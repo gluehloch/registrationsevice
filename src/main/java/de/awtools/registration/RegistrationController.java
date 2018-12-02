@@ -1,9 +1,9 @@
 package de.awtools.registration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,10 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/registration")
 public class RegistrationController {
 
+    @Autowired
+    private RegistrationService registrationService;
+
     @CrossOrigin
     @PostMapping(value = "/register", headers = {
             "Content-type=application/json" })
     public String register(RegistrationJson registration) {
+
+        registrationService.registerNewUserAccount(registration.getUsername(),
+                registration.getEmail(), registration.getPassword());
         return "TODO";
     }
 

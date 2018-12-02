@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -29,12 +28,8 @@ public class RegistrationService {
     private TimeService timeService;
 
     @Transactional
-    public UserRegistration registerNewUserAccount(String username, String email,
-            String password, String passwordConfirm) {
-
-        if (!StringUtils.equals(password, passwordConfirm)) {
-            throw new IllegalArgumentException("The passwords are not equal.");
-        }
+    public UserRegistration registerNewUserAccount(String username,
+            String email, String password) {
 
         LocalDateTime now = timeService.now();
 
@@ -45,17 +40,14 @@ public class RegistrationService {
         user.setCreated(now);
         user.setToken("TODO_TOKEN");
         /*
-        user.setCredentialExpired(false);
-        user.setEnabled(true);
-        user.setLastChange(now);
-        user.setLocked(false);
-        */
+         * user.setCredentialExpired(false); user.setEnabled(true);
+         * user.setLastChange(now); user.setLocked(false);
+         */
 
         userRegisterRepository.save(user);
 
         return user;
     }
-
 
     @Autowired
     private RegistrationDetailsService userDetailsService;
