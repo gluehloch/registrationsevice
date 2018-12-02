@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Change Notes</title>
+		<author email="andre.winkler@web.de">Andre Winkler</author>
+	</properties>
+	<body>
+
+		<!-- *** STILL UNDER DEVELOPMENT x.x.x (SNAPSHOT) *** -->
+
+		<!-- UNDER DEVELOPMENT -->
+
+		<!-- RELEASED -->
+		<release version="registrationservice-0.0.1" date="2018-12-02"
+			description="First release">
+			<action dev="andrewinkler" type="add" date="2018-12-02">
+				First prototype.
+			</action>
+		</release>
+	</body>
+</document>
+    
