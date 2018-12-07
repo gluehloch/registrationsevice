@@ -23,8 +23,9 @@ public class RegistrationController {
             "Content-type=application/json" })
     public String register(RegistrationJson registration) {
 
-        registrationService.registerNewUserAccount(registration.getUsername(),
-                registration.getEmail(), registration.getPassword());
+        registrationService.registerNewUserAccount(registration.getNickname(),
+                registration.getEmail(), registration.getPassword(),
+                registration.getName(), registration.getFirstname());
         return "TODO";
     }
 

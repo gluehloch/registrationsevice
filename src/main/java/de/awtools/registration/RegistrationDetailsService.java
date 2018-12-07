@@ -48,7 +48,7 @@ public class RegistrationDetailsService implements UserDetailsService {
 
         @Override
         public String getUsername() {
-            return user.getUsername();
+            return user.getNickname();
         }
 
         @Override

@@ -21,8 +21,16 @@ public class UserRegistration {
     private Long id;
 
     @NotNull
-    @Column(name = "username")
-    private String username;
+    @Column(name = "nickname")
+    private String nickname;
+
+    @NotNull
+    @Column(name = "name")
+    private String name;
+
+    @NotNull
+    @Column(name = "firstname")
+    private String firstname;
 
     @NotNull
     @Column(name = "email")
@@ -48,12 +56,28 @@ public class UserRegistration {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getEmail() {

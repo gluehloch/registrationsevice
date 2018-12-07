@@ -28,13 +28,15 @@ public class RegistrationService {
     private TimeService timeService;
 
     @Transactional
-    public UserRegistration registerNewUserAccount(String username,
-            String email, String password) {
+    public UserRegistration registerNewUserAccount(String nickname,
+            String email, String password, String name, String firstname) {
 
         LocalDateTime now = timeService.now();
 
         UserRegistration user = new UserRegistration();
-        user.setUsername(username);
+        user.setNickname(nickname);
+        user.setFirstname(firstname);
+        user.setName(name);
         user.setPassword(new Password(passwordEncoder.encode(password)));
         user.setEmail(email);
         user.setCreated(now);
