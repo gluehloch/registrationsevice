@@ -1,9 +1,15 @@
 package de.awtools.registration;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/registration")
-public class RegistrationController {
+class RegistrationController {
 
     @Autowired
     private RegistrationService registrationService;
@@ -22,13 +28,13 @@ public class RegistrationController {
     @CrossOrigin
     @GetMapping(path = "/ping")
     public String ping() {
-        return "pong";
+        return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @CrossOrigin
     @PostMapping(path = "/register", headers = {
             "Content-type=application/json" })
-    public String register(RegistrationJson registration) {
+    public String register(@Valid @RequestBody RegistrationJson registration) {
 
         registrationService.registerNewUserAccount(registration.getNickname(),
                 registration.getEmail(), registration.getPassword(),

@@ -1,5 +1,7 @@
 package de.awtools.registration;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Holds the registration data.
  *
@@ -7,10 +9,19 @@ package de.awtools.registration;
  */
 public class RegistrationJson {
 
+    @NotNull
     private String nickname;
+    
+    @NotNull
     private String name;
+    
+    @NotNull
     private String firstname;
+    
+    @NotNull
     private String password;
+    
+    @NotNull
     private String email;
 
     public String getNickname() {
