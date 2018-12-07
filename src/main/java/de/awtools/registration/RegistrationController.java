@@ -2,6 +2,7 @@ package de.awtools.registration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,13 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @CrossOrigin
-    @PostMapping(value = "/register", headers = {
+    @GetMapping(path = "/ping")
+    public String ping() {
+        return "pong";
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/register", headers = {
             "Content-type=application/json" })
     public String register(RegistrationJson registration) {
 
