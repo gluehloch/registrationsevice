@@ -23,7 +23,8 @@ public class RegistrationServiceTest {
     @Test
     public void testRegistrationService() {
         UserRegistration account = registrationService
-                .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch");
+                .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
+                        "Winkler", "Andre");
 
         assertThat(account.getPassword().get()).isNotEqualTo("Frosch");
     }

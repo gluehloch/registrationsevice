@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRegisterRepository
         extends CrudRepository<UserRegistration, Long> {
 
-    UserRegistration findByUsername(String username);
+    UserRegistration findByNickname(String nickname);
 
 }

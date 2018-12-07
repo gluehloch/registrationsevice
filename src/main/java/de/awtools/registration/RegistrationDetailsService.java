@@ -16,10 +16,10 @@ public class RegistrationDetailsService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String nickname) {
+        User user = userRepository.findByNickname(nickname);
         if (user == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(nickname);
         }
         return new RegistrationUserDeatils(user);
     }
