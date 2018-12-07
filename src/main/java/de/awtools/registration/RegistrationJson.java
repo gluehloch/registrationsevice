@@ -1,5 +1,6 @@
 package de.awtools.registration;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -22,6 +23,7 @@ public class RegistrationJson {
     private String password;
     
     @NotNull
+    @Email
     private String email;
 
     public String getNickname() {
