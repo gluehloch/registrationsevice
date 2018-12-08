@@ -6,12 +6,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import javax.servlet.ServletContext;
-import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,10 +25,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = { PersistenceJPAConfig.class,
-        RegistrationController.class })
-// @ComponentScan("de.awtools.registration") durch api-servlet.xml vorgegeben.
-@Transactional
+@ContextConfiguration(classes = { PersistenceJPAConfig.class })
+@ComponentScan("de.awtools.registration")
 @Rollback
 public class WebMvcTest {
 
@@ -43,7 +42,7 @@ public class WebMvcTest {
     }
 
     @Test
-    public void xxx() throws Exception {
+    public void ping() throws Exception {
         ServletContext context = webAppContext.getServletContext();
 
         assertThat(context).isNotNull();
@@ -53,14 +52,15 @@ public class WebMvcTest {
         assertThat(webAppContext.getBean(RegistrationController.class))
                 .isNotNull();
 
-        MvcResult result = mockMvc.perform(get("/api/registration/ping"))
+        MvcResult result = mockMvc
+                .perform(get("/registration/ping")
+                        .header("Content-type", "application/json")
+                        .header("charset", "UTF-8"))
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
-        assertThat(result.getResponse().getContentType())
-                .isEqualTo("application/json;charset=UTF-8");
 
-        mockMvc.perform(get("/index.jsp")).andDo(print())
-                .andExpect(status().isOk());
+        assertThat(result.getResponse().getContentType())
+                .isEqualTo("application/json;charset=utf-8");
     }
 
 }

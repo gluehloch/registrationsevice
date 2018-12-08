@@ -26,21 +26,23 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @CrossOrigin
-    @GetMapping(path = "/ping", headers = { "Content-type=application/json" })
+    @GetMapping(path = "/ping", headers = {
+            "Content-type=application/json;charset=UTF-8" }, produces = "application/json; charset=utf-8")
+
     public String ping() {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @CrossOrigin
     @PostMapping(path = "/register", headers = {
-            "Content-type=application/json" })
+            "Content-type=application/json;charset=UTF-8" })
     public String register(@Valid @RequestBody RegistrationJson registration) {
 
         registrationService.registerNewUserAccount(registration.getNickname(),
                 registration.getEmail(), registration.getPassword(),
                 registration.getName(), registration.getFirstname());
 
-        return "TODO";
+        return "{'name': 'TODO'}";
     }
 
     /*
