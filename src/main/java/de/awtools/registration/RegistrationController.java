@@ -22,20 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/registration")
 public class RegistrationController {
 
+    private static final String HEADER = "Content-type=application/json;charset=UTF-8";
+    private static final String JSON_UTF_8 = "application/json; charset=utf-8";
+
     @Autowired
     private RegistrationService registrationService;
 
     @CrossOrigin
-    @GetMapping(path = "/ping", headers = {
-            "Content-type=application/json;charset=UTF-8" }, produces = "application/json; charset=utf-8")
-
+    @GetMapping(path = "/ping", headers = { HEADER }, produces = JSON_UTF_8)
     public String ping() {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     @CrossOrigin
-    @PostMapping(path = "/register", headers = {
-            "Content-type=application/json;charset=UTF-8" })
+    @PostMapping(path = "/register", headers = { HEADER }, produces = JSON_UTF_8)
     public String register(@Valid @RequestBody RegistrationJson registration) {
 
         registrationService.registerNewUserAccount(registration.getNickname(),
