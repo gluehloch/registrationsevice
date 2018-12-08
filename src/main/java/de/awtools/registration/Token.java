@@ -11,26 +11,26 @@ import javax.validation.constraints.Size;
  * @author winkler
  */
 @Embeddable
-public class Password {
+public class Token {
 
     @NotNull
-    @Column(name = "password")
+    @Column(name = "token")
     @Size(min = 8, max = 60)
-    private String password;
+    private String token;
 
-    public Password() {
+    public Token() {
     }
     
-    public Password(String password) {
-        this.password = password;
+    public Token(String token) {
+        this.token = token;
     }
     
     public String get() {
-        return password;
+        return token;
     }
 
-    public Password set(String password) {
-        this.password = password;
+    public Token set(String token) {
+        this.token = token;
         return this;
     }
 

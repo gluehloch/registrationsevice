@@ -45,8 +45,8 @@ public class UserRegistration {
     private LocalDateTime created;
 
     @NotNull
-    @Column(name = "token")
-    private String token;
+    @Embedded
+    private Token token;
 
     public Long getId() {
         return id;
@@ -104,11 +104,11 @@ public class UserRegistration {
         this.created = created;
     }
 
-    public String getToken() {
+    public Token getToken() {
         return token;
     }
 
-    public void setToken(String token) {
+    public void setToken(Token token) {
         this.token = token;
     }
 

@@ -40,7 +40,7 @@ public class RegistrationService {
         user.setPassword(new Password(passwordEncoder.encode(password)));
         user.setEmail(email);
         user.setCreated(now);
-        user.setToken("TODO_TOKEN");
+        user.setToken(new Token().set("TODO_TOKEN"));
         /*
          * user.setCredentialExpired(false); user.setEnabled(true);
          * user.setLastChange(now); user.setLocked(false);
