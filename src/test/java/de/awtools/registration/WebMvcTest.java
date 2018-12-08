@@ -18,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -49,10 +50,14 @@ public class WebMvcTest {
         assertThat(context).isInstanceOf(MockServletContext.class);
         assertThat(context.getServletContextName())
                 .isEqualTo("MockServletContext");
+        assertThat(webAppContext.getBean(RegistrationController.class))
+                .isNotNull();
 
-        mockMvc.perform(get("/api/registration/ping"))
+        MvcResult result = mockMvc.perform(get("/api/registration/ping"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn();
+        assertThat(result.getResponse().getContentType())
+                .isEqualTo("application/json;charset=UTF-8");
 
         mockMvc.perform(get("/index.jsp")).andDo(print())
                 .andExpect(status().isOk());

@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/registration")
-class RegistrationController {
+public class RegistrationController {
 
     @Autowired
     private RegistrationService registrationService;
 
     @CrossOrigin
-    @GetMapping(path = "/ping")
+    @GetMapping(path = "/ping", headers = { "Content-type=application/json" })
     public String ping() {
         return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
     }
