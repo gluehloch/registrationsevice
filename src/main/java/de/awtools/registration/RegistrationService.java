@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * Register a new user. Do it with this service.
+ * Register and confirm a new user.
  * 
  * @author winkler
  */
@@ -28,7 +28,7 @@ public class RegistrationService {
     private TimeService timeService;
 
     @Transactional
-    public UserRegistration registerNewUserAccount(String username,
+    public UserRegistration registerAccount(String username,
             String email, String password) {
 
         LocalDateTime now = timeService.now();
@@ -49,6 +49,12 @@ public class RegistrationService {
         return user;
     }
 
+    @Transactional
+    public void confirmAccount(String token) {
+        // TODO Auto-generated method stub
+        
+    }
+    
     @Autowired
     private RegistrationDetailsService userDetailsService;
 
