@@ -1,12 +1,17 @@
 package de.awtools.registration;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -17,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
+
+    private static final String HEADER = "Content-type=application/json;charset=UTF-8";
+    private static final String JSON_UTF_8 = "application/json; charset=utf-8";
 
     @Autowired
     private RegistrationService registrationService;
@@ -29,13 +37,21 @@ public class RegistrationController {
      * @return ...
      */
     @CrossOrigin
-    @PostMapping(value = "/register", headers = {
-            "Content-type=application/json" })
-    public String register(RegistrationJson registration) {
+    @GetMapping(path = "/ping", headers = { HEADER }, produces = JSON_UTF_8)
+    public String ping() {
+        return LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+    }
 
-        registrationService.registerAccount(registration.getUsername(),
-                registration.getEmail(), registration.getPassword());
-        return "TODO";
+    @CrossOrigin
+    @PostMapping(path = "/register", headers = { HEADER }, produces = JSON_UTF_8)
+    public String register(@Valid @RequestBody RegistrationJson registration) {
+
+        registrationService.registerNewUserAccount(registration.getNickname(),
+                registration.getEmail(), registration.getPassword(),
+                registration.getName(), registration.getFirstname());
+
+
+        return "{'name': 'TODO'}";
     }
 
     /**

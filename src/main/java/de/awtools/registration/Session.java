@@ -39,6 +39,12 @@ public class Session {
     @Column(name = "sessionId")
     private String sessionId;
 
+    @Column(name = "remoteaddress")
+    private String remoteaddress;
+
+    @Column(name = "browser")
+    private String browser;
+
     public Long getId() {
         return id;
     }
@@ -85,6 +91,22 @@ public class Session {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public String getRemoteaddress() {
+        return remoteaddress;
+    }
+
+    public void setRemoteaddress(String remoteaddress) {
+        this.remoteaddress = remoteaddress;
+    }
+
+    public String getBrowser() {
+        return browser;
+    }
+
+    public void setBrowser(String browser) {
+        this.browser = browser;
     }
 
 }

@@ -28,17 +28,19 @@ public class RegistrationService {
     private TimeService timeService;
 
     @Transactional
-    public UserRegistration registerAccount(String username,
-            String email, String password) {
+    public UserRegistration registerNewUserAccount(String nickname,
+            String email, String password, String name, String firstname) {
 
         LocalDateTime now = timeService.now();
 
         UserRegistration user = new UserRegistration();
-        user.setUsername(username);
+        user.setNickname(nickname);
+        user.setFirstname(firstname);
+        user.setName(name);
         user.setPassword(new Password(passwordEncoder.encode(password)));
         user.setEmail(email);
         user.setCreated(now);
-        user.setToken("TODO_TOKEN");
+        user.setToken(new Token().set("TODO_TOKEN"));
         /*
          * user.setCredentialExpired(false); user.setEnabled(true);
          * user.setLastChange(now); user.setLocked(false);

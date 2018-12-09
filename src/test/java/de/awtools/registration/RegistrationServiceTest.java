@@ -7,12 +7,16 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+@WebAppConfiguration
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
+@ComponentScan("de.awtools.registration")
 @Transactional
 @Rollback
 public class RegistrationServiceTest {
@@ -21,11 +25,13 @@ public class RegistrationServiceTest {
     private RegistrationService registrationService;
 
     @Test
-    public void testRegistrationService() {
+    public void testRegistrationService() throws Exception {
         UserRegistration account = registrationService
-                .registerAccount("Frosch", "frosch@web.de", "Frosch");
+                .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
+                        "Winkler", "Andre");
 
         assertThat(account.getPassword().get()).isNotEqualTo("Frosch");
+
     }
 
 }

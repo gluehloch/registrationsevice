@@ -8,7 +8,9 @@ drop table if exists user;
 
 create table user_registration (
     id bigint not null auto_increment,
-    username varchar(20) not null unique,
+    nickname varchar(20) not null unique,
+    name varchar(50) not null,
+    firstname varchar(50) not null,
     password varchar(60) not null,
     email varchar(50) not null,
     created datetime not null,
@@ -18,7 +20,9 @@ create table user_registration (
 
 create table user (
     id bigint not null auto_increment,
-    username varchar(20) not null unique,
+    nickname varchar(20) not null unique,
+    name varchar(50) not null,
+    firstname varchar(50) not null,
     password varchar(60) not null,
     email varchar(50) not null,
     created datetime not null,
