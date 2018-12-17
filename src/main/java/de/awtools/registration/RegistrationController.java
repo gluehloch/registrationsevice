@@ -33,8 +33,7 @@ public class RegistrationController {
      * Starts the registration process. The caller receives an email with
      * an URL to confirm his address.
      *
-     * @param registration Registration data as JSON.
-     * @return ...
+     * @return Web-Service reachable?
      */
     @CrossOrigin
     @GetMapping(path = "/ping", headers = { HEADER }, produces = JSON_UTF_8)

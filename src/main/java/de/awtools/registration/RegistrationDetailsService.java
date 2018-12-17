@@ -37,7 +37,7 @@ public class RegistrationDetailsService implements UserDetailsService {
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            // TODO Implement some authorities!
+            // TODO Implement some authorities! Sind das die Rolle und Zustaendigkeiten?
             return null;
         }
 
