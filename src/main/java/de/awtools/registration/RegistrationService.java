@@ -31,6 +31,8 @@ public class RegistrationService {
     public UserRegistration registerNewUserAccount(String nickname,
             String email, String password, String name, String firstname) {
 
+        // check nickname
+        
         LocalDateTime now = timeService.now();
 
         UserRegistration user = new UserRegistration();
