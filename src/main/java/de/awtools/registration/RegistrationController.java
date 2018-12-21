@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,12 @@ public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 
+    /**
+     * Starts the registration process. The caller receives an email with
+     * an URL to confirm his address.
+     *
+     * @return Web-Service reachable?
+     */
     @CrossOrigin
     @GetMapping(path = "/ping", headers = { HEADER }, produces = JSON_UTF_8)
     public String ping() {
@@ -42,9 +49,24 @@ public class RegistrationController {
                 registration.getEmail(), registration.getPassword(),
                 registration.getName(), registration.getFirstname());
 
+
         return "{'name': 'TODO'}";
     }
 
+    /**
+     * The user confirmed his account.
+     *
+     * @param token The unique token of a new user.
+     * @return ...
+     */
+    @CrossOrigin
+    @PostMapping(value = "/confirm/{token}")
+    public String confirm(@PathVariable String token) {
+        registrationService.confirmAccount(token);
+        
+        return "TODO";
+    }
+    
     /*
      * @CrossOrigin
      * 
