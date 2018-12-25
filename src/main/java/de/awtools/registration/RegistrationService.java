@@ -1,6 +1,7 @@
 package de.awtools.registration;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -32,6 +33,8 @@ public class RegistrationService {
             String email, String password, String name, String firstname) {
 
         // check nickname
+        UserRegistration ur = userRegisterRepository.findByNickname(nickname);
+        
         
         LocalDateTime now = timeService.now();
 
@@ -42,7 +45,9 @@ public class RegistrationService {
         user.setPassword(new Password(passwordEncoder.encode(password)));
         user.setEmail(email);
         user.setCreated(now);
-        user.setToken(new Token().set("TODO_TOKEN"));
+        UUID token = UUID.randomUUID();
+        user.setToken(new Token(token.toString()));
+
         /*
          * user.setCredentialExpired(false); user.setEnabled(true);
          * user.setLastChange(now); user.setLocked(false);
