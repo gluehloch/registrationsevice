@@ -21,7 +21,7 @@ public class Session {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_ref")
-    private User user;
+    private UserAccount user;
 
     @NotNull
     @Column(name = "login")
@@ -61,11 +61,11 @@ public class Session {
         this.login = login;
     }
 
-    public User getUser() {
+    public UserAccount getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserAccount user) {
         this.user = user;
     }
 

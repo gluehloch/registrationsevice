@@ -22,13 +22,20 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class RegistrationServiceTest {
 
     @Autowired
+    private ApplicationRepository applicationRepository;
+    
+    @Autowired
     private RegistrationService registrationService;
 
     @Test
     public void testRegistrationService() throws Exception {
-        UserRegistration account = registrationService
+        Application application = new Application();
+        application.setName("applicationId");
+        applicationRepository.save(application);
+
+        Registration account = registrationService
                 .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
-                        "Winkler", "Andre");
+                        "Winkler", "Andre", "applicationId");
 
         assertThat(account.getPassword().get()).isNotEqualTo("Frosch");
 

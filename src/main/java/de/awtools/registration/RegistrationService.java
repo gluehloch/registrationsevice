@@ -23,22 +23,45 @@ public class RegistrationService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserRegisterRepository userRegisterRepository;
+    private RegisterRepository userRegisterRepository;
+    
+    @Autowired
+    private ApplicationRepository applicationRepository;
 
     @Autowired
     private TimeService timeService;
 
+    /**
+     * Starts the registration process.
+     * 
+     * @param nickname nickname 
+     * @param email the email address
+     * @param password password
+     * @param name real name
+     * @param firstname real firstname
+     * @param application the application to register for
+     * @return UserRegistration
+     */
     @Transactional
-    public UserRegistration registerNewUserAccount(String nickname,
-            String email, String password, String name, String firstname) {
+    public Registration registerNewUserAccount(String nickname,
+            String email, String password, String name, String firstname,
+            String application) {
 
+        // check application
+        
+        Application app = applicationRepository.findByName(application);
+        if (app == null) {
+            throw new IllegalArgumentException("Unknown application: " + application);
+        }
+        
+        // TODO
+        
         // check nickname
-        UserRegistration ur = userRegisterRepository.findByNickname(nickname);
-        
-        
+        Registration ur = userRegisterRepository.findByNickname(nickname);
+
         LocalDateTime now = timeService.now();
 
-        UserRegistration user = new UserRegistration();
+        Registration user = new Registration();
         user.setNickname(nickname);
         user.setFirstname(firstname);
         user.setName(name);
@@ -61,9 +84,9 @@ public class RegistrationService {
     @Transactional
     public void confirmAccount(String token) {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
     @Autowired
     private RegistrationDetailsService userDetailsService;
 

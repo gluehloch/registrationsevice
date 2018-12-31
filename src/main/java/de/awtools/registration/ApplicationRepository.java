@@ -4,9 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRegisterRepository
-        extends CrudRepository<UserRegistration, Long> {
+public interface ApplicationRepository extends CrudRepository<Application, Long> {
 
-    UserRegistration findByNickname(String nickname);
+    Application findByName(String name);
 
 }

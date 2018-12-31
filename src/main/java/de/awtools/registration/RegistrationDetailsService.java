@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class RegistrationDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserAccountRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String nickname) {
-        User user = userRepository.findByNickname(nickname);
+        UserAccount user = userRepository.findByNickname(nickname);
         if (user == null) {
             throw new UsernameNotFoundException(nickname);
         }
@@ -29,9 +29,9 @@ public class RegistrationDetailsService implements UserDetailsService {
 
         private static final long serialVersionUID = -7882416572804994114L;
 
-        private User user;
+        private UserAccount user;
 
-        public RegistrationUserDeatils(User user) {
+        public RegistrationUserDeatils(UserAccount user) {
             this.user = user;
         }
 

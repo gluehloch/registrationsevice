@@ -54,7 +54,8 @@ public class RegistrationController {
 
         registrationService.registerNewUserAccount(registration.getNickname(),
                 registration.getEmail(), registration.getPassword(),
-                registration.getName(), registration.getFirstname());
+                registration.getName(), registration.getFirstname(),
+                registration.getApplicationId());
 
         return "{'name': 'TODO'}";
     }

@@ -25,6 +25,9 @@ public class RegistrationJson {
     @NotNull
     @Email
     private String email;
+    
+    @NotNull
+    private String applicationId;
 
     public String getNickname() {
         return nickname;
@@ -66,4 +69,12 @@ public class RegistrationJson {
         this.email = email;
     }
 
+    public String getApplicationId() {
+        return applicationId;
+    }
+    
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+    
 }

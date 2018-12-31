@@ -1,6 +1,8 @@
 package de.awtools.registration;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -8,18 +10,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity
-@Table(name = "user_registration")
-public class UserRegistration {
+@Table(name = "useraccount")
+public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @NaturalId
     @NotNull
     @Column(name = "nickname")
     private String nickname;
@@ -40,13 +46,26 @@ public class UserRegistration {
     @Embedded
     private Password password;
 
-    @NotNull
     @Column(name = "created")
     private LocalDateTime created;
 
-    @NotNull
-    @Embedded
-    private Token token;
+    @Column(name = "last_change")
+    private LocalDateTime lastChange;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "expired")
+    private boolean expired;
+
+    @Column(name = "locked")
+    private boolean locked;
+
+    @Column(name = "credential_expired")
+    private boolean credentialExpired;
+    
+    @ManyToMany(mappedBy = "userAccounts")
+    private Set<Application> applications = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -80,20 +99,20 @@ public class UserRegistration {
         this.firstname = firstname;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Password getPassword() {
         return password;
     }
 
     public void setPassword(Password password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDateTime getCreated() {
@@ -104,12 +123,44 @@ public class UserRegistration {
         this.created = created;
     }
 
-    public Token getToken() {
-        return token;
+    public LocalDateTime getLastChange() {
+        return lastChange;
     }
 
-    public void setToken(Token token) {
-        this.token = token;
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setLastChange(LocalDateTime lastChange) {
+        this.lastChange = lastChange;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public boolean isCredentialExpired() {
+        return credentialExpired;
+    }
+
+    public void setCredentialExpired(boolean credentialExpired) {
+        this.credentialExpired = credentialExpired;
     }
 
 }

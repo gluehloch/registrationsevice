@@ -2,11 +2,13 @@
 select 'Start installation of registerservice 0.0.1 MySQL schema.' as INFO;
 select version();
 
-drop table if exists user_registration;
-drop table if exists user_session;
-drop table if exists user;
+drop table if exists registration;
+drop table if exists useraccount_session;
+drop table if exists useraccount_application;
+drop table if exists useraccount;
+drop table if exists application;
 
-create table user_registration (
+create table registration (
     id bigint not null auto_increment,
     nickname varchar(20) not null unique,
     name varchar(50) not null,
@@ -18,7 +20,7 @@ create table user_registration (
     primary key(id)
 ) ENGINE=InnoDB;
 
-create table user (
+create table useraccount (
     id bigint not null auto_increment,
     nickname varchar(20) not null unique,
     name varchar(50) not null,
@@ -34,9 +36,16 @@ create table user (
     primary key(id)
 ) ENGINE=InnoDB;
 
-create table user_session (
+create table application (
     id bigint not null auto_increment,
-    user_ref bigint,
+    name varchar(50) not null unique,
+    description varchar(500) not null,
+    primary key(id)
+) ENGINE=InnoDB;
+
+create table useraccount_session (
+    id bigint not null auto_increment,
+    useraccount_ref bigint,
     token varchar(2048) not null comment 'Session Token',
     login datetime comment 'Login date and time',
     logout datetime comment 'Logout date and time',
@@ -45,7 +54,23 @@ create table user_session (
     primary key(id)
 ) ENGINE=InnoDB;
 
-alter table user_session
-    add constraint fk_user_session_user
-    foreign key (user_ref)
-    references user(id);
+create table useraccount_application (
+    useraccount_ref bigint not null,
+    application_ref bigint not null,
+    primary key(useraccount_ref, application_ref)
+) ENGINE=InnoDB;
+
+alter table useraccount_session
+    add constraint fk_useraccount_session_user
+    foreign key (useraccount_ref)
+    references useraccount(id);
+
+alter table useraccount_application
+    add constraint fk_useracc_app_useracc
+    foreign key (useraccount_ref)
+    references useraccount(id);
+    
+alter table  useraccount_application
+    add constraint fk_useracc_app_app
+    foreign key (application_ref)
+    references application(id);

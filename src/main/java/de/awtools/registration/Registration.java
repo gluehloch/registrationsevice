@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "registration")
+public class Registration {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,23 +40,13 @@ public class User {
     @Embedded
     private Password password;
 
+    @NotNull
     @Column(name = "created")
     private LocalDateTime created;
 
-    @Column(name = "last_change")
-    private LocalDateTime lastChange;
-
-    @Column(name = "enabled")
-    private boolean enabled;
-
-    @Column(name = "expired")
-    private boolean expired;
-
-    @Column(name = "locked")
-    private boolean locked;
-
-    @Column(name = "credential_expired")
-    private boolean credentialExpired;
+    @NotNull
+    @Embedded
+    private Token token;
 
     public Long getId() {
         return id;
@@ -90,20 +80,20 @@ public class User {
         this.firstname = firstname;
     }
 
-    public Password getPassword() {
-        return password;
-    }
-
-    public void setPassword(Password password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Password getPassword() {
+        return password;
+    }
+
+    public void setPassword(Password password) {
+        this.password = password;
     }
 
     public LocalDateTime getCreated() {
@@ -114,44 +104,12 @@ public class User {
         this.created = created;
     }
 
-    public LocalDateTime getLastChange() {
-        return lastChange;
+    public Token getToken() {
+        return token;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void setLastChange(LocalDateTime lastChange) {
-        this.lastChange = lastChange;
-    }
-
-    public boolean isExpired() {
-        return expired;
-    }
-
-    public void setExpired(boolean expired) {
-        this.expired = expired;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
-    }
-
-    public boolean isCredentialExpired() {
-        return credentialExpired;
-    }
-
-    public void setCredentialExpired(boolean credentialExpired) {
-        this.credentialExpired = credentialExpired;
+    public void setToken(Token token) {
+        this.token = token;
     }
 
 }
