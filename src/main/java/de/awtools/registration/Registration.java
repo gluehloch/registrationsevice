@@ -48,6 +48,10 @@ public class Registration {
     @Embedded
     private Token token;
 
+    @NotNull
+    @Column(name = "application")
+    private String application;
+    
     public Long getId() {
         return id;
     }
@@ -112,4 +116,12 @@ public class Registration {
         this.token = token;
     }
 
+    public String getApplication() {
+        return application;
+    }
+    
+    public void setApplication(String application) {
+        this.application = application;
+    }
+    
 }

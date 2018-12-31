@@ -17,6 +17,7 @@ create table registration (
     email varchar(50) not null,
     created datetime not null,
     token varchar(2048) not null,
+    application varchar(50) not null,
     primary key(id)
 ) ENGINE=InnoDB;
 
