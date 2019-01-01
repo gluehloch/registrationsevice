@@ -8,6 +8,8 @@ import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
@@ -23,6 +25,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @Rollback
 public class RegistrationServiceTest {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RegistrationServiceTest.class);
+
     @Autowired
     private ApplicationRepository applicationRepository;
     
@@ -31,6 +35,8 @@ public class RegistrationServiceTest {
 
     @Test
     public void testRegistrationService() throws Exception {
+        LOG.info("Start of the test...");
+        
         Application application = new Application();
         application.setName("applicationId");
         application.setDescription("Test Application for some JUnit tests.");

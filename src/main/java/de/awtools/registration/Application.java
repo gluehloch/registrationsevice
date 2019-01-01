@@ -39,7 +39,7 @@ public class Application {
     @Column(name = "description")
     private String description;
     
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany /* (cascade = { CascadeType.ALL }) */
     @JoinTable(
             name = "useraccount_application",
             joinColumns = { @JoinColumn(name = "application_ref")},
