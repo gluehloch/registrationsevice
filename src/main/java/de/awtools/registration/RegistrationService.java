@@ -70,6 +70,7 @@ public class RegistrationService {
         user.setCreated(now);
         UUID token = UUID.randomUUID();
         user.setToken(new Token(token.toString()));
+        user.setApplication(application);
 
         /*
          * user.setCredentialExpired(false); user.setEnabled(true);

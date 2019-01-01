@@ -2,6 +2,8 @@ package de.awtools.registration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
+
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,7 @@ public class RegistrationServiceTest {
     public void testRegistrationService() throws Exception {
         Application application = new Application();
         application.setName("applicationId");
+        application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
         Registration account = registrationService
@@ -38,7 +41,21 @@ public class RegistrationServiceTest {
                         "Winkler", "Andre", "applicationId");
 
         assertThat(account.getPassword().get()).isNotEqualTo("Frosch");
-
+        
+        UserAccount userAccount = new UserAccount();
+        userAccount.setCreated(LocalDateTime.now());
+        userAccount.setCredentialExpired(false);
+        userAccount.setEmail("frosch@web.de");
+        userAccount.setEnabled(true);
+        userAccount.setExpired(false);
+        userAccount.setFirstname("Andre");
+        userAccount.setLastChange(LocalDateTime.now());
+        userAccount.setLocked(false);
+        userAccount.setName("Winkler");
+        userAccount.setNickname("Frosch");
+        userAccount.setPassword(account.getPassword());
+        application.addUser(userAccount);
+        applicationRepository.save(application);
     }
 
 }

@@ -163,4 +163,8 @@ public class UserAccount {
         this.credentialExpired = credentialExpired;
     }
 
+    Set<Application> getApplications() {
+        return applications;
+    }
+
 }

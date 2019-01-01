@@ -69,5 +69,10 @@ public class Application {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public void addUser(UserAccount userAccount) {
+        userAccount.getApplications().add(this);
+        userAccounts.add(userAccount);
+    }
 
 }
