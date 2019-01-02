@@ -51,6 +51,9 @@ public class Registration {
     @NotNull
     @Column(name = "application")
     private String application;
+
+    @Column(name = "confirmed")
+    private boolean confirmed;
     
     public Long getId() {
         return id;
@@ -124,4 +127,12 @@ public class Registration {
         this.application = application;
     }
     
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+    
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
+    }
+
 }

@@ -14,10 +14,11 @@ create table registration (
     name varchar(50) not null,
     firstname varchar(50) not null,
     password varchar(60) not null,
-    email varchar(50) not null,
-    created datetime not null,
-    token varchar(2048) not null,
-    application varchar(50) not null,
+    email varchar(50) not null comment 'email address',
+    created datetime not null comment 'cretion time',
+    token varchar(2048) not null comment 'token to confirm email address',
+    application varchar(50) not null comment 'name of the appliction',
+    confirmed bit comment 'registration completed successful',
     primary key(id)
 ) ENGINE=InnoDB;
 

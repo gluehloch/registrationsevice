@@ -1,5 +1,7 @@
 package de.awtools.registration;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
@@ -8,26 +10,28 @@ import javax.validation.constraints.NotNull;
  *
  * @author Andre Winkler
  */
-public class RegistrationJson {
+public class RegistrationJson implements Serializable {
+
+    private static final long serialVersionUID = 7765899606128897504L;
 
     @NotNull
     private String nickname;
-    
+
     @NotNull
     private String name;
-    
+
     @NotNull
     private String firstname;
-    
+
     @NotNull
     private String password;
-    
+
     @NotNull
     @Email
     private String email;
-    
+
     @NotNull
-    private String applicationId;
+    private String applicationName;
 
     public String getNickname() {
         return nickname;
@@ -69,12 +73,12 @@ public class RegistrationJson {
         this.email = email;
     }
 
-    public String getApplicationId() {
-        return applicationId;
+    public String getApplicationName() {
+        return applicationName;
     }
-    
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
-    
+
 }
