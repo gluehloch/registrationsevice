@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
-
-    private static final Logger LOG = LoggerFactory
-            .getLogger(RegistrationController.class);
 
     private static final String HEADER = "Content-type=application/json;charset=UTF-8";
     private static final String JSON_UTF_8 = "application/json; charset=utf-8";
