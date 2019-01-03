@@ -1,11 +1,7 @@
 package de.awtools.registration;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -45,26 +41,28 @@ public class RegistrationController {
      */
     @CrossOrigin
     @GetMapping(path = "/ping", headers = { HEADER }, produces = JSON_UTF_8)
-    public JsonObject ping() {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        builder.add("datetime",
-                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
-        return builder.build();
+    public DateTimeJson ping() {
+        DateTimeJson dateTimeJson = new DateTimeJson();
+        // LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
+        dateTimeJson.setDateTime(LocalDateTime.now());
+        return dateTimeJson;
     }
 
     @CrossOrigin
     @PostMapping(path = "/register", headers = {
             HEADER }, produces = JSON_UTF_8)
-    public Registration register(
+    public RegistrationValidationJson register(
             @Valid @RequestBody RegistrationJson registration) {
 
-        Registration registrationStart = registrationService
+        RegistrationValidation validation = registrationService
                 .registerNewUserAccount(registration.getNickname(),
-                        registration.getEmail(), registration.getPassword(),
-                        registration.getName(), registration.getFirstname(),
+                        registration.getEmail(),
+                        registration.getPassword(),
+                        registration.getName(),
+                        registration.getFirstname(),
                         registration.getApplicationName());
 
-        return registrationStart;
+        return new RegistrationValidationJson(validation);
     }
 
     @CrossOrigin
@@ -73,12 +71,12 @@ public class RegistrationController {
     public RegistrationValidationJson valiate(
             @RequestBody RegistrationJson registration) {
 
-        RegistrationValidationJson validation = registrationService.validate(
+        RegistrationValidation validation = registrationService.validate(
                 registration.getNickname(),
                 registration.getEmail(),
                 registration.getApplicationName());
 
-        return validation;
+        return new RegistrationValidationJson(validation);
     }
 
     /**

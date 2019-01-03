@@ -17,6 +17,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import de.awtools.registration.RegistrationValidation.ValidationCode;
+
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
@@ -34,7 +36,7 @@ public class RegistrationServiceTest {
     private RegistrationService registrationService;
 
     @Test
-    public void testRegistrationService() throws Exception {
+    public void registerNewAccount() throws Exception {
         LOG.info("Start of the test...");
         
         Application application = new Application();
@@ -42,12 +44,20 @@ public class RegistrationServiceTest {
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
-        Registration account = registrationService
+        RegistrationValidation validation = registrationService
                 .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
                         "Winkler", "Andre", "applicationId");
 
-        assertThat(account.getPassword().get()).isNotEqualTo("Frosch");
-        
+        assertThat(validation.getValidationCode()).isEqualTo(ValidationCode.OK);
+    }
+
+    @Test
+    public void saveNewAccount() {
+        Application application = new Application();
+        application.setName("applicationId");
+        application.setDescription("Test Application for some JUnit tests.");
+        applicationRepository.save(application);
+
         UserAccount userAccount = new UserAccount();
         userAccount.setCreated(LocalDateTime.now());
         userAccount.setCredentialExpired(false);
@@ -59,7 +69,7 @@ public class RegistrationServiceTest {
         userAccount.setLocked(false);
         userAccount.setName("Winkler");
         userAccount.setNickname("Frosch");
-        userAccount.setPassword(account.getPassword());
+        userAccount.setPassword(new Password("password"));
         application.addUser(userAccount);
         applicationRepository.save(application);
     }

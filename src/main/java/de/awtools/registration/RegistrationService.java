@@ -5,13 +5,15 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import de.awtools.registration.RegistrationValidationJson.ValidationCode;
+import de.awtools.registration.RegistrationValidation.ValidationCode;
 
 /**
  * Register and confirm a new user.
@@ -20,6 +22,8 @@ import de.awtools.registration.RegistrationValidationJson.ValidationCode;
  */
 @Service
 public class RegistrationService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(RegistrationService.class);
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -51,23 +55,23 @@ public class RegistrationService {
      *            real firstname
      * @param application
      *            the application to register for
-     * @return UserRegistration
+     * @return RegistrationValidation
      */
     @Transactional
-    public Registration registerNewUserAccount(String nickname,
+    public RegistrationValidation registerNewUserAccount(String nickname,
             String email, String password, String name, String firstname,
             String application) {
 
         Application app = applicationRepository.findByName(application);
         if (app == null) {
-            throw new IllegalArgumentException(
-                    "Unknown application: " + application);
+            LOG.info("Unknown application: [%s]", application);
+            return new RegistrationValidation(ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         Registration registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined != null) {
-            throw new IllegalArgumentException(
-                    "Nickname is already defined: " + nickname);
+            LOG.info("Nickname already defined: [%s]", nickname);
+            return new RegistrationValidation(ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         LocalDateTime now = timeService.now();
@@ -84,14 +88,9 @@ public class RegistrationService {
         registration.setApplication(application);
         registration.setConfirmed(false);
 
-        /*
-         * user.setCredentialExpired(false); user.setEnabled(true);
-         * user.setLastChange(now); user.setLocked(false);
-         */
-
         registrationRepository.save(registration);
 
-        return registration;
+        return new RegistrationValidation(ValidationCode.OK);
     }
 
     @Transactional
@@ -101,27 +100,27 @@ public class RegistrationService {
     }
 
     @Transactional
-    public RegistrationValidationJson validate(String nickname, String email,
+    public RegistrationValidation validate(String nickname, String email,
             String applicationName) {
 
         Application application = applicationRepository.findByName(applicationName);
         if (application == null) {
-            return new RegistrationValidationJson(ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         Registration registrationDefined = null; 
         
         registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined != null) {
-            return new RegistrationValidationJson(ValidationCode.KNOWN_NICKNAME);
+            return new RegistrationValidation(ValidationCode.KNOWN_NICKNAME);
         }
         
         registrationDefined = registrationRepository.findByEmail(email);
         if (registrationDefined != null) {
-            return new RegistrationValidationJson(ValidationCode.KNOWN_MAILADDRESS);
+            return new RegistrationValidation(ValidationCode.KNOWN_MAILADDRESS);
         }
         
-        return new RegistrationValidationJson(ValidationCode.OK);
+        return new RegistrationValidation(ValidationCode.OK);
     }
 
     @Bean
