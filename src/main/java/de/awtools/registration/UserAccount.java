@@ -39,8 +39,8 @@ public class UserAccount {
     private String firstname;
 
     @NotNull
-    @Column(name = "email")
-    private String email;
+    @Embedded
+    private Email email;
 
     @NotNull
     @Embedded
@@ -67,6 +67,23 @@ public class UserAccount {
     @ManyToMany(mappedBy = "userAccounts")
     private Set<Application> applications = new HashSet<>();
 
+    public UserAccount() {
+    }
+    
+    public UserAccount(LocalDateTime createdAt, Registration registration) {
+        this.created = createdAt;
+        this.credentialExpired = false;
+        this.email = registration.getEmail();
+        this.enabled = true;
+        this.expired = false;
+        this.firstname = registration.getFirstname();
+        this.lastChange = this.created;
+        this.locked = false;
+        this.name = registration.getName();
+        this.nickname = registration.getNickname();
+        this.password = registration.getPassword();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -107,11 +124,11 @@ public class UserAccount {
         this.password = password;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 

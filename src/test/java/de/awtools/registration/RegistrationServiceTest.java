@@ -73,7 +73,7 @@ public class RegistrationServiceTest {
         UserAccount userAccount = new UserAccount();
         userAccount.setCreated(LocalDateTime.now());
         userAccount.setCredentialExpired(false);
-        userAccount.setEmail("frosch@web.de");
+        userAccount.setEmail(new Email("frosch@web.de"));
         userAccount.setEnabled(true);
         userAccount.setExpired(false);
         userAccount.setFirstname("Andre");

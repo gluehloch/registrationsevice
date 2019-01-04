@@ -21,17 +21,21 @@ import de.awtools.registration.password.PasswordEncoderWrapper;
 @Service
 public class RegistrationService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationService.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(RegistrationService.class);
 
     @Autowired
     private PasswordEncoderWrapper passwordEncoder;
-    
+
     @Autowired
     private RegistrationRepository registrationRepository;
 
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private UserAccountRepository userAccountRepository;
+    
     @Autowired
     private TimeService timeService;
 
@@ -60,13 +64,16 @@ public class RegistrationService {
         Application app = applicationRepository.findByName(application);
         if (app == null) {
             LOG.info("Unknown application: [%s]", application);
-            return new RegistrationValidation(nickname, ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(nickname,
+                    ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
-        Registration registrationDefined = registrationRepository.findByNickname(nickname);
+        Registration registrationDefined = registrationRepository
+                .findByNickname(nickname);
         if (registrationDefined != null) {
             LOG.info("Nickname already defined: [%s]", nickname);
-            return new RegistrationValidation(nickname, ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(nickname,
+                    ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         LocalDateTime now = timeService.now();
@@ -75,7 +82,8 @@ public class RegistrationService {
         registration.setNickname(nickname);
         registration.setFirstname(firstname);
         registration.setName(name);
-        registration.setPassword(new Password(passwordEncoder.encode(password)));
+        registration
+                .setPassword(new Password(passwordEncoder.encode(password)));
         registration.setEmail(new Email(email));
         registration.setCreated(now);
         UUID token = UUID.randomUUID();
@@ -89,32 +97,58 @@ public class RegistrationService {
     }
 
     @Transactional
-    public RegistrationValidation confirmAccount(String token) {
-        // TODO Auto-generated method stub
-        return null;
+    public RegistrationValidation confirmAccount(Token token) {
+        Registration registration = registrationRepository.findByToken(token);
+        if (registration == null) {
+            return new RegistrationValidation("unkown",
+                    ValidationCode.ILLEGAL_ARGUMENTS);
+        }
+
+        registration.setConfirmed(true);
+
+        Application application = applicationRepository
+                .findByName(registration.getApplication());
+
+        if (application == null) {
+            return new RegistrationValidation("unknown",
+                    ValidationCode.UNKNOWN_APPLICATION);
+        }
+
+        UserAccount newUserAccount = new UserAccount(timeService.now(),
+                registration);
+        application.addUser(newUserAccount);
+        
+        userAccountRepository.save(newUserAccount);
+
+        return new RegistrationValidation(registration.getNickname(),
+                ValidationCode.OK);
     }
 
     @Transactional
     public RegistrationValidation validate(String nickname, String email,
             String applicationName) {
 
-        Application application = applicationRepository.findByName(applicationName);
+        Application application = applicationRepository
+                .findByName(applicationName);
         if (application == null) {
-            return new RegistrationValidation(nickname, ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(nickname,
+                    ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
-        Registration registrationDefined = null; 
-        
+        Registration registrationDefined = null;
+
         registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined != null) {
-            return new RegistrationValidation(nickname, ValidationCode.KNOWN_NICKNAME);
+            return new RegistrationValidation(nickname,
+                    ValidationCode.KNOWN_NICKNAME);
         }
-        
+
         registrationDefined = registrationRepository.findByEmail(email);
         if (registrationDefined != null) {
-            return new RegistrationValidation(nickname, ValidationCode.KNOWN_MAILADDRESS);
+            return new RegistrationValidation(nickname,
+                    ValidationCode.KNOWN_MAILADDRESS);
         }
-        
+
         return new RegistrationValidation(nickname, ValidationCode.OK);
     }
 

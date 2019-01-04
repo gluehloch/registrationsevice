@@ -7,7 +7,8 @@ public class RegistrationValidation {
         KNOWN_DATA(1000), //
         KNOWN_NICKNAME(1001), //
         KNOWN_MAILADDRESS(1002), //
-        ILLEGAL_ARGUMENTS(1003);
+        UNKNOWN_APPLICATION(1003), //
+        ILLEGAL_ARGUMENTS(2000);
 
         ValidationCode(int code) {
             this.code = code;

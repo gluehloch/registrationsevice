@@ -84,10 +84,8 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
     public RegistrationValidationJson confirm(@PathVariable String token) {
-        registrationService.confirmAccount(token);
-
         RegistrationValidation validation = registrationService
-                .confirmAccount(token);
+                .confirmAccount(new Token(token));
 
         return new RegistrationValidationJson(validation);
     }
