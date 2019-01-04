@@ -90,7 +90,7 @@ public class ValidationTest {
                         .header("charset", "UTF-8"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("validationCode").value("1003"))
+                .andExpect(jsonPath("validationCode").value("2000"))
                 // .andExpect(content().json("{'validationCode': 1003}"))
                 .andReturn();
 

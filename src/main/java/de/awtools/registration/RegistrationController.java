@@ -63,7 +63,7 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/validate", headers = {
             HEADER }, produces = JSON_UTF_8)
-    public RegistrationValidationJson valiate(
+    public RegistrationValidationJson validate(
             @RequestBody RegistrationJson registration) {
 
         RegistrationValidation validation = registrationService.validate(
