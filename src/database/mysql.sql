@@ -16,7 +16,7 @@ create table registration (
     password varchar(60) not null,
     email varchar(50) not null comment 'email address',
     created datetime not null comment 'cretion time',
-    token varchar(2048) not null comment 'token to confirm email address',
+    token varchar(2048) not null unique comment 'token to confirm email address',
     application varchar(50) not null comment 'name of the appliction',
     confirmed bit comment 'registration completed successful',
     primary key(id)

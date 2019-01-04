@@ -1,6 +1,7 @@
 package de.awtools.registration;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -37,19 +38,18 @@ public class Application {
 
     @Column(name = "description")
     private String description;
-    
+
     @ManyToMany /* (cascade = { CascadeType.ALL }) */
-    @JoinTable(
-            name = "useraccount_application",
-            joinColumns = { @JoinColumn(name = "application_ref")},
-            inverseJoinColumns = { @JoinColumn(name = "useraccount_ref")})
+    @JoinTable(name = "useraccount_application", joinColumns = {
+            @JoinColumn(name = "application_ref") }, inverseJoinColumns = {
+                    @JoinColumn(name = "useraccount_ref") })
     private Set<UserAccount> userAccounts = new HashSet<>();
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    void setId(Long id) {
         this.id = id;
     }
 
@@ -68,10 +68,32 @@ public class Application {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public void addUser(UserAccount userAccount) {
         userAccount.getApplications().add(this);
         userAccounts.add(userAccount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Application other = (Application) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
     }
 
 }

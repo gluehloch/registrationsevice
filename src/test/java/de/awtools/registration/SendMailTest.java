@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import de.awtools.registration.config.PersistenceJPAConfig;
 import de.awtools.registration.mail.SendMail;
 
 /**

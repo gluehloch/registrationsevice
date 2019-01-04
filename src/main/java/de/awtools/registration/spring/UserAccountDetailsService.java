@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.spring;
 
 import java.util.Collection;
 
@@ -9,8 +9,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import de.awtools.registration.UserAccount;
+import de.awtools.registration.UserAccountRepository;
+
 @Service
-public class RegistrationDetailsService implements UserDetailsService {
+public class UserAccountDetailsService implements UserDetailsService {
 
     @Autowired
     private UserAccountRepository userRepository;
@@ -21,17 +24,17 @@ public class RegistrationDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(nickname);
         }
-        return new RegistrationUserDeatils(user);
+        return new UserAccountDetails(user);
     }
     
     
-    public static class RegistrationUserDeatils implements UserDetails {
+    public static class UserAccountDetails implements UserDetails {
 
         private static final long serialVersionUID = -7882416572804994114L;
 
         private UserAccount user;
 
-        public RegistrationUserDeatils(UserAccount user) {
+        public UserAccountDetails(UserAccount user) {
             this.user = user;
         }
 

@@ -21,23 +21,32 @@ public class RegistrationValidation {
 
     }
 
+    private final String nickname;
     private final ValidationCode validationCode;
 
-    public RegistrationValidation() {
-        validationCode = ValidationCode.OK;
+    public RegistrationValidation(String nickname) {
+        this.nickname = nickname;
+        this.validationCode = ValidationCode.OK;
     }
-    
-    public RegistrationValidation(ValidationCode code) {
+
+    public RegistrationValidation(String nickname, ValidationCode code) {
+        this.nickname = nickname;
         this.validationCode = code;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public ValidationCode getValidationCode() {
         return validationCode;
     }
-    
+
     @Override
     public String toString() {
-        return String.format("RegistrationValidationJson code=[%s]", validationCode);
+        return String.format(
+                "RegistrationValidationJson nickname=[%s], code=[%s]",
+                nickname, validationCode);
     }
 
 }

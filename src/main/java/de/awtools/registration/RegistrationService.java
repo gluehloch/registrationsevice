@@ -8,12 +8,10 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.awtools.registration.RegistrationValidation.ValidationCode;
+import de.awtools.registration.password.PasswordEncoderWrapper;
 
 /**
  * Register and confirm a new user.
@@ -26,16 +24,13 @@ public class RegistrationService {
     private static final Logger LOG = LoggerFactory.getLogger(RegistrationService.class);
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    private PasswordEncoderWrapper passwordEncoder;
+    
     @Autowired
     private RegistrationRepository registrationRepository;
 
     @Autowired
     private ApplicationRepository applicationRepository;
-
-    @Autowired
-    private RegistrationDetailsService userDetailsService;
 
     @Autowired
     private TimeService timeService;
@@ -65,13 +60,13 @@ public class RegistrationService {
         Application app = applicationRepository.findByName(application);
         if (app == null) {
             LOG.info("Unknown application: [%s]", application);
-            return new RegistrationValidation(ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(nickname, ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         Registration registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined != null) {
             LOG.info("Nickname already defined: [%s]", nickname);
-            return new RegistrationValidation(ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(nickname, ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         LocalDateTime now = timeService.now();
@@ -81,7 +76,7 @@ public class RegistrationService {
         registration.setFirstname(firstname);
         registration.setName(name);
         registration.setPassword(new Password(passwordEncoder.encode(password)));
-        registration.setEmail(email);
+        registration.setEmail(new Email(email));
         registration.setCreated(now);
         UUID token = UUID.randomUUID();
         registration.setToken(new Token(token.toString()));
@@ -90,13 +85,13 @@ public class RegistrationService {
 
         registrationRepository.save(registration);
 
-        return new RegistrationValidation(ValidationCode.OK);
+        return new RegistrationValidation(nickname, ValidationCode.OK);
     }
 
     @Transactional
-    public void confirmAccount(String token) {
+    public RegistrationValidation confirmAccount(String token) {
         // TODO Auto-generated method stub
-
+        return null;
     }
 
     @Transactional
@@ -105,30 +100,22 @@ public class RegistrationService {
 
         Application application = applicationRepository.findByName(applicationName);
         if (application == null) {
-            return new RegistrationValidation(ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(nickname, ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
         Registration registrationDefined = null; 
         
         registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined != null) {
-            return new RegistrationValidation(ValidationCode.KNOWN_NICKNAME);
+            return new RegistrationValidation(nickname, ValidationCode.KNOWN_NICKNAME);
         }
         
         registrationDefined = registrationRepository.findByEmail(email);
         if (registrationDefined != null) {
-            return new RegistrationValidation(ValidationCode.KNOWN_MAILADDRESS);
+            return new RegistrationValidation(nickname, ValidationCode.KNOWN_MAILADDRESS);
         }
         
-        return new RegistrationValidation(ValidationCode.OK);
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder);
-        return authProvider;
+        return new RegistrationValidation(nickname, ValidationCode.OK);
     }
 
 }

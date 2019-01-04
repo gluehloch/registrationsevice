@@ -11,4 +11,6 @@ public interface RegistrationRepository
     
     Registration findByEmail(String email);
 
+    Registration findByToken(Token token);
+    
 }

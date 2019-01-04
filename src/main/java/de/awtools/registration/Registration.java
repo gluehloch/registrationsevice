@@ -1,6 +1,7 @@
 package de.awtools.registration;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity
 @Table(name = "registration")
 public class Registration {
@@ -20,6 +23,7 @@ public class Registration {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @NaturalId
     @NotNull
     @Column(name = "nickname")
     private String nickname;
@@ -33,8 +37,8 @@ public class Registration {
     private String firstname;
 
     @NotNull
-    @Column(name = "email")
-    private String email;
+    @Embedded
+    private Email email;
 
     @NotNull
     @Embedded
@@ -87,11 +91,11 @@ public class Registration {
         this.firstname = firstname;
     }
 
-    public String getEmail() {
+    public Email getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(Email email) {
         this.email = email;
     }
 
@@ -133,6 +137,28 @@ public class Registration {
     
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(nickname);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Registration other = (Registration) obj;
+        if (nickname == null) {
+            if (other.nickname != null)
+                return false;
+        } else if (!nickname.equals(other.nickname))
+            return false;
+        return true;
     }
 
 }

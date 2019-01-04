@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.awtools.registration.RegistrationValidation.ValidationCode;
+import de.awtools.registration.config.PersistenceJPAConfig;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -27,28 +28,39 @@ import de.awtools.registration.RegistrationValidation.ValidationCode;
 @Rollback
 public class RegistrationServiceTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RegistrationServiceTest.class);
+    private static final Logger LOG = LoggerFactory
+            .getLogger(RegistrationServiceTest.class);
 
     @Autowired
     private ApplicationRepository applicationRepository;
-    
+
+    @Autowired
+    private RegistrationRepository registrationRepository;
+
     @Autowired
     private RegistrationService registrationService;
 
     @Test
     public void registerNewAccount() throws Exception {
         LOG.info("Start of the test...");
-        
+
         Application application = new Application();
-        application.setName("applicationId");
+        application.setName("applicationName");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
         RegistrationValidation validation = registrationService
                 .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
-                        "Winkler", "Andre", "applicationId");
+                        "Winkler", "Andre", "applicationName");
 
+        Registration registration = registrationRepository
+                .findByNickname("Frosch");
+        Registration registration2 = registrationRepository
+                .findByToken(registration.getToken());
+
+        assertThat(registration.getId()).isEqualTo(registration2.getId());
         assertThat(validation.getValidationCode()).isEqualTo(ValidationCode.OK);
+        assertThat(validation.getNickname()).isEqualTo("Frosch");
     }
 
     @Test
