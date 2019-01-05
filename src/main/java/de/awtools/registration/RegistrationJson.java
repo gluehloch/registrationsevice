@@ -81,4 +81,12 @@ public class RegistrationJson implements Serializable {
         this.applicationName = applicationName;
     }
 
+    @Override
+    public String toString() {
+        return "RegistrationJson [nickname=" + nickname + ", name=" + name
+                + ", firstname=" + firstname + ", password=" + password
+                + ", email=" + email + ", applicationName=" + applicationName
+                + "]";
+    }
+
 }

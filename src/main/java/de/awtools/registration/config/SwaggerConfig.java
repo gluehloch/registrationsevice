@@ -23,12 +23,14 @@ public class SwaggerConfig {
     @Bean
     public Docket postsApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                //.host("http://localhost:8080")
+                //.pathMapping("/registrationservice/api")
                 .groupName("public-api")
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build();
+                .build().pathMapping("http://localhost:8080/registrationservice/api");
     }
 
     private Predicate<String> postPaths() {
