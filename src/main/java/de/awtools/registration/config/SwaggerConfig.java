@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build().pathMapping("http://localhost:8080/registrationservice/api");
+                .build();
     }
 
     private Predicate<String> postPaths() {
