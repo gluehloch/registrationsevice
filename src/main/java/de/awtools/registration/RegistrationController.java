@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiOperation;
+
 /**
  * The registration controller.
  *
@@ -34,8 +36,9 @@ public class RegistrationController {
      *
      * @return Web-Service reachable?
      */
+    @ApiOperation(value = "doStuff", nickname = "doStuff", response = DateTimeJson.class)
     @CrossOrigin
-    @GetMapping(path = "/ping", headers = { HEADER }, produces = JSON_UTF_8)
+    @GetMapping(path = "/ping", produces = JSON_UTF_8)
     public DateTimeJson ping() {
         DateTimeJson dateTimeJson = new DateTimeJson();
         // LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
