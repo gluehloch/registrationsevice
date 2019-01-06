@@ -22,7 +22,6 @@ import de.awtools.registration.RegistrationValidation.ValidationCode;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.ResponseHeader;
 
 /**
  * The registration controller.
@@ -76,8 +75,7 @@ public class RegistrationController {
 
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Invalid application name"),
-            @ApiResponse(code = 404, message = "Pet not found") })
+            @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
     @PostMapping(path = "/validate", headers = {
             HEADER }, produces = JSON_UTF_8)

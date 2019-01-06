@@ -1,5 +1,7 @@
 package de.awtools.registration.config;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,25 +23,25 @@ public class SwaggerConfig {
     // http://localhost:8080/registrationservice/swagger-ui.html#/
 
     @Bean
-    public Docket postsApi() {
+    public Docket postsApi(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
-                //.host("http://localhost:8080")
-                //.pathMapping("/registrationservice/api")
+                // .host("http://localhost:8080")
+                // .pathMapping("/registrationservice/api")
                 .groupName("public-api")
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
-                .build();
+                .build();//.host("http://localhost:8080").pathMapping("/registrationservice/api");
     }
 
     private Predicate<String> postPaths() {
         return PathSelectors.regex("/api/registration/ping");
-//        return Predicates.or(
-//                PathSelectors.regex("/api/registration/ping"),
-//                PathSelectors.regex("/api/registration/register"),
-//                PathSelectors.regex("/api/registration/validate"),
-//                PathSelectors.regex("/api/registration/confirm"));
+        // return Predicates.or(
+        // PathSelectors.regex("/api/registration/ping"),
+        // PathSelectors.regex("/api/registration/register"),
+        // PathSelectors.regex("/api/registration/validate"),
+        // PathSelectors.regex("/api/registration/confirm"));
     }
 
     private ApiInfo apiInfo() {
