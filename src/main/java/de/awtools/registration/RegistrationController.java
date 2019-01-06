@@ -87,11 +87,11 @@ public class RegistrationController {
                 registration.getEmail(),
                 registration.getApplicationName());
 
-        Set<ValidationCode> httpStatus404 = Set.of(
+        Set<ValidationCode> httpStatus400 = Set.of(
                 ValidationCode.ILLEGAL_ARGUMENTS,
                 ValidationCode.UNKNOWN_APPLICATION);
 
-        if (httpStatus404.contains(validation.getValidationCode())) {
+        if (httpStatus400.contains(validation.getValidationCode())) {
             LOG.info("Invalid request parameters {}", validation);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
