@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "Ping:"
 
 curl -H "Content-Type: application/json" \

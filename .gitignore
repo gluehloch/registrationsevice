@@ -16,3 +16,8 @@ target
 
 # Other...
 .factorypath
+.register.properties
+
+# Output
+*.war
+

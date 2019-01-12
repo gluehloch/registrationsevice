@@ -89,13 +89,14 @@ public class ValidationTest {
                         .header("Content-type", "application/json")
                         .header("charset", "UTF-8"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("validationCode").value("2000"))
+                .andExpect(status().isBadRequest())
+                // In der 'Bad-Requets' Variante wird kein JSON ausgeliefert.
+                // .andExpect(jsonPath("validationCode").value("2000"))
                 // .andExpect(content().json("{'validationCode': 1003}"))
                 .andReturn();
 
-        assertThat(result.getResponse().getContentType())
-                .isEqualTo("application/json;charset=utf-8");
+        // assertThat(result.getResponse().getContentType())
+        //        .isEqualTo("application/json;charset=utf-8");
 
         // RegistrationValidation validation = mapper.readValue(
         // result.getResponse().getContentAsString(),
