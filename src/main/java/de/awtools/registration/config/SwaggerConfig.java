@@ -25,6 +25,7 @@ public class SwaggerConfig {
     @Bean
     public Docket postsApi(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
+                .pathMapping("/api")
                 // .host("http://localhost:8080")
                 // .pathMapping("/registrationservice/api")
                 .groupName("public-api")

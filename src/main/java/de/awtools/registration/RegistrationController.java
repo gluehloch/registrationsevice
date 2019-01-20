@@ -41,6 +41,18 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     /**
+     * Shows the current version of this API.
+     * 
+     * @return A version String.
+     */
+    @ApiOperation(value = "version", nickname = "version", response = String.class)
+    @CrossOrigin
+    @GetMapping(path = "version", produces = JSON_UTF_8)
+    public VersionJson versionInfo() {
+        return new VersionJson();
+    }
+
+    /**
      * Starts the registration process. The caller receives an email with an URL
      * to confirm his address.
      *
