@@ -58,7 +58,7 @@ public class RegistrationController {
      *
      * @return Web-Service reachable?
      */
-    @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class)
+    @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
     @CrossOrigin
     @GetMapping(path = "/ping", produces = JSON_UTF_8)
     public DateTimeJson ping() {
@@ -68,6 +68,7 @@ public class RegistrationController {
         return dateTimeJson;
     }
 
+    @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/register", headers = {
             HEADER }, produces = JSON_UTF_8)
@@ -85,7 +86,7 @@ public class RegistrationController {
         return new RegistrationValidationJson(validation);
     }
 
-    @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class)
+    @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
@@ -99,14 +100,7 @@ public class RegistrationController {
                 registration.getEmail(),
                 registration.getApplicationName());
 
-        Set<ValidationCode> httpStatus400 = Set.of(
-                ValidationCode.ILLEGAL_ARGUMENTS,
-                ValidationCode.UNKNOWN_APPLICATION);
-
-        if (httpStatus400.contains(validation.getValidationCode())) {
-            LOG.info("Invalid request parameters {}", validation);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        toResponseStatusException(validation);
 
         return new RegistrationValidationJson(validation);
     }
@@ -124,7 +118,21 @@ public class RegistrationController {
         RegistrationValidation validation = registrationService
                 .confirmAccount(new Token(token));
 
+        toResponseStatusException(validation);
+
         return new RegistrationValidationJson(validation);
     }
 
+    private void toResponseStatusException(RegistrationValidation rv) {
+        Set<ValidationCode> httpStatus400 = Set.of(
+                ValidationCode.ILLEGAL_ARGUMENTS,
+                ValidationCode.UNKNOWN_APPLICATION);
+
+        if (httpStatus400.contains(rv.getValidationCode())) {
+            LOG.info("Invalid request parameters {}", rv);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    
 }

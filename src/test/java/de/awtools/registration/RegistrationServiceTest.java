@@ -61,6 +61,10 @@ public class RegistrationServiceTest {
         assertThat(registration.getId()).isEqualTo(registration2.getId());
         assertThat(validation.getValidationCode()).isEqualTo(ValidationCode.OK);
         assertThat(validation.getNickname()).isEqualTo("Frosch");
+
+        RegistrationValidation restartUserAccount = registrationService
+                .restartUserAccount("Frosch", "frosch@web.de", "Frosch",
+                        "Winkler", "Andre", "applicationName");
     }
 
     @Test

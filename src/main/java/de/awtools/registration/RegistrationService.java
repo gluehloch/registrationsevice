@@ -35,7 +35,7 @@ public class RegistrationService {
 
     @Autowired
     private UserAccountRepository userAccountRepository;
-    
+
     @Autowired
     private TimeService timeService;
 
@@ -97,6 +97,16 @@ public class RegistrationService {
     }
 
     @Transactional
+    public RegistrationValidation restartUserAccount(String nickname,
+            String email, String password, String name, String firstname,
+            String application) {
+
+        registrationRepository.deleteByEmail(new Email(email));
+        return registerNewUserAccount(nickname, email, password, name,
+                firstname, application);
+    }
+
+    @Transactional
     public RegistrationValidation confirmAccount(Token token) {
         Registration registration = registrationRepository.findByToken(token);
         if (registration == null) {
@@ -117,7 +127,7 @@ public class RegistrationService {
         UserAccount newUserAccount = new UserAccount(timeService.now(),
                 registration);
         application.addUser(newUserAccount);
-        
+
         userAccountRepository.save(newUserAccount);
 
         return new RegistrationValidation(registration.getNickname(),
