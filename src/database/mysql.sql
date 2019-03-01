@@ -19,6 +19,8 @@ create table registration (
     token varchar(60) not null unique comment 'token to confirm email address',
     application varchar(50) not null comment 'name of the appliction',
     confirmed bit comment 'registration completed successful',
+    acceptmail bit comment 'user accepts emails',
+    acceptcookie bit comment 'user accepts cookies',
     primary key(id)
 ) ENGINE=InnoDB;
 
@@ -35,6 +37,8 @@ create table useraccount (
     expired bit comment 'password expired',
     locked bit comment 'account locked',
     credential_expired bit comment 'credential expired?',
+    acceptmail bit comment 'user accepts emails',
+    acceptcookie bit comment 'user accepts cookies',
     primary key(id)
 ) ENGINE=InnoDB;
 

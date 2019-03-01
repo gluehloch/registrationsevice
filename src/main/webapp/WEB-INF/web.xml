@@ -22,6 +22,19 @@
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 
+    <!-- TODO/FIX Das behebt das Swagger Problem. Macht aber alle anderen Servlets/JSPs/Controller unbrauchbar. -->
+    <servlet-mapping>
+        <servlet-name>api</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+<!-- 
+ <servlet-mapping>
+        <servlet-name>default</servlet-name>
+            <url-pattern>/swagger-ui.html</url-pattern>
+    </servlet-mapping>
+ -->
+ 
 	<!-- <resource-ref> <description>resource description</description> <res-ref-name>jdbc/betoffice</res-ref-name> 
 		<res-type>javax.sql.DataSource</res-type> <res-auth>Container</res-auth> 
 		</resource-ref> -->

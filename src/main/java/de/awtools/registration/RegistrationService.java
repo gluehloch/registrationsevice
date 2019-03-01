@@ -54,12 +54,21 @@ public class RegistrationService {
      *            real firstname
      * @param application
      *            the application to register for
+     * @param acceptMail
+     *            user accepts mails
+     * @param acceptCookie
+     *            user accepts cookies
      * @return RegistrationValidation
      */
     @Transactional
     public RegistrationValidation registerNewUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application) {
+            String application, boolean acceptMail, boolean acceptCookie) {
+
+        if (!acceptMail || !acceptCookie) {
+            return new RegistrationValidation(nickname,
+                    ValidationCode.ILLEGAL_ARGUMENTS);
+        }
 
         Application app = applicationRepository.findByName(application);
         if (app == null) {
@@ -90,6 +99,8 @@ public class RegistrationService {
         registration.setToken(new Token(token.toString()));
         registration.setApplication(application);
         registration.setConfirmed(false);
+        registration.setAcceptCookie(acceptCookie);
+        registration.setAcceptMail(acceptMail);
 
         registrationRepository.save(registration);
 
@@ -99,11 +110,11 @@ public class RegistrationService {
     @Transactional
     public RegistrationValidation restartUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application) {
+            String application, boolean acceptMail, boolean acceptCookie) {
 
         registrationRepository.deleteByEmail(new Email(email));
         return registerNewUserAccount(nickname, email, password, name,
-                firstname, application);
+                firstname, application, acceptMail, acceptCookie);
     }
 
     @Transactional

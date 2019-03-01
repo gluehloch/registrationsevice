@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.google.common.base.Predicate;
 
@@ -26,14 +27,16 @@ public class SwaggerConfig {
     public Docket postsApi(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .pathMapping("/api")
-                // .host("http://localhost:8080")
-                // .pathMapping("/registrationservice/api")
+                //.host("http://localhost:8080/registrationservice/api")
+                //.pathMapping("/registrationservice")
                 .groupName("public-api")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build();//.host("http://localhost:8080").pathMapping("/registrationservice/api");
+                .apis(RequestHandlerSelectors
+                        .basePackage("de.awtools.registration"))
+                .paths(/*PathSelectors.ant("/api/*")*/PathSelectors.any())
+                .build();
+        // .host("http://localhost:8080").pathMapping("/registrationservice/api");
     }
 
     private Predicate<String> postPaths() {
@@ -47,10 +50,10 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("SpringMVC Example API")
-                .description("SpringMVC Example API reference for developers")
-                .termsOfServiceUrl("http://hantsy.blogspot.com")
-                .contact("Hantsy Bai")
+                .title("Registration API")
+                .description("Registration API reference for developers")
+                //.termsOfServiceUrl("http")
+                .contact("Andre Winkler")
                 .license("Apache License Version 2.0")
                 .licenseUrl(
                         "https://github.com/springfox/springfox/blob/master/LICENSE")

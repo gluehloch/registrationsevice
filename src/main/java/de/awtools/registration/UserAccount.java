@@ -64,6 +64,12 @@ public class UserAccount {
     @Column(name = "credential_expired")
     private boolean credentialExpired;
 
+    @Column(name = "acceptmail")
+    private boolean acceptMail;
+    
+    @Column(name = "acceptcookie")
+    private boolean acceptCookie;
+
     @ManyToMany(mappedBy = "userAccounts")
     private Set<Application> applications = new HashSet<>();
 
@@ -178,6 +184,22 @@ public class UserAccount {
 
     public void setCredentialExpired(boolean credentialExpired) {
         this.credentialExpired = credentialExpired;
+    }
+
+    public void setAcceptMail(boolean acceptMail) {
+        this.acceptMail = acceptMail;
+    }
+    
+    public boolean isAcceptingMail() {
+        return acceptMail;
+    }
+    
+    public void setAcceptCookie(boolean acceptCookie) {
+        this.acceptCookie = acceptCookie;
+    }
+    
+    public boolean isAcceptingCookie() {
+        return acceptCookie;
     }
 
     Set<Application> getApplications() {

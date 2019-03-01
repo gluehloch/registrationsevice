@@ -19,7 +19,6 @@ public class RegistrationValidation {
         public int getCode() {
             return code;
         }
-
     }
 
     private final String nickname;

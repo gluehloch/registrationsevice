@@ -58,6 +58,12 @@ public class Registration {
 
     @Column(name = "confirmed")
     private boolean confirmed;
+
+    @Column(name = "acceptmail")
+    private boolean acceptMail;
+    
+    @Column(name = "acceptcookie")
+    private boolean acceptCookie;
     
     public Long getId() {
         return id;
@@ -139,6 +145,22 @@ public class Registration {
         this.confirmed = confirmed;
     }
 
+    public void setAcceptMail(boolean acceptMail) {
+        this.acceptMail = acceptMail;
+    }
+    
+    public boolean isAccepetingMail() {
+        return acceptMail;
+    }
+    
+    public void setAcceptCookie(boolean acceptCookie) {
+        this.acceptCookie = acceptCookie;
+    }
+    
+    public boolean isAcceptingMail() {
+        return acceptMail;
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hashCode(nickname);

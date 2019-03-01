@@ -23,5 +23,8 @@
 	</ul>
 	<h2>Umlaute:</h2>
 	<p>ÄÖÜ äöü ß</p>
+	
+	<!-- http://localhost:8080/registrationservice/api  -->
+	<a href="http://localhost:8080/registrationservice/swagger-ui.html">Swagger API</a>
 </body>
 </html>

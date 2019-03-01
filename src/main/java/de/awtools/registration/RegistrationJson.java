@@ -33,6 +33,10 @@ public class RegistrationJson implements Serializable {
     @NotNull
     private String applicationName;
 
+    private boolean acceptMail;
+    
+    private boolean acceptCookie;
+    
     public String getNickname() {
         return nickname;
     }
@@ -81,12 +85,29 @@ public class RegistrationJson implements Serializable {
         this.applicationName = applicationName;
     }
 
+    public boolean isAcceptMail() {
+        return acceptMail;
+    }
+
+    public void setAcceptMail(boolean acceptMail) {
+        this.acceptMail = acceptMail;
+    }
+
+    public boolean isAcceptCookie() {
+        return acceptCookie;
+    }
+
+    public void setAcceptCookie(boolean acceptCookie) {
+        this.acceptCookie = acceptCookie;
+    }
+
     @Override
     public String toString() {
         return "RegistrationJson [nickname=" + nickname + ", name=" + name
                 + ", firstname=" + firstname + ", password=" + password
                 + ", email=" + email + ", applicationName=" + applicationName
-                + "]";
+                + ", acceptMail=" + acceptMail + ", acceptCookie="
+                + acceptCookie + "]";
     }
 
 }
