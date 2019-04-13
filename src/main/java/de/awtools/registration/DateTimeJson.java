@@ -10,8 +10,9 @@ public class DateTimeJson {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public DateTimeJson setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+        return this;
     }
 
 }

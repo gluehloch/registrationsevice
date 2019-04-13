@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
@@ -28,9 +28,8 @@ import de.awtools.registration.config.PersistenceJPAConfig;
 @Rollback
 public class RegistrationServiceTest {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(RegistrationServiceTest.class);
-
+    private static final Logger LOG = LogManager.getLogger();
+    
     @Autowired
     private ApplicationRepository applicationRepository;
 
@@ -61,6 +60,8 @@ public class RegistrationServiceTest {
         assertThat(registration.getId()).isEqualTo(registration2.getId());
         assertThat(validation.getValidationCode()).isEqualTo(ValidationCode.OK);
         assertThat(validation.getNickname()).isEqualTo("Frosch");
+        assertThat(registration.isAcceptingCookie()).isTrue();
+        assertThat(registration.isAcceptingMail()).isTrue();
 
         RegistrationValidation restartUserAccount = registrationService
                 .restartUserAccount("Frosch", "frosch@web.de", "Frosch",

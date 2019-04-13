@@ -2,11 +2,21 @@
 select 'Start installation of registerservice 0.0.1 MySQL schema.' as INFO;
 select version();
 
+drop table if exists cookie;
 drop table if exists registration;
 drop table if exists useraccount_session;
 drop table if exists useraccount_application;
 drop table if exists useraccount;
 drop table if exists application;
+
+create table cookie(
+    id bigint not null auto_increment,
+    remoteaddress VARCHAR(100) not null comment 'the user remote address',
+    browser VARCHAR(200) not null comment 'the user browser',
+    created datetime not null comment 'entry creation time',
+    acceptcookie bit comment 'user accepts cookies',
+    primary key (id)
+) ENGINE=InnoDB;
 
 create table registration (
     id bigint not null auto_increment,

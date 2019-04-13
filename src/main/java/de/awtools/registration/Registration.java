@@ -61,10 +61,10 @@ public class Registration {
 
     @Column(name = "acceptmail")
     private boolean acceptMail;
-    
+
     @Column(name = "acceptcookie")
     private boolean acceptCookie;
-    
+
     public Long getId() {
         return id;
     }
@@ -132,35 +132,35 @@ public class Registration {
     public String getApplication() {
         return application;
     }
-    
+
     public void setApplication(String application) {
         this.application = application;
     }
-    
+
     public boolean isConfirmed() {
         return confirmed;
     }
-    
+
     public void setConfirmed(boolean confirmed) {
         this.confirmed = confirmed;
+    }
+
+    public boolean isAcceptingMail() {
+        return acceptMail;
     }
 
     public void setAcceptMail(boolean acceptMail) {
         this.acceptMail = acceptMail;
     }
-    
-    public boolean isAccepetingMail() {
-        return acceptMail;
+
+    public boolean isAcceptingCookie() {
+        return acceptCookie;
     }
-    
+
     public void setAcceptCookie(boolean acceptCookie) {
         this.acceptCookie = acceptCookie;
     }
-    
-    public boolean isAcceptingMail() {
-        return acceptMail;
-    }
-    
+
     @Override
     public int hashCode() {
         return Objects.hashCode(nickname);
