@@ -4,7 +4,6 @@ import javax.servlet.ServletContext;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.google.common.base.Predicate;
 
@@ -26,7 +25,7 @@ public class SwaggerConfig {
     @Bean
     public Docket postsApi(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
-                .pathMapping("/api")
+                //.pathMapping()
                 //.host("http://localhost:8080/registrationservice/api")
                 //.pathMapping("/registrationservice")
                 .groupName("public-api")

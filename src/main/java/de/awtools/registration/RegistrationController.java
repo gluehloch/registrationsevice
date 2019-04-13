@@ -32,9 +32,6 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping("/registration")
 public class RegistrationController {
 
-    private static final String HEADER = "Content-type=application/json;charset=UTF-8";
-    private static final String JSON_UTF_8 = "application/json; charset=utf-8";
-
     private static final Logger LOG = LogManager.getLogger();
 
     @Autowired
@@ -47,7 +44,7 @@ public class RegistrationController {
      */
     @ApiOperation(value = "version", nickname = "version", response = String.class)
     @CrossOrigin
-    @GetMapping(path = "version", produces = JSON_UTF_8)
+    @GetMapping(path = "version", produces = HttpConst.JSON_UTF_8)
     public VersionJson versionInfo() {
         return new VersionJson();
     }
@@ -60,7 +57,7 @@ public class RegistrationController {
      */
     @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
     @CrossOrigin
-    @GetMapping(path = "/ping", produces = JSON_UTF_8)
+    @GetMapping(path = "/ping", produces = HttpConst.JSON_UTF_8)
     public DateTimeJson ping() {
         DateTimeJson dateTimeJson = new DateTimeJson();
         // LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
@@ -71,7 +68,7 @@ public class RegistrationController {
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/register", headers = {
-            HEADER }, produces = JSON_UTF_8)
+            HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
     public RegistrationValidationJson register(
             @Valid @RequestBody RegistrationJson registration) {
 
@@ -93,7 +90,7 @@ public class RegistrationController {
             @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
     @PostMapping(path = "/validate", headers = {
-            HEADER }, produces = JSON_UTF_8)
+            HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
     public RegistrationValidationJson validate(
             @RequestBody RegistrationJson registration) {
 
@@ -135,6 +132,5 @@ public class RegistrationController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
-    
-    
+
 }

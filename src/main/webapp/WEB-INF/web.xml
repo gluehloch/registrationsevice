@@ -23,10 +23,12 @@
 	</servlet-mapping>
 
     <!-- TODO/FIX Das behebt das Swagger Problem. Macht aber alle anderen Servlets/JSPs/Controller unbrauchbar. -->
+    <!--
     <servlet-mapping>
         <servlet-name>api</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+     -->
 
 <!-- 
  <servlet-mapping>
