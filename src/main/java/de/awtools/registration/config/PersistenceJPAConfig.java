@@ -5,10 +5,12 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -28,12 +30,19 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages = { "de.awtools.registration" })
 public class PersistenceJPAConfig {
 
-    // TODO Move to another Configuration class?
+    @Autowired
+    private PersistenceConfiguration persistenceConfiguration;
+    
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);
     }
 
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigIn() {
+      return new PropertySourcesPlaceholderConfigurer();
+    }
+    
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -50,12 +59,10 @@ public class PersistenceJPAConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        // dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setDriverClassName("org.mariadb.jdbc.Driver");
-        // dataSource.setUrl("jdbc:mysql://192.168.99.100:3307/school");
-        dataSource.setUrl("jdbc:mariadb://192.168.99.100:3308/register");
-        dataSource.setUsername("register");
-        dataSource.setPassword("register");
+        dataSource.setDriverClassName(persistenceConfiguration.getDriverClassName());
+        dataSource.setUrl(persistenceConfiguration.getUrl());
+        dataSource.setUsername(persistenceConfiguration.getUsername());
+        dataSource.setPassword(persistenceConfiguration.getPassword());
 
         Properties connectionProperties = new Properties();
         connectionProperties.setProperty("autocommit", "false");

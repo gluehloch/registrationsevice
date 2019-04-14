@@ -11,10 +11,10 @@
 		<!-- UNDER DEVELOPMENT -->
 
 		<!-- RELEASED -->
-		<release version="registrationservice-0.0.1" date="2018-12-02"
+		<release version="registrationservice-0.1.0" date="2019-04-014"
 			description="First release">
 			<action dev="andrewinkler" type="add" date="2018-12-02">
-				First prototype.
+				First prototype. Cookie accepted service.
 			</action>
 		</release>
 	</body>
