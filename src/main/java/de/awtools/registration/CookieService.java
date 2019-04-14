@@ -21,7 +21,7 @@ public class CookieService {
         cookie.setBrowser(browser);
         cookie.setRemoteaddress(remoteaddress);
         cookie.setCreated(timeService.now());
-        cookieRepository.save(cookie);
+        cookie = cookieRepository.save(cookie);
         return cookie;
     }
 

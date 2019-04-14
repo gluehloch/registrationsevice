@@ -40,7 +40,7 @@ public class CookieServiceTest {
         
         Cookie cookie2 = cookieService.storeCookieAcceptance("Bworser",
                 "RemoteAddress", true);
-        assertThat(cookie.isAcceptingCookie()).isTrue();        
+        assertThat(cookie2.isAcceptingCookie()).isTrue();        
     }
 
 }
