@@ -1,7 +1,6 @@
 package de.awtools.registration;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 
