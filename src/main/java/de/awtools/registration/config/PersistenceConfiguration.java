@@ -11,16 +11,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class PersistenceConfiguration {
 
-    @Value("${register.persistence.classname:org.mariadb.jdbc.Driver}")
+    @Value("${register.persistence.classname}")
     private String driverClassName;
 
-    @Value("${register.persistence.url:jdbc:mariadb://192.168.99.100:3308/register")
+    @Value("${register.persistence.url}")
     private String url;
     
-    @Value("${register.persistence.username:register}")
+    @Value("${register.persistence.username}")
     private String username;
     
-    @Value("${register.persistence.password:register}")
+    @Value("${register.persistence.password}")
     private String password;
 
     public String getDriverClassName() {

@@ -24,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@PropertySource({"classpath:/register.properties"})
 @PropertySource({"file:${user.home}/.register.properties"})
 @EnableTransactionManagement
 @ComponentScan("de.awtools.registration")
@@ -40,7 +41,9 @@ public class PersistenceJPAConfig {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigIn() {
-      return new PropertySourcesPlaceholderConfigurer();
+        PropertySourcesPlaceholderConfigurer p = new PropertySourcesPlaceholderConfigurer();
+        p.setIgnoreResourceNotFound(true);
+        return p;
     }
     
     @Bean
