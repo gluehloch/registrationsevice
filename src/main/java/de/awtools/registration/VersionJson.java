@@ -7,8 +7,23 @@ package de.awtools.registration;
  */
 public class VersionJson {
 
+    private static final String VERSION = "V0.0.0.1-dev";
+    private static final VersionJson VERSION_JSON = new VersionJson();
+
+    private VersionJson() {
+    }
+
+    public static VersionJson of() {
+        return VERSION_JSON;
+    }
+
     public final String getVersion() {
-        return "V0.0.0.1-dev";
+        return VERSION;
+    }
+
+    @Override
+    public String toString() {
+        return VERSION;
     }
 
 }

@@ -23,6 +23,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * Registration Service Configuration Factory.
+ *
+ * Remember: The last property source wins on property name clash!
+ *
+ * @author Andre Winkler
+ */
 @Configuration
 @PropertySource({"classpath:/register.properties"})
 @PropertySource({"file:${user.home}/.register.properties"})
