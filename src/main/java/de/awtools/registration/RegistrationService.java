@@ -164,7 +164,7 @@ public class RegistrationService {
                     ValidationCode.KNOWN_NICKNAME);
         }
 
-        registrationDefined = registrationRepository.findByEmail(email);
+        registrationDefined = registrationRepository.findByEmail(new Email(email));
         if (registrationDefined != null) {
             return new RegistrationValidation(nickname,
                     ValidationCode.KNOWN_MAILADDRESS);

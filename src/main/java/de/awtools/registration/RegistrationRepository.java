@@ -12,7 +12,8 @@ public interface RegistrationRepository
 
     Registration findByNickname(String nickname);
     
-    Registration findByEmail(String email);
+    // @Query("select r from Registration r where r.email.email = :email")
+    Registration findByEmail(Email email);
 
     Registration findByToken(Token token);
 

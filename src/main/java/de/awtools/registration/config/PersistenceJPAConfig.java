@@ -24,8 +24,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@PropertySource({"classpath:/register.properties"})
-@PropertySource({"file:${user.home}/.register.properties"})
+@PropertySource(ignoreResourceNotFound = true, value = {
+        "classpath:/register.properties",
+        "file:${AWTOOLS_CONFDIR}/register/register.properties",
+        "file:${user.home}/.register.properties" })
 @EnableTransactionManagement
 @ComponentScan("de.awtools.registration")
 @EnableJpaRepositories(basePackages = { "de.awtools.registration" })
@@ -33,7 +35,7 @@ public class PersistenceJPAConfig {
 
     @Autowired
     private PersistenceConfiguration persistenceConfiguration;
-    
+
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(11);
@@ -45,7 +47,7 @@ public class PersistenceJPAConfig {
         p.setIgnoreResourceNotFound(true);
         return p;
     }
-    
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -62,7 +64,8 @@ public class PersistenceJPAConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(persistenceConfiguration.getDriverClassName());
+        dataSource.setDriverClassName(
+                persistenceConfiguration.getDriverClassName());
         dataSource.setUrl(persistenceConfiguration.getUrl());
         dataSource.setUsername(persistenceConfiguration.getUsername());
         dataSource.setPassword(persistenceConfiguration.getPassword());

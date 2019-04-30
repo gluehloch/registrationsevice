@@ -1,0 +1,24 @@
+https://example.com/comments/1
+
+###
+
+POST http://cookie.gluehloch.de/registrationservice/api/registration/validate HTTP/1.1
+content-type: application/json
+
+{
+    "name": "name",
+    "nickname": "nickname",
+    "firstname": "firstname",
+    "email": "email@email.de",
+    "password": "password",
+    "applicationName": "application",
+    "acceptMail": true,
+    "acceptCookie": true
+}
+
+###
+
+curl -d '{"nickname": "nickname", "name": "name", "firstname": "firstname", "email": "email@mail.de", "password": "password"}' \
+   -H "Content-Type: application/json" \
+  http://cookie.gluehloch.de/registrationservice/api/registration/validate
+
