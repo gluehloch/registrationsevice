@@ -59,23 +59,21 @@ public class RegistrationService {
      * @param acceptCookie
      *            user accepts cookies
      * @return RegistrationValidation
+     * @throws RequestValidationException
+     *             Request validation exception
      */
     @Transactional
     public RegistrationValidation registerNewUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application, boolean acceptMail, boolean acceptCookie) {
+            String application, boolean acceptMail, boolean acceptCookie)
+            throws RequestValidationException {
 
         if (!acceptMail || !acceptCookie) {
             return new RegistrationValidation(nickname,
                     ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
-        Application app = applicationRepository.findByName(application);
-        if (app == null) {
-            LOG.info("Unknown application: [%s]", application);
-            return new RegistrationValidation(nickname,
-                    ValidationCode.ILLEGAL_ARGUMENTS);
-        }
+        Application app = validateApplication(application);
 
         Registration registrationDefined = registrationRepository
                 .findByNickname(nickname);
@@ -110,7 +108,8 @@ public class RegistrationService {
     @Transactional
     public RegistrationValidation restartUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application, boolean acceptMail, boolean acceptCookie) {
+            String application, boolean acceptMail, boolean acceptCookie)
+            throws RequestValidationException {
 
         registrationRepository.deleteByEmail(new Email(email));
         return registerNewUserAccount(nickname, email, password, name,
@@ -118,7 +117,9 @@ public class RegistrationService {
     }
 
     @Transactional
-    public RegistrationValidation confirmAccount(Token token) {
+    public RegistrationValidation confirmAccount(Token token)
+            throws RequestValidationException {
+
         Registration registration = registrationRepository.findByToken(token);
         if (registration == null) {
             return new RegistrationValidation("unkown",
@@ -127,13 +128,8 @@ public class RegistrationService {
 
         registration.setConfirmed(true);
 
-        Application application = applicationRepository
-                .findByName(registration.getApplication());
-
-        if (application == null) {
-            return new RegistrationValidation("unknown",
-                    ValidationCode.UNKNOWN_APPLICATION);
-        }
+        Application application = validateApplication(
+                registration.getApplication());
 
         UserAccount newUserAccount = new UserAccount(timeService.now(),
                 registration);
@@ -147,14 +143,9 @@ public class RegistrationService {
 
     @Transactional
     public RegistrationValidation validate(String nickname, String email,
-            String applicationName) {
+            String applicationName) throws RequestValidationException {
 
-        Application application = applicationRepository
-                .findByName(applicationName);
-        if (application == null) {
-            return new RegistrationValidation(nickname,
-                    ValidationCode.ILLEGAL_ARGUMENTS);
-        }
+        Application application = validateApplication(applicationName);
 
         Registration registrationDefined = null;
 
@@ -164,13 +155,29 @@ public class RegistrationService {
                     ValidationCode.KNOWN_NICKNAME);
         }
 
-        registrationDefined = registrationRepository.findByEmail(new Email(email));
+        registrationDefined = registrationRepository
+                .findByEmail(new Email(email));
         if (registrationDefined != null) {
             return new RegistrationValidation(nickname,
                     ValidationCode.KNOWN_MAILADDRESS);
         }
 
         return new RegistrationValidation(nickname, ValidationCode.OK);
+    }
+
+    private Application validateApplication(String applicationName)
+            throws RequestValidationException {
+
+        Application application = applicationRepository
+                .findByName(applicationName);
+
+        if (application == null) {
+            throw new RequestValidationException(
+                    new RegistrationValidation("unknown",
+                            ValidationCode.UNKNOWN_APPLICATION));
+        }
+
+        return application;
     }
 
 }

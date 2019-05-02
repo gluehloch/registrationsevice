@@ -22,3 +22,18 @@ curl -d '{"nickname": "nickname", "name": "name", "firstname": "firstname", "ema
    -H "Content-Type: application/json" \
   http://cookie.gluehloch.de/registrationservice/api/registration/validate
 
+###
+
+POST http://localhost:8080/registrationservice/api/registration/validate HTTP/1.1
+content-type: application/json
+
+{
+    "name": "name",
+    "nickname": "nickname22",
+    "firstname": "firstname",
+    "email": "email@email.de",
+    "password": "password",
+    "applicationName": "test",
+    "acceptMail": true,
+    "acceptCookie": true
+}

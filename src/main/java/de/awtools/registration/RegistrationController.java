@@ -127,7 +127,14 @@ public class RegistrationController {
                 ValidationCode.ILLEGAL_ARGUMENTS,
                 ValidationCode.UNKNOWN_APPLICATION);
 
-        if (httpStatus400.contains(rv.getValidationCode())) {
+        // TODO
+        // Is there a possibility to give the client a nice response message?
+        // A JSON error message would be nice. Springboot support this.
+
+        if (rv.getValidationCode() == ValidationCode.UNKNOWN_APPLICATION) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                    "Invalid application parameter.");
+        } else if (httpStatus400.contains(rv.getValidationCode())) {
             LOG.info("Invalid request parameters {}", rv);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
