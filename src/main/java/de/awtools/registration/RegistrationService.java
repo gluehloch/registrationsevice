@@ -73,7 +73,7 @@ public class RegistrationService {
                     ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
-        Application app = validateApplication(application);
+        validateApplication(application);
 
         Registration registrationDefined = registrationRepository
                 .findByNickname(nickname);
@@ -145,7 +145,7 @@ public class RegistrationService {
     public RegistrationValidation validate(String nickname, String email,
             String applicationName) throws RequestValidationException {
 
-        Application application = validateApplication(applicationName);
+        validateApplication(applicationName);
 
         Registration registrationDefined = null;
 

@@ -12,10 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import de.awtools.registration.RequestValidationException;
 
 @ControllerAdvice
-// @ResponseBody
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
-
-    public static final String DEFAULT_ERROR_VIEW = "error";
 
     @ExceptionHandler(value = { RequestValidationException.class })
     protected ResponseEntity<Object> handleConflict(Exception ex,
@@ -24,15 +21,10 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         String bodyOfResponse = "Unknown";
         if (ex instanceof RequestValidationException) {
             RequestValidationException rvex = (RequestValidationException) ex;
-            bodyOfResponse = new StringBuilder().append('{').append("\"message\": \"")
+            bodyOfResponse = new StringBuilder().append('{')
+                    .append("\"message\": \"")
                     .append(rvex.getValidation().getValidationCode().toString())
                     .append("\"").append('}').toString();
-
-            // Json.createObjectBuilder()
-            // .add("message",
-            // rvex.getValidation().getValidationCode().toString())
-            // .build().toString();
-
         }
 
         HttpHeaders headers = new HttpHeaders();
@@ -41,24 +33,5 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, bodyOfResponse,
                 headers, HttpStatus.BAD_REQUEST, request);
     }
-
-    // @ExceptionHandler(value = /*ResponseStatusException*/ Exception.class)
-    // @ResponseStatus(HttpStatus.BAD_REQUEST)
-    /*
-     * public ModelAndView defaultErrorHandler( HttpServletRequest req,
-     * Exception e) throws Exception {
-     * 
-     * // If the exception is annotated with @ResponseStatus rethrow it and let
-     * // the framework handle it - like the OrderNotFoundException example //
-     * at the start of this post. // AnnotationUtils is a Spring Framework
-     * utility class. if (AnnotationUtils.findAnnotation(e.getClass(),
-     * ResponseStatus.class) != null) throw e;
-     * 
-     * // Otherwise setup and send the user to a default error-view.
-     * ModelAndView mav = new ModelAndView();
-     * mav.setStatus(HttpStatus.BAD_REQUEST); mav.addObject("exception", e);
-     * mav.addObject("url", req.getRequestURL());
-     * mav.setViewName(DEFAULT_ERROR_VIEW); return mav; }
-     */
 
 }
