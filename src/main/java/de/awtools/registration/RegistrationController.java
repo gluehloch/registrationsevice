@@ -46,7 +46,7 @@ public class RegistrationController {
     @CrossOrigin
     @GetMapping(path = "version", produces = HttpConst.JSON_UTF_8)
     public VersionJson versionInfo() {
-        return new VersionJson();
+        return VersionJson.of();
     }
 
     /**
