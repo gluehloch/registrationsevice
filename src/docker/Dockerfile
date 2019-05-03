@@ -1,6 +1,10 @@
 # docker build -t register:0.0.1 .
 # Namensvorschlaege: register
-# docker run --expose 8080 -p 8080:8080 --name register-0.0.1 -d register:0.0.1
+#                    
+# docker run --expose 8080 -p 9090:8080 --name register-0.0.1 -d register:0.0.1
+#                             ^    ^- Port im Container
+#                             \- Port im Host
+# docker run --expose 8080 -p 9090:8080 --name register -d register:0.0.1
 #
 # Im laufenden Betrieb ein WAR installieren:
 # docker cp registrationservice-0.0.1-SNAPSHOT.war registerservice:/usr/local/tomcat/webapps/registrationservice2.war

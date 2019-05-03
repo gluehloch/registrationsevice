@@ -37,3 +37,19 @@ content-type: application/json
     "acceptMail": true,
     "acceptCookie": true
 }
+
+###
+
+POST http://192.168.99.100:9090/registrationservice/registration/validate HTTP/1.1
+content-type: application/json
+
+{
+    "name": "name",
+    "nickname": "nickname22",
+    "firstname": "firstname",
+    "email": "email@email.de",
+    "password": "password",
+    "applicationName": "test",
+    "acceptMail": true,
+    "acceptCookie": true
+}
