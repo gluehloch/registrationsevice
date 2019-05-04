@@ -11,6 +11,7 @@ drop table if exists application;
 
 create table cookie(
     id bigint not null auto_increment,
+    website VARCHAR(50),
     remoteaddress VARCHAR(100) not null comment 'the user remote address',
     browser VARCHAR(200) not null comment 'the user browser',
     created datetime not null comment 'entry creation time',

@@ -53,7 +53,9 @@ public class CookieController {
         DateTimeJson dateTimeJson = new DateTimeJson();      
         
         return dateTimeJson.setDateTime(cookieService
-                .storeCookieAcceptance(userAgent,
+                .storeCookieAcceptance(
+                        cookieJson.getWebsite(),
+                        userAgent,
                         request.getRemoteAddr(),
                         cookieJson.isAcceptCookies())
                 .getCreated());

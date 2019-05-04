@@ -24,6 +24,10 @@ public class Cookie {
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
+    @Column(name = "website")
+    @Size(max = 50)
+    private String website;
+    
     @Column(name = "remoteaddress")
     @Size(max = 100)
     private String remoteaddress;
@@ -44,6 +48,14 @@ public class Cookie {
         return id;
     }
 
+    public String getWebsite() {
+        return website;
+    }
+    
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+    
     public String getRemoteaddress() {
         return this.remoteaddress;
     }

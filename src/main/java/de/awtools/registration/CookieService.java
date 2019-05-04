@@ -15,8 +15,11 @@ public class CookieService {
     private CookieRepository cookieRepository;
 
     @Transactional
-    public Cookie storeCookieAcceptance(String browser, String remoteaddress, boolean acceptCookies) {
+    public Cookie storeCookieAcceptance(String website, String browser,
+            String remoteaddress, boolean acceptCookies) {
+
         Cookie cookie = new Cookie();
+        cookie.setWebsite(website);
         cookie.setAcceptCookie(acceptCookies);
         cookie.setBrowser(browser);
         cookie.setRemoteaddress(remoteaddress);

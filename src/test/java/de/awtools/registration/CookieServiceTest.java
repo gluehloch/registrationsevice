@@ -34,13 +34,15 @@ public class CookieServiceTest {
     public void registerNewAccount() throws Exception {
         LOG.info("Start of the test...");
 
-        Cookie cookie = cookieService.storeCookieAcceptance("Bworser",
+        Cookie cookie = cookieService.storeCookieAcceptance("test.de",
+                "Bworser",
                 "RemoteAddress", false);
         assertThat(cookie.isAcceptingCookie()).isFalse();
-        
-        Cookie cookie2 = cookieService.storeCookieAcceptance("Bworser",
+
+        Cookie cookie2 = cookieService.storeCookieAcceptance("test.de",
+                "Bworser",
                 "RemoteAddress", true);
-        assertThat(cookie2.isAcceptingCookie()).isTrue();        
+        assertThat(cookie2.isAcceptingCookie()).isTrue();
     }
 
 }

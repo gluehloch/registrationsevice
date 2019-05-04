@@ -2,8 +2,6 @@ package de.awtools.registration;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * A JSON wrapper for the cookie confirmation of a user.
  *
@@ -14,6 +12,7 @@ public class CookieJson implements Serializable {
     private static final long serialVersionUID = 6847203448959868549L;
 
     private boolean acceptCookies;
+    private String website;
 
     public boolean isAcceptCookies() {
         return acceptCookies;
@@ -21,6 +20,14 @@ public class CookieJson implements Serializable {
 
     public void setAcceptCookies(boolean acceptCookies) {
         this.acceptCookies = acceptCookies;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
 }
