@@ -2,6 +2,7 @@ package de.awtools.registration;
 
 import java.time.LocalDateTime;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,11 +46,15 @@ public class CookieController {
     @PostMapping(path = "confirmCookie", headers = {
             HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
     public DateTimeJson confirmCookie(
-            @Valid @RequestBody CookieJson cookieJson) {
-        DateTimeJson dateTimeJson = new DateTimeJson();
+            @Valid @RequestBody CookieJson cookieJson,
+            @RequestHeader("User-Agent") String userAgent,
+            HttpServletRequest request) {
+
+        DateTimeJson dateTimeJson = new DateTimeJson();      
+        
         return dateTimeJson.setDateTime(cookieService
-                .storeCookieAcceptance(cookieJson.getBrowser(),
-                        cookieJson.getRemoteaddress(),
+                .storeCookieAcceptance(userAgent,
+                        request.getRemoteAddr(),
                         cookieJson.isAcceptCookies())
                 .getCreated());
     }

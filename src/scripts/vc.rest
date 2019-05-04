@@ -53,3 +53,19 @@ content-type: application/json
     "acceptMail": true,
     "acceptCookie": true
 }
+
+###
+
+POST https://tippdiekistebier.de/registrationservice/registration/validate HTTP/1.1
+content-type: application/json
+
+{
+    "name": "name",
+    "nickname": "nickname22",
+    "firstname": "firstname",
+    "email": "email@email.de",
+    "password": "password",
+    "applicationName": "test",
+    "acceptMail": true,
+    "acceptCookie": true
+}
