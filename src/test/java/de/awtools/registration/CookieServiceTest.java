@@ -31,7 +31,7 @@ public class CookieServiceTest {
     private CookieService cookieService;
 
     @Test
-    public void registerNewAccount() throws Exception {
+    public void registerNewAccount() {
         LOG.info("Start of the test...");
 
         Cookie cookie = cookieService.storeCookieAcceptance("test.de",
