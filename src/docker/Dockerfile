@@ -10,7 +10,7 @@
 # docker cp registrationservice-0.0.1-SNAPSHOT.war registerservice:/usr/local/tomcat/webapps/registrationservice2.war
 #
 
-FROM tomcat:9.0.14-jre11
+FROM tomcat:9.0.21-jdk11-openjdk
 
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
