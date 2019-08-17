@@ -65,6 +65,12 @@ public class RegistrationController {
         return dateTimeJson;
     }
 
+    /**
+     * Here starts the registration process.
+     *
+     * @param registration The registration data.
+     * @return A copy of the registration data.
+     */
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/register", headers = {
@@ -85,6 +91,12 @@ public class RegistrationController {
         return new RegistrationValidationJson(validation);
     }
 
+    /**
+     * Validates the registration data. Should be called before <code>/register</code>.
+     *
+     * @param registration The registration data
+     * @return A copy of the registration data.
+     */
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Invalid application name") })

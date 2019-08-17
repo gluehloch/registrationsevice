@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -64,6 +65,10 @@ public class Registration {
 
     @Column(name = "acceptcookie")
     private boolean acceptCookie;
+
+    @Column(name = "supplement")
+    @Size(max = 100)
+    private String supplement;
 
     public Long getId() {
         return id;
@@ -159,6 +164,14 @@ public class Registration {
 
     public void setAcceptCookie(boolean acceptCookie) {
         this.acceptCookie = acceptCookie;
+    }
+
+    public String getSupplement() {
+        return supplement;
+    }
+
+    public void setSupplement(String supplement) {
+        this.supplement = supplement;
     }
 
     @Override

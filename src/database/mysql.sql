@@ -32,6 +32,7 @@ create table registration (
     confirmed bit comment 'registration completed successful',
     acceptmail bit comment 'user accepts emails',
     acceptcookie bit comment 'user accepts cookies',
+    supplement varchar(100) comment 'supplement / untyped data.',
     primary key(id)
 ) ENGINE=InnoDB;
 
