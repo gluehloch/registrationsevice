@@ -58,6 +58,8 @@ public class RegistrationService {
      *            user accepts mails
      * @param acceptCookie
      *            user accepts cookies
+     * @param supplement
+     *            untyped supplement data
      * @return RegistrationValidation
      * @throws RequestValidationException
      *             Request validation exception
@@ -65,7 +67,8 @@ public class RegistrationService {
     @Transactional
     public RegistrationValidation registerNewUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application, boolean acceptMail, boolean acceptCookie)
+            String application, boolean acceptMail, boolean acceptCookie,
+            String supplement)
             throws RequestValidationException {
 
         if (!acceptMail || !acceptCookie) {
@@ -99,6 +102,7 @@ public class RegistrationService {
         registration.setConfirmed(false);
         registration.setAcceptCookie(acceptCookie);
         registration.setAcceptMail(acceptMail);
+        registration.setSupplement(supplement);
 
         registrationRepository.save(registration);
 
@@ -108,12 +112,13 @@ public class RegistrationService {
     @Transactional
     public RegistrationValidation restartUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application, boolean acceptMail, boolean acceptCookie)
+            String application, boolean acceptMail, boolean acceptCookie,
+            String supplement)
             throws RequestValidationException {
 
         registrationRepository.deleteByEmail(new Email(email));
         return registerNewUserAccount(nickname, email, password, name,
-                firstname, application, acceptMail, acceptCookie);
+                firstname, application, acceptMail, acceptCookie, supplement);
     }
 
     @Transactional

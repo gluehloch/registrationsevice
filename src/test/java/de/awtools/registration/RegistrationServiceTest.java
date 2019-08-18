@@ -50,7 +50,8 @@ public class RegistrationServiceTest {
 
         RegistrationValidation validation = registrationService
                 .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
-                        "Winkler", "Andre", "applicationName", true, true);
+                        "Winkler", "Andre", "applicationName", true, true,
+                        "Supplement data");
 
         Registration registration = registrationRepository
                 .findByNickname("Frosch");
@@ -65,7 +66,8 @@ public class RegistrationServiceTest {
 
         RegistrationValidation restartUserAccount = registrationService
                 .restartUserAccount("Frosch", "frosch@web.de", "Frosch",
-                        "Winkler", "Andre", "applicationName", true, true);
+                        "Winkler", "Andre", "applicationName", true, true,
+                        "Supplement data");
     }
 
     @Test

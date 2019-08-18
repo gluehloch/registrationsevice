@@ -36,6 +36,8 @@ public class RegistrationJson implements Serializable {
     private boolean acceptMail;
     
     private boolean acceptCookie;
+
+    private String supplement;
     
     public String getNickname() {
         return nickname;
@@ -99,6 +101,14 @@ public class RegistrationJson implements Serializable {
 
     public void setAcceptCookie(boolean acceptCookie) {
         this.acceptCookie = acceptCookie;
+    }
+
+    public String getSupplement() {
+        return supplement;
+    }
+
+    public void setSupplement(String supplement) {
+        this.supplement = supplement;
     }
 
     @Override
