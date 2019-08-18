@@ -86,7 +86,8 @@ public class RegistrationController {
                         registration.getFirstname(),
                         registration.getApplicationName(),
                         registration.isAcceptMail(),
-                        registration.isAcceptCookie());
+                        registration.isAcceptCookie(),
+                        registration.getSupplement());
 
         return new RegistrationValidationJson(validation);
     }
