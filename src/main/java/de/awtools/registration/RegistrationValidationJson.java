@@ -1,20 +1,21 @@
 package de.awtools.registration;
 
+import java.util.Set;
+
 public class RegistrationValidationJson {
+
+    private String nickname;
+    private Set<RegistrationValidation.ValidationCode> validationCodes;
 
     public RegistrationValidationJson() {
     }
 
-    public RegistrationValidationJson(
-            RegistrationValidation registrationValidation) {
+    public RegistrationValidationJson(String nickname,
+            Set<RegistrationValidation.ValidationCode> validationCodes) {
 
-        this.nickname = registrationValidation.getNickname();
-        this.validationCode = registrationValidation.getValidationCode()
-                .getCode();
+        this.nickname = nickname;
+        this.validationCodes = validationCodes;
     }
-
-    private String nickname;
-    private int validationCode;
 
     public String getNickname() {
         return nickname;
@@ -22,14 +23,6 @@ public class RegistrationValidationJson {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public int getValidationCode() {
-        return validationCode;
-    }
-
-    public void setValidationCode(int validationCode) {
-        this.validationCode = validationCode;
     }
 
 }

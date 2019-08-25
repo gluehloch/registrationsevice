@@ -39,7 +39,7 @@ public class RegistrationController {
 
     /**
      * Shows the current version of this API.
-     * 
+     *
      * @return A version String.
      */
     @ApiOperation(value = "version", nickname = "version", response = String.class)
@@ -89,7 +89,8 @@ public class RegistrationController {
                         registration.isAcceptCookie(),
                         registration.getSupplement());
 
-        return new RegistrationValidationJson(validation);
+        return new RegistrationValidationJson(validation.getNickname(),
+                validation.getValidationCodes());
     }
 
     /**
@@ -114,14 +115,14 @@ public class RegistrationController {
 
         toResponseStatusException(validation);
 
-        return new RegistrationValidationJson(validation);
+        return new RegistrationValidationJson(validation.getNickname(),
+                validation.getValidationCodes());
     }
 
     /**
      * The user confirmed his account.
      *
-     * @param token
-     *            The unique token of a new user.
+     * @param token The unique token of a new user.
      * @return ...
      */
     @CrossOrigin
@@ -132,10 +133,12 @@ public class RegistrationController {
 
         toResponseStatusException(validation);
 
-        return new RegistrationValidationJson(validation);
+        return new RegistrationValidationJson(validation.getNickname(),
+                validation.getValidationCodes());
     }
 
     private void toResponseStatusException(RegistrationValidation rv) {
+        // Http Status Code 400: Bad request
         Set<ValidationCode> httpStatus400 = Set.of(
                 ValidationCode.ILLEGAL_ARGUMENTS,
                 ValidationCode.UNKNOWN_APPLICATION);
@@ -145,7 +148,7 @@ public class RegistrationController {
         // A JSON error message would be nice. Springboot support this.
 
         if (rv.getValidationCode() == ValidationCode.UNKNOWN_APPLICATION) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Invalid application parameter.");
         } else if (httpStatus400.contains(rv.getValidationCode())) {
             LOG.info("Invalid request parameters {}", rv);

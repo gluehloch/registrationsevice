@@ -52,8 +52,8 @@ public class RegistrationService {
      *            real name
      * @param firstname
      *            real firstname
-     * @param application
-     *            the application to register for
+     * @param applicationName
+     *            the application name to register for
      * @param acceptMail
      *            user accepts mails
      * @param acceptCookie
@@ -67,46 +67,60 @@ public class RegistrationService {
     @Transactional
     public RegistrationValidation registerNewUserAccount(String nickname,
             String email, String password, String name, String firstname,
-            String application, boolean acceptMail, boolean acceptCookie,
+            String applicationName, boolean acceptMail, boolean acceptCookie,
             String supplement)
             throws RequestValidationException {
 
-        if (!acceptMail || !acceptCookie) {
-            return new RegistrationValidation(nickname,
-                    ValidationCode.ILLEGAL_ARGUMENTS);
+        RegistrationValidation registrationValidation = new RegistrationValidation(nickname);
+
+        if (!acceptCookie) {
+            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_COOKIE);
         }
 
-        validateApplication(application);
-
-        Registration registrationDefined = registrationRepository
-                .findByNickname(nickname);
-        if (registrationDefined != null) {
-            LOG.info("Nickname already defined: [%s]", nickname);
-            return new RegistrationValidation(nickname,
-                    ValidationCode.ILLEGAL_ARGUMENTS);
+        if (!acceptMail) {
+            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
-        LocalDateTime now = timeService.now();
+        Application application = applicationRepository.findByName(applicationName);
+        if (application == null) {
+            registrationValidation.addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
+        }
 
-        Registration registration = new Registration();
-        registration.setNickname(nickname);
-        registration.setFirstname(firstname);
-        registration.setName(name);
-        registration
-                .setPassword(new Password(passwordEncoder.encode(password)));
-        registration.setEmail(new Email(email));
-        registration.setCreated(now);
-        UUID token = UUID.randomUUID();
-        registration.setToken(new Token(token.toString()));
-        registration.setApplication(application);
-        registration.setConfirmed(false);
-        registration.setAcceptCookie(acceptCookie);
-        registration.setAcceptMail(acceptMail);
-        registration.setSupplement(supplement);
+        UserAccount userAccountCheck = userAccountRepository.findByNickname(nickname);
+        if (userAccountCheck != null) {
+            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
+        }
 
-        registrationRepository.save(registration);
+        Registration registrationCheck = registrationRepository.findByNickname(nickname);
+        if (registrationCheck != null) {
+            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
+        }
 
-        return new RegistrationValidation(nickname, ValidationCode.OK);
+        if (registrationValidation.ok()) {
+            LocalDateTime now = timeService.now();
+
+            Registration registration = new Registration();
+            registration.setNickname(nickname);
+            registration.setFirstname(firstname);
+            registration.setName(name);
+            registration
+                    .setPassword(new Password(passwordEncoder.encode(password)));
+            registration.setEmail(new Email(email));
+            registration.setCreated(now);
+            UUID token = UUID.randomUUID();
+            registration.setToken(new Token(token.toString()));
+            registration.setApplication(applicationName);
+            registration.setConfirmed(false);
+            registration.setAcceptCookie(acceptCookie);
+            registration.setAcceptMail(acceptMail);
+            registration.setSupplement(supplement);
+
+            registrationRepository.save(registration);
+
+            registrationValidation.addValidationCode(ValidationCode.OK);
+        }
+
+        return registrationValidation;
     }
 
     @Transactional

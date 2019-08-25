@@ -11,12 +11,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import de.awtools.registration.RequestValidationException;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 @ControllerAdvice
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { RequestValidationException.class })
     protected ResponseEntity<Object> handleConflict(Exception ex,
             WebRequest request) {
+
+        JsonObjectBuilder json = Json.createObjectBuilder();
+        json.add()
+
 
         String bodyOfResponse = "Unknown";
         if (ex instanceof RequestValidationException) {
