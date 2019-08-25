@@ -1,5 +1,6 @@
 package de.awtools.registration.config;
 
+import de.awtools.registration.RegistrationValidation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import de.awtools.registration.RequestValidationException;
 
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
@@ -23,23 +25,24 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         JsonObjectBuilder json = Json.createObjectBuilder();
-        json.add()
 
-
-        String bodyOfResponse = "Unknown";
         if (ex instanceof RequestValidationException) {
             RequestValidationException rvex = (RequestValidationException) ex;
-            bodyOfResponse = new StringBuilder().append('{')
-                    .append("\"message\": \"")
-                    .append(rvex.getValidation().getValidationCode().toString())
-                    .append("\"").append('}').toString();
+
+            JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+            for (RegistrationValidation.ValidationCode vc : rvex.getValidation()
+                    .getValidationCodes()) {
+                arrayBuilder.add(vc.name());
+            }
+
+            json.add("message", arrayBuilder.build());
         }
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
-        return handleExceptionInternal(ex, bodyOfResponse,
-                headers, HttpStatus.BAD_REQUEST, request);
+        return handleExceptionInternal(ex, json.build(), headers,
+                HttpStatus.BAD_REQUEST, request);
     }
 
 }
