@@ -92,9 +92,10 @@ public class ValidationTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 // In der 'Bad-Requets' Variante wird kein JSON ausgeliefert.
+                .andExpect(jsonPath("nickname").value("nickname"))
                 .andExpect(jsonPath("validationCode").value("UNKNOWN_APPLICATION"))
                 .andExpect(content().json(
-                        "{'nickname':'unknown'," +
+                        "{'nickname':'nickname'," +
                                 "'applicationName':'unknownApplication'," +
                                 "'validationCode':['UNKNOWN_APPLICATION']}"))
                 .andReturn();

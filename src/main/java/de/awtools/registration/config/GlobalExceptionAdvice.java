@@ -45,17 +45,19 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
+        return handleExceptionInternal(ex, jsonToString(json), headers,
+                HttpStatus.BAD_REQUEST, request);
+    }
 
+    private String jsonToString(JsonObjectBuilder jsonBuilder) {
         String jsonString;
         try(Writer writer = new StringWriter()) {
-            Json.createWriter(writer).write(json.build());
+            Json.createWriter(writer).write(jsonBuilder.build());
             jsonString = writer.toString();
         } catch (IOException ioex) {
             jsonString = ioex.getLocalizedMessage();
         }
-
-        return handleExceptionInternal(ex, jsonString, headers,
-                HttpStatus.BAD_REQUEST, request);
+        return jsonString;
     }
 
 }

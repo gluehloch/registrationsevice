@@ -149,6 +149,7 @@ public class RegistrationService {
         registration.setConfirmed(true);
 
         Application application = validateApplication(
+                registration.getNickname(),
                 registration.getApplication());
 
         UserAccount newUserAccount = new UserAccount(timeService.now(),
@@ -165,7 +166,7 @@ public class RegistrationService {
     public RegistrationValidation validate(String nickname, String email,
             String applicationName) throws RequestValidationException {
 
-        validateApplication(applicationName);
+        validateApplication(nickname, applicationName);
 
         Registration registrationDefined = null;
 
@@ -185,7 +186,7 @@ public class RegistrationService {
         return new RegistrationValidation(nickname, ValidationCode.OK);
     }
 
-    private Application validateApplication(String applicationName)
+    private Application validateApplication(String nickname, String applicationName)
             throws RequestValidationException {
 
         Application application = applicationRepository
@@ -193,7 +194,7 @@ public class RegistrationService {
 
         if (application == null) {
             throw new RequestValidationException(
-                    new RegistrationValidation("unknown", applicationName,
+                    new RegistrationValidation(nickname, applicationName,
                             ValidationCode.UNKNOWN_APPLICATION));
         }
 
