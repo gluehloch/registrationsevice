@@ -137,21 +137,21 @@ public class RegistrationController {
                 validation.getValidationCodes());
     }
 
+    /**
+     * Throws an exception:
+     * <ul>
+     *     <li>The application is unknown.</li>
+     * </ul>
+     * @param rv The validation result.
+     */
     private void toResponseStatusException(RegistrationValidation rv) {
         // Http Status Code 400: Bad request
-        Set<ValidationCode> httpStatus400 = Set.of(
-                ValidationCode.ILLEGAL_ARGUMENTS,
-                ValidationCode.UNKNOWN_APPLICATION);
-
-        // TODO FIX ME
-        ... this does not work...
+        Set<ValidationCode> httpStatus400 = Set.of(ValidationCode.UNKNOWN_APPLICATION);
 
         if (rv.getValidationCodes().contains(ValidationCode.UNKNOWN_APPLICATION)) {
+            LOG.error("Find an unknown application.");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Invalid application parameter.");
-        } else if (rv.getValidationCodes().) {
-            LOG.info("Invalid request parameters {}", rv);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 

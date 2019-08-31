@@ -12,10 +12,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import de.awtools.registration.RequestValidationException;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import javax.json.*;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 
 @ControllerAdvice
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
@@ -24,10 +24,14 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleConflict(Exception ex,
             WebRequest request) {
 
-        JsonObjectBuilder json = Json.createObjectBuilder();
+        JsonBuilderFactory factory = Json.createBuilderFactory(null);
+        JsonObjectBuilder json = factory.createObjectBuilder();
 
         if (ex instanceof RequestValidationException) {
             RequestValidationException rvex = (RequestValidationException) ex;
+
+            json.add("nickname", rvex.getValidation().getNickname());
+            json.add("applicationName", rvex.getValidation().getApplicationName());
 
             JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
             for (RegistrationValidation.ValidationCode vc : rvex.getValidation()
@@ -35,13 +39,22 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
                 arrayBuilder.add(vc.name());
             }
 
-            json.add("message", arrayBuilder.build());
+            json.add("validationCode", arrayBuilder.build());
         }
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
 
-        return handleExceptionInternal(ex, json.build(), headers,
+
+        String jsonString;
+        try(Writer writer = new StringWriter()) {
+            Json.createWriter(writer).write(json.build());
+            jsonString = writer.toString();
+        } catch (IOException ioex) {
+            jsonString = ioex.getLocalizedMessage();
+        }
+
+        return handleExceptionInternal(ex, jsonString, headers,
                 HttpStatus.BAD_REQUEST, request);
     }
 

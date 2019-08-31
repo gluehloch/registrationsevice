@@ -59,7 +59,7 @@ public class RegistrationServiceTest {
                 .findByToken(registration.getToken());
 
         assertThat(registration.getId()).isEqualTo(registration2.getId());
-        assertThat(validation.getValidationCode()).isEqualTo(ValidationCode.OK);
+        assertThat(validation.getValidationCodes()).contains(ValidationCode.OK);
         assertThat(validation.getNickname()).isEqualTo("Frosch");
         assertThat(registration.isAcceptingCookie()).isTrue();
         assertThat(registration.isAcceptingMail()).isTrue();

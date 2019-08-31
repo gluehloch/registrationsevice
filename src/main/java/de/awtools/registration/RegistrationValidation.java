@@ -28,19 +28,35 @@ public class RegistrationValidation {
     }
 
     private final String nickname;
+    private String applicationName;
     private final Set<ValidationCode> validationCodes = new HashSet<>();
 
     public RegistrationValidation(String nickname) {
-        this.nickname = nickname;
+        this(nickname, null, null);
     }
 
     public RegistrationValidation(String nickname, ValidationCode code) {
+        this(nickname, null, code);
+    }
+
+    public RegistrationValidation(String nickname, String applicationName, ValidationCode code) {
         this.nickname = nickname;
-        this.validationCodes.add(code);
+        this.applicationName = applicationName;
+        if (code != null) {
+            this.validationCodes.add(code);
+        }
     }
 
     public String getNickname() {
         return nickname;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
     }
 
     public Set<ValidationCode> getValidationCodes() {

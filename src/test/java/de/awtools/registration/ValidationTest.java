@@ -3,6 +3,7 @@ package de.awtools.registration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,8 +92,8 @@ public class ValidationTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 // In der 'Bad-Requets' Variante wird kein JSON ausgeliefert.
-                // .andExpect(jsonPath("validationCode").value("2000"))
-                // .andExpect(content().json("{'validationCode': 1003}"))
+                .andExpect(jsonPath("validationCode").value("2000"))
+                .andExpect(content().json("{'validationCode': 1003}"))
                 .andReturn();
 
         // assertThat(result.getResponse().getContentType())

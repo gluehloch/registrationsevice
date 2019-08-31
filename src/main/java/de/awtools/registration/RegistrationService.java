@@ -83,6 +83,7 @@ public class RegistrationService {
 
         Application application = applicationRepository.findByName(applicationName);
         if (application == null) {
+            registrationValidation.setApplicationName(applicationName);
             registrationValidation.addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
         }
 
@@ -141,7 +142,7 @@ public class RegistrationService {
 
         Registration registration = registrationRepository.findByToken(token);
         if (registration == null) {
-            return new RegistrationValidation("unkown",
+            return new RegistrationValidation("unknown",
                     ValidationCode.ILLEGAL_ARGUMENTS);
         }
 
@@ -192,7 +193,7 @@ public class RegistrationService {
 
         if (application == null) {
             throw new RequestValidationException(
-                    new RegistrationValidation("unknown",
+                    new RegistrationValidation("unknown", applicationName,
                             ValidationCode.UNKNOWN_APPLICATION));
         }
 
