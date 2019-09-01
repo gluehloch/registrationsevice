@@ -37,6 +37,9 @@ import de.awtools.registration.config.PersistenceJPAConfig;
 public class ValidationTest {
 
     @Autowired
+    private ApplicationRepository applicationRepository;
+
+    @Autowired
     private WebApplicationContext webAppContext;
 
     private MockMvc mockMvc;
@@ -84,31 +87,57 @@ public class ValidationTest {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(registration);
 
-        MvcResult result = mockMvc
+        /*MvcResult result =*/
+        mockMvc
                 .perform(post("/registration/validate")
                         .content(json)
                         .header("Content-type", "application/json")
                         .header("charset", "UTF-8"))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                // In der 'Bad-Requets' Variante wird kein JSON ausgeliefert.
                 .andExpect(jsonPath("nickname").value("nickname"))
-                .andExpect(jsonPath("validationCode").value("UNKNOWN_APPLICATION"))
+                .andExpect(
+                        jsonPath("validationCode").value("UNKNOWN_APPLICATION"))
                 .andExpect(content().json(
                         "{'nickname':'nickname'," +
                                 "'applicationName':'unknownApplication'," +
                                 "'validationCode':['UNKNOWN_APPLICATION']}"))
                 .andReturn();
+    }
 
-        // assertThat(result.getResponse().getContentType())
-        //        .isEqualTo("application/json;charset=utf-8");
+    @Test
+    public void validateKnownApplication() throws Exception {
+        Application application = new Application();
+        application.setName("application");
+        application.setDescription("Test Application for some JUnit tests.");
+        application = applicationRepository.save(application);
 
-        // RegistrationValidation validation = mapper.readValue(
-        // result.getResponse().getContentAsString(),
-        // RegistrationValidation.class);
-        //
-        // assertThat(validation.getValidationCode())
-        // .isEqualTo(ValidationCode.ILLEGAL_ARGUMENTS);
+        RegistrationJson registration = new RegistrationJson();
+        registration.setApplicationName("application");
+        registration.setEmail("email@web.de");
+        registration.setFirstname("firstname");
+        registration.setName("name");
+        registration.setNickname("nickname");
+        registration.setPassword("password");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(registration);
+
+        mockMvc.perform(post("/registration/validate")
+                .content(json)
+                .header("Content-type", "application/json")
+                .header("charset", "UTF-8"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("nickname").value("nickname"))
+                .andExpect(jsonPath("validationCode").value("OK"))
+                .andExpect(content().json(
+                        "{'nickname':'nickname'," +
+                                "'applicationName':'applicationName'," +
+                                "'validationCode':['OK']}"))
+                .andReturn();
+
+        applicationRepository.delete(application);
     }
 
 }

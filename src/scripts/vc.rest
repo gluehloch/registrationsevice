@@ -40,7 +40,7 @@ content-type: application/json
 
 ###
 
-POST http://192.168.99.100:9090/registrationservice/registration/validate HTTP/1.1
+POST http://192.168.99.101:9090/registrationservice/registration/validate HTTP/1.1
 content-type: application/json
 
 {
