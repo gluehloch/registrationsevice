@@ -107,6 +107,8 @@ public class ValidationTest {
 
     @Test
     public void validateKnownApplication() throws Exception {
+        applicationRepository.deleteAll();
+
         Application application = new Application();
         application.setName("application");
         application.setDescription("Test Application for some JUnit tests.");
@@ -130,11 +132,11 @@ public class ValidationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("nickname").value("nickname"))
-                .andExpect(jsonPath("validationCode").value("OK"))
+                .andExpect(jsonPath("validationCodes").value("OK"))
                 .andExpect(content().json(
                         "{'nickname':'nickname'," +
                                 "'applicationName':'applicationName'," +
-                                "'validationCode':['OK']}"))
+                                "'validationCodes':['OK']}"))
                 .andReturn();
 
         applicationRepository.delete(application);

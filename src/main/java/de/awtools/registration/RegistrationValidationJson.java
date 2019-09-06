@@ -1,5 +1,6 @@
 package de.awtools.registration;
 
+import java.util.Collections;
 import java.util.Set;
 
 public class RegistrationValidationJson {
@@ -23,6 +24,10 @@ public class RegistrationValidationJson {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public Set<RegistrationValidation.ValidationCode> getRegistrationValidations() {
+        return Collections.unmodifiableSet(validationCodes);
     }
 
 }
