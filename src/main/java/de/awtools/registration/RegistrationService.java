@@ -71,30 +71,38 @@ public class RegistrationService {
             String supplement)
             throws RequestValidationException {
 
-        RegistrationValidation registrationValidation = new RegistrationValidation(nickname);
+        RegistrationValidation registrationValidation = new RegistrationValidation(
+                nickname, applicationName);
 
         if (!acceptCookie) {
-            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_COOKIE);
+            registrationValidation
+                    .addValidationCode(ValidationCode.MISSING_ACCEPT_COOKIE);
         }
 
         if (!acceptMail) {
-            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
+            registrationValidation
+                    .addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
-        Application application = applicationRepository.findByName(applicationName);
+        Application application = applicationRepository
+                .findByName(applicationName);
         if (application == null) {
-            registrationValidation.setApplicationName(applicationName);
-            registrationValidation.addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
+            registrationValidation
+                    .addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
         }
 
-        UserAccount userAccountCheck = userAccountRepository.findByNickname(nickname);
+        UserAccount userAccountCheck = userAccountRepository
+                .findByNickname(nickname);
         if (userAccountCheck != null) {
-            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
+            registrationValidation
+                    .addValidationCode(ValidationCode.KNOWN_NICKNAME);
         }
 
-        Registration registrationCheck = registrationRepository.findByNickname(nickname);
+        Registration registrationCheck = registrationRepository
+                .findByNickname(nickname);
         if (registrationCheck != null) {
-            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
+            registrationValidation
+                    .addValidationCode(ValidationCode.KNOWN_NICKNAME);
         }
 
         if (registrationValidation.ok()) {
@@ -105,7 +113,8 @@ public class RegistrationService {
             registration.setFirstname(firstname);
             registration.setName(name);
             registration
-                    .setPassword(new Password(passwordEncoder.encode(password)));
+                    .setPassword(
+                            new Password(passwordEncoder.encode(password)));
             registration.setEmail(new Email(email));
             registration.setCreated(now);
             UUID token = UUID.randomUUID();
@@ -142,8 +151,8 @@ public class RegistrationService {
 
         Registration registration = registrationRepository.findByToken(token);
         if (registration == null) {
-            return new RegistrationValidation("unknown",
-                    ValidationCode.ILLEGAL_ARGUMENTS);
+            return new RegistrationValidation(null, null,
+                    ValidationCode.UNKNOWN_TOKEN);
         }
 
         registration.setConfirmed(true);
@@ -159,6 +168,7 @@ public class RegistrationService {
         userAccountRepository.save(newUserAccount);
 
         return new RegistrationValidation(registration.getNickname(),
+                registration.getApplication(),
                 ValidationCode.OK);
     }
 
@@ -173,6 +183,7 @@ public class RegistrationService {
         registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined != null) {
             return new RegistrationValidation(nickname,
+                    applicationName,
                     ValidationCode.KNOWN_NICKNAME);
         }
 
@@ -180,13 +191,16 @@ public class RegistrationService {
                 .findByEmail(new Email(email));
         if (registrationDefined != null) {
             return new RegistrationValidation(nickname,
+                    applicationName,
                     ValidationCode.KNOWN_MAILADDRESS);
         }
 
-        return new RegistrationValidation(nickname, ValidationCode.OK);
+        return new RegistrationValidation(nickname, applicationName,
+                ValidationCode.OK);
     }
 
-    private Application validateApplication(String nickname, String applicationName)
+    private Application validateApplication(String nickname,
+            String applicationName)
             throws RequestValidationException {
 
         Application application = applicationRepository

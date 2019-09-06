@@ -7,6 +7,7 @@ import java.util.Set;
 public class RegistrationValidation {
 
     public enum ValidationCode {
+        // @formatter:off
         OK(1),
         KNOWN_DATA(1000),
         KNOWN_NICKNAME(1001),
@@ -14,7 +15,9 @@ public class RegistrationValidation {
         UNKNOWN_APPLICATION(1003),
         MISSING_ACCEPT_EMAIL(1004),
         MISSING_ACCEPT_COOKIE(1005),
+        UNKNOWN_TOKEN(1006),
         ILLEGAL_ARGUMENTS(2000);
+        // @formatter:on
 
         ValidationCode(int code) {
             this.code = code;
@@ -28,18 +31,15 @@ public class RegistrationValidation {
     }
 
     private final String nickname;
-    private String applicationName;
+    private final String applicationName;
     private final Set<ValidationCode> validationCodes = new HashSet<>();
 
-    public RegistrationValidation(String nickname) {
-        this(nickname, null, null);
+    public RegistrationValidation(String nickname, String applicationName) {
+        this(nickname, applicationName, null);
     }
 
-    public RegistrationValidation(String nickname, ValidationCode code) {
-        this(nickname, null, code);
-    }
-
-    public RegistrationValidation(String nickname, String applicationName, ValidationCode code) {
+    public RegistrationValidation(String nickname, String applicationName,
+            ValidationCode code) {
         this.nickname = nickname;
         this.applicationName = applicationName;
         if (code != null) {
@@ -49,10 +49,6 @@ public class RegistrationValidation {
 
     public String getNickname() {
         return nickname;
-    }
-
-    public void setApplicationName(String applicationName) {
-        this.applicationName = applicationName;
     }
 
     public String getApplicationName() {

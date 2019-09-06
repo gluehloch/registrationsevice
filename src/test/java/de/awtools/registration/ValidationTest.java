@@ -135,7 +135,7 @@ public class ValidationTest {
                 .andExpect(jsonPath("validationCodes").value("OK"))
                 .andExpect(content().json(
                         "{'nickname':'nickname'," +
-                                "'applicationName':'applicationName'," +
+                                "'applicationName':'application'," +
                                 "'validationCodes':['OK']}"))
                 .andReturn();
 

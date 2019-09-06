@@ -68,7 +68,8 @@ public class RegistrationController {
     /**
      * Here starts the registration process.
      *
-     * @param registration The registration data.
+     * @param registration
+     *            The registration data.
      * @return A copy of the registration data.
      */
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
@@ -89,14 +90,15 @@ public class RegistrationController {
                         registration.isAcceptCookie(),
                         registration.getSupplement());
 
-        return new RegistrationValidationJson(validation.getNickname(),
-                validation.getValidationCodes());
+        return RegistrationValidationJson.of(validation);
     }
 
     /**
-     * Validates the registration data. Should be called before <code>/register</code>.
+     * Validates the registration data. Should be called before
+     * <code>/register</code>.
      *
-     * @param registration The registration data
+     * @param registration
+     *            The registration data
      * @return A copy of the registration data.
      */
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
@@ -115,14 +117,14 @@ public class RegistrationController {
 
         toResponseStatusException(validation);
 
-        return new RegistrationValidationJson(validation.getNickname(),
-                validation.getValidationCodes());
+        return RegistrationValidationJson.of(validation);
     }
 
     /**
      * The user confirmed his account.
      *
-     * @param token The unique token of a new user.
+     * @param token
+     *            The unique token of a new user.
      * @return ...
      */
     @CrossOrigin
@@ -133,22 +135,25 @@ public class RegistrationController {
 
         toResponseStatusException(validation);
 
-        return new RegistrationValidationJson(validation.getNickname(),
-                validation.getValidationCodes());
+        return RegistrationValidationJson.of(validation);
     }
 
     /**
      * Throws an exception:
      * <ul>
-     *     <li>The application is unknown.</li>
+     * <li>The application is unknown.</li>
      * </ul>
-     * @param rv The validation result.
+     * 
+     * @param rv
+     *            The validation result.
      */
     private void toResponseStatusException(RegistrationValidation rv) {
         // Http Status Code 400: Bad request
-        Set<ValidationCode> httpStatus400 = Set.of(ValidationCode.UNKNOWN_APPLICATION);
+        Set<ValidationCode> httpStatus400 = Set
+                .of(ValidationCode.UNKNOWN_APPLICATION);
 
-        if (rv.getValidationCodes().contains(ValidationCode.UNKNOWN_APPLICATION)) {
+        if (rv.getValidationCodes()
+                .contains(ValidationCode.UNKNOWN_APPLICATION)) {
             LOG.error("Find an unknown application.");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Invalid application parameter.");
