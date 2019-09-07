@@ -40,6 +40,7 @@ public class RegistrationValidation {
 
     public RegistrationValidation(String nickname, String applicationName,
             ValidationCode code) {
+        
         this.nickname = nickname;
         this.applicationName = applicationName;
         if (code != null) {
