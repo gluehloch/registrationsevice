@@ -74,7 +74,7 @@ public class ValidationTest {
 
     @Test
     public void validateUnknownApplication() throws Exception {
-        ServletContext context = webAppContext.getServletContext();
+        // ServletContext context = webAppContext.getServletContext();
 
         RegistrationJson registration = new RegistrationJson();
         registration.setApplicationName("unknownApplication");

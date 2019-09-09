@@ -1,7 +1,6 @@
 package de.awtools.registration;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -149,8 +148,8 @@ public class RegistrationController {
      */
     private void toResponseStatusException(RegistrationValidation rv) {
         // Http Status Code 400: Bad request
-        Set<ValidationCode> httpStatus400 = Set
-                .of(ValidationCode.UNKNOWN_APPLICATION);
+        // Set<ValidationCode> httpStatus400 =
+        // Set.of(ValidationCode.UNKNOWN_APPLICATION);
 
         if (rv.getValidationCodes()
                 .contains(ValidationCode.UNKNOWN_APPLICATION)) {

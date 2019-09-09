@@ -29,7 +29,7 @@ import de.awtools.registration.config.PersistenceJPAConfig;
 public class RegistrationServiceTest {
 
     private static final Logger LOG = LogManager.getLogger();
-    
+
     @Autowired
     private ApplicationRepository applicationRepository;
 
@@ -68,6 +68,12 @@ public class RegistrationServiceTest {
                 .restartUserAccount("Frosch", "frosch@web.de", "Frosch",
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
+
+        assertThat(restartUserAccount).isNotNull();
+        assertThat(restartUserAccount.getNickname()).isEqualTo("Frosch");
+        assertThat(restartUserAccount.getValidationCodes()).hasSize(1);
+        assertThat(restartUserAccount.getValidationCodes())
+                .contains(ValidationCode.OK);
     }
 
     @Test
