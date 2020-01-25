@@ -9,6 +9,16 @@
 		<!-- *** STILL UNDER DEVELOPMENT x.x.x (SNAPSHOT) *** -->
 
 		<!-- UNDER DEVELOPMENT -->
+        <release version="registrationservice-0.2.0" date="2020-??-??"
+            description="SSO service">
+            <action dev="andrewinkler" type="add" date="2020-01-19">
+                Login and logout service. For Single-Sign-On. With Google
+                and Facebook? With JWT.
+            </action>
+            <action dev="andrewinkler" type="add" date="2020-01-25">
+                Generate JWT. Examples.
+            </action>
+        </release>
 
 		<!-- RELEASED -->
 		<release version="registrationservice-0.1.0" date="2019-04-014"
