@@ -1,6 +1,8 @@
 package de.awtools.registration.jwt;
 
+import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
@@ -53,7 +55,7 @@ public class JasonWebTokenTest {
     }
 
     @Test
-    public void jsonWebToken() {
+    public void createValidJsonWebToken() {
         // Mit diesem Befehl kann man den Schluessel in einen String umwandeln und abspeichern.
         // Dabei nicht vergessen: Das ist der geheime Schluessel.
         String secretString = Encoders.BASE64.encode(key.getEncoded());
@@ -61,7 +63,7 @@ public class JasonWebTokenTest {
 
         String jws = Jwts.builder()
                 .setHeaderParam("betoffice", "1.0")
-                .setSubject("Joe")
+                .setSubject("Frosch")
                 .setExpiration(tomorrow)
                 .signWith(key)
                 .compact();
@@ -70,11 +72,23 @@ public class JasonWebTokenTest {
                 .setSigningKey(key)
                 .parseClaimsJws(jws)
                 .getBody()
-                .getSubject()).isEqualTo("Joe");
+                .getSubject()).isEqualTo("Frosch");
+
+        // IncorrectClaimException: 'Peter' statt 'Frosch'.
+        assertThatThrownBy(() -> Jwts.parser()
+                .requireSubject("Peter").setSigningKey(key)
+                .parseClaimsJws(jws))
+                .isInstanceOf(IncorrectClaimException.class);
+
+        // MissingClaimException: Ein Issuer wurde nicht angelegt.
+        assertThatThrownBy(() -> Jwts.parser()
+                .requireIssuer("MissingIssuer").setSigningKey(key)
+                .parseClaimsJws(jws))
+                .isInstanceOf(MissingClaimException.class);
     }
 
     @Test
-    public void expiredJwt() {
+    public void createExpiredJwt() {
         String jws = Jwts.builder()
                 .setHeaderParam("betoffice", "1.0")
                 .setSubject("Joe")
