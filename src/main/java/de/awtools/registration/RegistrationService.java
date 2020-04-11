@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import de.awtools.registration.RegistrationValidation.ValidationCode;
 import de.awtools.registration.password.PasswordEncoderWrapper;
+import de.awtools.registration.time.TimeService;
 
 /**
  * Register and confirm a new user.

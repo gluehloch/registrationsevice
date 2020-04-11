@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.cookie;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.awtools.registration.HttpConst;
+import de.awtools.registration.time.DateTimeJson;
 import io.swagger.annotations.ApiOperation;
 
 /**

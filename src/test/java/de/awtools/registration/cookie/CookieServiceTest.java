@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.cookie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.cookie.Cookie;
+import de.awtools.registration.cookie.CookieService;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)

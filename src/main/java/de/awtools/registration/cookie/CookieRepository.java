@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.cookie;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
