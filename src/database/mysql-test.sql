@@ -1,6 +1,5 @@
 CREATE DATABASE `registertest` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-/*
 CREATE USER 'register'@'localhost' IDENTIFIED BY 'register';
 CREATE USER 'register'@'%' IDENTIFIED BY 'register';
 
@@ -12,7 +11,6 @@ REVOKE ALL PRIVILEGES ON * . * FROM 'register'@'%';
 
 REVOKE ALL PRIVILEGES ON * . * FROM 'registersu'@'localhost';
 REVOKE ALL PRIVILEGES ON * . * FROM 'registersu'@'%';
-*/
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON registertest.* TO 'register'@'localhost'
   WITH GRANT OPTION
