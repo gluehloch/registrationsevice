@@ -15,7 +15,7 @@ FROM tomcat:9.0.16-jre11-slim
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
 
-COPY registrationservice-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/registrationservice.war
+COPY registrationservice-0.2.0-SNAPSHOT.war /usr/local/tomcat/webapps/registrationservice.war
 COPY .register.properties /root/.register.properties
 # COPY mariadb-java-client-2.2.6.jar /usr/local/tomcat/lib
 
