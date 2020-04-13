@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>registrationservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<name>Registration REST API project</name>
 	<packaging>war</packaging>
 
@@ -232,18 +232,11 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<!--
-			<version>${junit.jupiter.version}</version>
-			-->
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
-		    <!--
-			<version>${junit.platform.version}</version>
-			-->
 			<scope>test</scope>
 		</dependency>
 

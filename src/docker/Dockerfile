@@ -10,12 +10,20 @@
 # docker cp registrationservice-0.0.1-SNAPSHOT.war registerservice:/usr/local/tomcat/webapps/registrationservice2.war
 #
 
+#
+# docker network create dev
+# docker network rm dev
+# docker network connect dev mariadb
+# docker network connect dev register
+# Im JDBC connection string kann nun der Container Name, z.B. 'mariadb', als Host Name verwendet werden. 
+#
+
 FROM tomcat:9.0.16-jre11-slim
 
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
 
-COPY registrationservice-0.0.1-SNAPSHOT.war /usr/local/tomcat/webapps/registrationservice.war
+COPY registrationservice-0.2.0-SNAPSHOT.war /usr/local/tomcat/webapps/registrationservice.war
 COPY .register.properties /root/.register.properties
 # COPY mariadb-java-client-2.2.6.jar /usr/local/tomcat/lib
 

@@ -32,9 +32,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Configuration
 @PropertySource(ignoreResourceNotFound = true, value = {
+		"classpath:/register.properties",
         "file:${AWTOOLS_CONFDIR}/register/register.properties",
-        "file:${user.home}/.register.properties",
-        "classpath:/register.properties"})
+        "file:${user.home}/.register.properties"})
 @EnableTransactionManagement
 @ComponentScan("de.awtools.registration")
 @EnableJpaRepositories(basePackages = { "de.awtools.registration" })

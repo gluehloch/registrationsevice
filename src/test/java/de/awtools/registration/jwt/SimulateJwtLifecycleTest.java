@@ -18,6 +18,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -25,6 +27,8 @@ import org.junit.jupiter.api.Test;
  */
 public class SimulateJwtLifecycleTest {
 
+    @Disabled("TODO")
+    @Tag("TODO")
 	@Test
 	public void readPrivateKey() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		InputStream privateKeyIs = SimulateJwtLifecycleTest.class.getResourceAsStream("register_id_rsa");
@@ -40,6 +44,8 @@ public class SimulateJwtLifecycleTest {
 		assertThat(privateKey).isNotNull();
 	}
 	
+    @Disabled("TODO")
+    @Tag("TODO")
 	@Test
 	public void readPrivateKey2() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		InputStream privateKeyIs = SimulateJwtLifecycleTest.class.getResourceAsStream("register_id_rsa_pkcs8");
@@ -55,6 +61,8 @@ public class SimulateJwtLifecycleTest {
 		assertThat(privateKey).isNotNull();
 	}
 
+    @Disabled("TODO")
+    @Tag("TODO")
 	@Test
 	public void xxx() throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchProviderException {
 

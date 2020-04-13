@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +19,6 @@ import de.awtools.registration.time.TimeService;
  */
 @Service
 public class RegistrationService {
-
-    private static final Logger LOG = LoggerFactory
-            .getLogger(RegistrationService.class);
 
     @Autowired
     private PasswordEncoderWrapper passwordEncoder;

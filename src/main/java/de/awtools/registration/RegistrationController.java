@@ -38,34 +38,6 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     /**
-     * Shows the current version of this API.
-     *
-     * @return A version String.
-     */
-    @ApiOperation(value = "version", nickname = "version", response = String.class)
-    @CrossOrigin
-    @GetMapping(path = "version", produces = HttpConst.JSON_UTF_8)
-    public VersionJson versionInfo() {
-        return VersionJson.of();
-    }
-
-    /**
-     * Starts the registration process. The caller receives an email with an URL
-     * to confirm his address.
-     *
-     * @return Web-Service reachable?
-     */
-    @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
-    @CrossOrigin
-    @GetMapping(path = "/ping", produces = HttpConst.JSON_UTF_8)
-    public DateTimeJson ping() {
-        DateTimeJson dateTimeJson = new DateTimeJson();
-        // LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)
-        dateTimeJson.setDateTime(LocalDateTime.now());
-        return dateTimeJson;
-    }
-
-    /**
      * Here starts the registration process.
      *
      * @param registration
