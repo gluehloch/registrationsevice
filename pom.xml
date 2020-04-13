@@ -286,8 +286,8 @@
 	</dependencies>
 
 	<properties>
-		<org.springframework.version>5.1.5.RELEASE</org.springframework.version>
-		<org.hibernate.version>5.3.7.Final</org.hibernate.version>
+		<org.springframework.version>5.2.4.RELEASE</org.springframework.version>
+		<org.hibernate.version>5.4.13.Final</org.hibernate.version>
 		<!-- <failOnMissingWebXml>false</failOnMissingWebXml> -->
 		
 		<!--  Obsolet mit junit-bom?!?
