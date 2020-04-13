@@ -54,7 +54,7 @@ public class WebMvcTest {
                 .isNotNull();
 
         MvcResult result = mockMvc
-                .perform(get("/registration/ping")
+                .perform(get("/ping")
                         .header("Content-type", "application/json")
                         .header("charset", "UTF-8"))
                 .andDo(print())
