@@ -20,7 +20,7 @@
 		<!-- UNDER DEVELOPMENT -->
         <release version="registrationservice-0.2.0" date="2020-??-??" description="Refactoring">
             <action dev="andrewinkler" type="add" date="2020-01-25">
-                Moving controllers: ping and cookie gets a new root url: '/ping' and '/cookie'.
+                Moving controllers: ping and cookie gets there own controller.
             </action>
             <action dev="andrewinkler" type="add" date="2020-01-25">
                 Generate JWT. Examples.
