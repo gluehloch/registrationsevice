@@ -1,5 +1,6 @@
 package de.awtools.registration.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MissingClaimException;
@@ -27,12 +28,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 public class JasonWebTokenTest {
 
+    private Date now;
     private Date yesterday;
     private Date tomorrow;
     private Key key;
 
     @BeforeEach
     public void before() {
+        now = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
         yesterday = Date.from(LocalDate.now().minusDays(1).atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
@@ -56,7 +59,8 @@ public class JasonWebTokenTest {
 
     @Test
     public void createValidJsonWebToken() {
-        // Mit diesem Befehl kann man den Schluessel in einen String umwandeln und abspeichern.
+        // Mit diesem Befehl kann man den Schluessel in einen String umwandeln und
+        // abspeichern.
         // Dabei nicht vergessen: Das ist der geheime Schluessel.
         String secretString = Encoders.BASE64.encode(key.getEncoded());
         assertThat(secretString).isNotBlank();
@@ -64,27 +68,29 @@ public class JasonWebTokenTest {
         String jws = Jwts.builder()
                 .setHeaderParam("betoffice", "1.0")
                 .setSubject("Frosch")
+                .setIssuer("issuer")
+                .setIssuedAt(now)
                 .setExpiration(tomorrow)
                 .signWith(key)
                 .compact();
 
-        assertThat(Jwts.parser()
-                .setSigningKey(key)
-                .parseClaimsJws(jws)
-                .getBody()
-                .getSubject()).isEqualTo("Frosch");
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(jws).getBody();
+
+        assertThat(claims.getSubject()).isEqualTo("Frosch");
+        assertThat(claims.getIssuedAt()).isEqualTo(now);
+        assertThat(claims.getIssuer()).isEqualTo("issuer");
 
         // IncorrectClaimException: 'Peter' statt 'Frosch'.
         assertThatThrownBy(() -> Jwts.parser()
                 .requireSubject("Peter").setSigningKey(key)
                 .parseClaimsJws(jws))
-                .isInstanceOf(IncorrectClaimException.class);
+                        .isInstanceOf(IncorrectClaimException.class);
 
         // MissingClaimException: Ein Issuer wurde nicht angelegt.
         assertThatThrownBy(() -> Jwts.parser()
                 .requireIssuer("MissingIssuer").setSigningKey(key)
                 .parseClaimsJws(jws))
-                .isInstanceOf(MissingClaimException.class);
+                        .isInstanceOf(IncorrectClaimException.class);
     }
 
     @Test
@@ -101,7 +107,7 @@ public class JasonWebTokenTest {
                 .parseClaimsJws(jws)
                 .getBody()
                 .getSubject())
-                .isInstanceOf(io.jsonwebtoken.ExpiredJwtException.class);
+                        .isInstanceOf(io.jsonwebtoken.ExpiredJwtException.class);
     }
 
 }
