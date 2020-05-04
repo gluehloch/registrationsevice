@@ -60,8 +60,10 @@ public class JasonWebTokenTest {
     @Test
     public void createValidJsonWebToken() {
         // Mit diesem Befehl kann man den Schluessel in einen String umwandeln und
-        // abspeichern.
-        // Dabei nicht vergessen: Das ist der geheime Schluessel.
+        // abspeichern. Dabei nicht vergessen: Das ist der geheime Schluessel.
+        
+        // TODO: Wie funktioiert das mit einem public/private key?
+        
         String secretString = Encoders.BASE64.encode(key.getEncoded());
         assertThat(secretString).isNotBlank();
 
