@@ -17,10 +17,10 @@ public class CookieService {
     private CookieRepository cookieRepository;
 
     @Transactional
-    public Cookie storeCookieAcceptance(String website, String browser,
+    public CookieEntity storeCookieAcceptance(String website, String browser,
             String remoteaddress, boolean acceptCookies) {
 
-        Cookie cookie = new Cookie();
+        CookieEntity cookie = new CookieEntity();
         cookie.setWebsite(website);
         cookie.setAcceptCookie(acceptCookies);
         cookie.setBrowser(browser);

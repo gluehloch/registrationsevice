@@ -2,6 +2,7 @@ package de.awtools.registration.cookie;
 
 import java.time.LocalDateTime;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -51,7 +52,9 @@ public class CookieController {
             @Valid @RequestBody CookieJson cookieJson,
             @RequestHeader("User-Agent") String userAgent,
             HttpServletRequest request) {
-
+    	
+    	Cookie[] cookies = request.getCookies();
+    	
         DateTimeJson dateTimeJson = new DateTimeJson();      
         
         return dateTimeJson.setDateTime(cookieService

@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
  *
  * @author Andre Winkler
  */
-@Entity
+@Entity(name = "Cookie")
 @Table(name = "cookie")
-public class Cookie {
+public class CookieEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
