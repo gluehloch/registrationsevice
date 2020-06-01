@@ -28,6 +28,8 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.user.ApplicationEntity;
+import de.awtools.registration.user.ApplicationRepository;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -109,7 +111,7 @@ public class ValidationTest {
     public void validateKnownApplication() throws Exception {
         applicationRepository.deleteAll();
 
-        Application application = new Application();
+        ApplicationEntity application = new ApplicationEntity();
         application.setName("application");
         application.setDescription("Test Application for some JUnit tests.");
         application = applicationRepository.save(application);

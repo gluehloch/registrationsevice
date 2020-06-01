@@ -25,6 +25,9 @@
             <action dev="andrewinkler" type="add" date="2020-01-25">
                 Generate JWT. Examples.
             </action>
+            <action dev="andrewinkler" type="add" date="2020-06-01">
+                Role and privileges for users.
+            </action>            
         </release>
 
 		<!-- RELEASED -->

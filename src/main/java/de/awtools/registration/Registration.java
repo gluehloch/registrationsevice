@@ -15,6 +15,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+
 @Entity
 @Table(name = "registration")
 public class Registration {

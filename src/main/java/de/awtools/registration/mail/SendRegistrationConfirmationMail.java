@@ -5,8 +5,8 @@ import javax.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import de.awtools.registration.Email;
 import de.awtools.registration.Token;
+import de.awtools.registration.user.Email;
 
 /**
  * Sends an email with a link to confirm the registration process.

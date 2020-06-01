@@ -6,9 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import de.awtools.registration.user.Email;
+
 @Repository
-public interface RegistrationRepository
-        extends CrudRepository<Registration, Long> {
+public interface RegistrationRepository extends CrudRepository<Registration, Long> {
 
     Registration findByNickname(String nickname);
     

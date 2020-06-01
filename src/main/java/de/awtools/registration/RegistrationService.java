@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
 import de.awtools.registration.RegistrationValidation.ValidationCode;
 import de.awtools.registration.password.PasswordEncoderWrapper;
 import de.awtools.registration.time.TimeService;
+import de.awtools.registration.user.ApplicationEntity;
+import de.awtools.registration.user.ApplicationRepository;
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+import de.awtools.registration.user.UserAccountEntity;
+import de.awtools.registration.user.UserAccountRepository;
 
 /**
  * Register and confirm a new user.
@@ -80,14 +86,14 @@ public class RegistrationService {
                     .addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
-        Application application = applicationRepository
+        ApplicationEntity application = applicationRepository
                 .findByName(applicationName);
         if (application == null) {
             registrationValidation
                     .addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
         }
 
-        UserAccount userAccountCheck = userAccountRepository
+        UserAccountEntity userAccountCheck = userAccountRepository
                 .findByNickname(nickname);
         if (userAccountCheck != null) {
             registrationValidation
@@ -153,11 +159,11 @@ public class RegistrationService {
 
         registration.setConfirmed(true);
 
-        Application application = validateApplication(
+        ApplicationEntity application = validateApplication(
                 registration.getNickname(),
                 registration.getApplication());
 
-        UserAccount newUserAccount = new UserAccount(timeService.now(),
+        UserAccountEntity newUserAccount = new UserAccountEntity(timeService.now(),
                 registration);
         application.addUser(newUserAccount);
 
@@ -195,11 +201,11 @@ public class RegistrationService {
                 ValidationCode.OK);
     }
 
-    private Application validateApplication(String nickname,
+    private ApplicationEntity validateApplication(String nickname,
             String applicationName)
             throws RequestValidationException {
 
-        Application application = applicationRepository
+        ApplicationEntity application = applicationRepository
                 .findByName(applicationName);
 
         if (application == null) {

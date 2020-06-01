@@ -19,6 +19,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.awtools.registration.RegistrationValidation.ValidationCode;
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.user.ApplicationEntity;
+import de.awtools.registration.user.ApplicationRepository;
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+import de.awtools.registration.user.UserAccountEntity;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -43,7 +48,7 @@ public class RegistrationServiceTest {
     public void registerNewAccount() throws Exception {
         LOG.info("Start of the test...");
 
-        Application application = new Application();
+        ApplicationEntity application = new ApplicationEntity();
         application.setName("applicationName");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
@@ -78,12 +83,12 @@ public class RegistrationServiceTest {
 
     @Test
     public void saveNewAccount() {
-        Application application = new Application();
+        ApplicationEntity application = new ApplicationEntity();
         application.setName("applicationId");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
-        UserAccount userAccount = new UserAccount();
+        UserAccountEntity userAccount = new UserAccountEntity();
         userAccount.setCreated(LocalDateTime.now());
         userAccount.setCredentialExpired(false);
         userAccount.setEmail(new Email("frosch@web.de"));

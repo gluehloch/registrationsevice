@@ -1,6 +1,14 @@
 package de.awtools.registration.config;
 
-import de.awtools.registration.RegistrationValidation;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonBuilderFactory;
+import javax.json.JsonObjectBuilder;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,12 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import de.awtools.registration.RegistrationValidation;
 import de.awtools.registration.RequestValidationException;
-
-import javax.json.*;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 
 @ControllerAdvice
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
@@ -43,7 +47,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         }
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         return handleExceptionInternal(ex, jsonToString(json), headers,
                 HttpStatus.BAD_REQUEST, request);

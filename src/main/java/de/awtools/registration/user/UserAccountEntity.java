@@ -1,24 +1,29 @@
-package de.awtools.registration;
+package de.awtools.registration.user;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.NaturalId;
 
-@Entity
+import de.awtools.registration.Registration;
+
+@Entity(name = "UserAccount")
 @Table(name = "useraccount")
-public class UserAccount {
+public class UserAccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,12 +76,16 @@ public class UserAccount {
     private boolean acceptCookie;
 
     @ManyToMany(mappedBy = "userAccounts")
-    private Set<Application> applications = new HashSet<>();
+    private Set<ApplicationEntity> applications = new HashSet<>();
 
-    public UserAccount() {
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "USERACCOUNT_ROLE", joinColumns = @JoinColumn(name = "USERACCOUNT_REF"), inverseJoinColumns = @JoinColumn(name = "ROLE_REF"))
+    private Set<RoleEntity> roles = new HashSet<>();    
+    
+    public UserAccountEntity() {
     }
     
-    public UserAccount(LocalDateTime createdAt, Registration registration) {
+    public UserAccountEntity(LocalDateTime createdAt, Registration registration) {
         this.created = createdAt;
         this.credentialExpired = false;
         this.email = registration.getEmail();
@@ -202,7 +211,7 @@ public class UserAccount {
         return acceptCookie;
     }
 
-    Set<Application> getApplications() {
+    Set<ApplicationEntity> getApplications() {
         return applications;
     }
 
@@ -223,7 +232,7 @@ public class UserAccount {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        UserAccount other = (UserAccount) obj;
+        UserAccountEntity other = (UserAccountEntity) obj;
         if (nickname == null) {
             if (other.nickname != null)
                 return false;

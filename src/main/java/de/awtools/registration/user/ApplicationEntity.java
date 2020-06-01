@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.user;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -22,9 +22,9 @@ import org.hibernate.annotations.NaturalId;
  *
  * @author winkler
  */
-@Entity
+@Entity(name = "Application")
 @Table(name = "application")
-public class Application {
+public class ApplicationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class Application {
     @JoinTable(name = "useraccount_application", joinColumns = {
             @JoinColumn(name = "application_ref") }, inverseJoinColumns = {
                     @JoinColumn(name = "useraccount_ref") })
-    private Set<UserAccount> userAccounts = new HashSet<>();
+    private Set<UserAccountEntity> userAccounts = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -69,7 +69,7 @@ public class Application {
         this.description = description;
     }
 
-    public void addUser(UserAccount userAccount) {
+    public void addUser(UserAccountEntity userAccount) {
         userAccount.getApplications().add(this);
         userAccounts.add(userAccount);
     }
@@ -87,7 +87,7 @@ public class Application {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Application other = (Application) obj;
+        ApplicationEntity other = (ApplicationEntity) obj;
         if (name == null) {
             if (other.name != null)
                 return false;
