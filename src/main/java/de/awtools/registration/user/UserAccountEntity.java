@@ -81,7 +81,7 @@ public class UserAccountEntity {
     private Set<ApplicationEntity> applications = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinTable(name = "USERACCOUNT_ROLE", joinColumns = @JoinColumn(name = "USERACCOUNT_REF"), inverseJoinColumns = @JoinColumn(name = "ROLE_REF"))
+    @JoinTable(name = "useraccount_role", joinColumns = @JoinColumn(name = "useraccount_ref"), inverseJoinColumns = @JoinColumn(name = "role_ref"))
     private Set<RoleEntity> roles = new HashSet<>();
 
     public UserAccountEntity() {
