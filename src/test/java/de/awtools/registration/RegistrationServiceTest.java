@@ -58,10 +58,8 @@ public class RegistrationServiceTest {
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
 
-        Registration registration = registrationRepository
-                .findByNickname("Frosch");
-        Registration registration2 = registrationRepository
-                .findByToken(registration.getToken());
+        Registration registration = registrationRepository.findByNickname("Frosch").orElseThrow();
+        Registration registration2 = registrationRepository.findByToken(registration.getToken()).orElseThrow();
 
         assertThat(registration.getId()).isEqualTo(registration2.getId());
         assertThat(validation.getValidationCodes()).contains(ValidationCode.OK);
@@ -77,8 +75,7 @@ public class RegistrationServiceTest {
         assertThat(restartUserAccount).isNotNull();
         assertThat(restartUserAccount.getNickname()).isEqualTo("Frosch");
         assertThat(restartUserAccount.getValidationCodes()).hasSize(1);
-        assertThat(restartUserAccount.getValidationCodes())
-                .contains(ValidationCode.OK);
+        assertThat(restartUserAccount.getValidationCodes()).contains(ValidationCode.OK);
     }
 
     @Test

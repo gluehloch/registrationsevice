@@ -71,7 +71,7 @@ public class UserAccountEntity {
 
     @Column(name = "acceptmail")
     private boolean acceptMail;
-    
+
     @Column(name = "acceptcookie")
     private boolean acceptCookie;
 
@@ -80,11 +80,11 @@ public class UserAccountEntity {
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "USERACCOUNT_ROLE", joinColumns = @JoinColumn(name = "USERACCOUNT_REF"), inverseJoinColumns = @JoinColumn(name = "ROLE_REF"))
-    private Set<RoleEntity> roles = new HashSet<>();    
-    
+    private Set<RoleEntity> roles = new HashSet<>();
+
     public UserAccountEntity() {
     }
-    
+
     public UserAccountEntity(LocalDateTime createdAt, Registration registration) {
         this.created = createdAt;
         this.credentialExpired = false;
@@ -98,7 +98,7 @@ public class UserAccountEntity {
         this.nickname = registration.getNickname();
         this.password = registration.getPassword();
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -198,21 +198,35 @@ public class UserAccountEntity {
     public void setAcceptMail(boolean acceptMail) {
         this.acceptMail = acceptMail;
     }
-    
+
     public boolean isAcceptingMail() {
         return acceptMail;
     }
-    
+
     public void setAcceptCookie(boolean acceptCookie) {
         this.acceptCookie = acceptCookie;
     }
-    
+
     public boolean isAcceptingCookie() {
         return acceptCookie;
     }
 
     Set<ApplicationEntity> getApplications() {
         return applications;
+    }
+
+    public void addRole(RoleEntity role) {
+        roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(RoleEntity role) {
+        roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    public Set<RoleEntity> getRoles() {
+        return roles;
     }
 
     @Override
@@ -239,6 +253,43 @@ public class UserAccountEntity {
         } else if (!nickname.equals(other.nickname))
             return false;
         return true;
+    }
+
+    public static class UserAccountBuilder {
+        private String nickname;
+        private String password;
+        private String name;
+
+        private String firstname;
+
+        private UserAccountBuilder() {
+        }
+
+        public static UserAccountBuilder of(String nickname, String password) {
+            UserAccountBuilder ub = new UserAccountBuilder();
+            ub.nickname = nickname;
+            ub.password = password;
+            return ub;
+        }
+
+        public UserAccountBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UserAccountBuilder firstname(String firstname) {
+            this.firstname = firstname;
+            return this;
+        }
+
+        public UserAccountEntity build() {
+            UserAccountEntity ue = new UserAccountEntity();
+            ue.setNickname(nickname);
+            ue.setPassword(new Password(password));
+            ue.setFirstname(firstname);
+            ue.setName(name);
+            return ue;
+        }
     }
 
 }

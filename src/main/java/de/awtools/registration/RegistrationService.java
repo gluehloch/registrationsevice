@@ -1,6 +1,7 @@
 package de.awtools.registration;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
@@ -73,38 +74,29 @@ public class RegistrationService {
             String supplement)
             throws RequestValidationException {
 
-        RegistrationValidation registrationValidation = new RegistrationValidation(
-                nickname, applicationName);
+        RegistrationValidation registrationValidation = new RegistrationValidation(nickname, applicationName);
 
         if (!acceptCookie) {
-            registrationValidation
-                    .addValidationCode(ValidationCode.MISSING_ACCEPT_COOKIE);
+            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_COOKIE);
         }
 
         if (!acceptMail) {
-            registrationValidation
-                    .addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
+            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
-        ApplicationEntity application = applicationRepository
-                .findByName(applicationName);
-        if (application == null) {
-            registrationValidation
-                    .addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
+        Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
+        if (application.isEmpty()) {
+            registrationValidation.addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
         }
 
-        UserAccountEntity userAccountCheck = userAccountRepository
-                .findByNickname(nickname);
-        if (userAccountCheck != null) {
-            registrationValidation
-                    .addValidationCode(ValidationCode.KNOWN_NICKNAME);
+        Optional<UserAccountEntity> userAccountCheck = userAccountRepository.findByNickname(nickname);
+        if (userAccountCheck.isPresent()) {
+            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
         }
 
-        Registration registrationCheck = registrationRepository
-                .findByNickname(nickname);
-        if (registrationCheck != null) {
-            registrationValidation
-                    .addValidationCode(ValidationCode.KNOWN_NICKNAME);
+        Optional<Registration> registrationCheck = registrationRepository.findByNickname(nickname);
+        if (registrationCheck.isPresent()) {
+            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
         }
 
         if (registrationValidation.ok()) {
@@ -114,9 +106,7 @@ public class RegistrationService {
             registration.setNickname(nickname);
             registration.setFirstname(firstname);
             registration.setName(name);
-            registration
-                    .setPassword(
-                            new Password(passwordEncoder.encode(password)));
+            registration.setPassword(new Password(passwordEncoder.encode(password)));
             registration.setEmail(new Email(email));
             registration.setCreated(now);
             UUID token = UUID.randomUUID();
@@ -151,11 +141,12 @@ public class RegistrationService {
     public RegistrationValidation confirmAccount(Token token)
             throws RequestValidationException {
 
-        Registration registration = registrationRepository.findByToken(token);
-        if (registration == null) {
-            return new RegistrationValidation(null, null,
-                    ValidationCode.UNKNOWN_TOKEN);
+        Optional<Registration> optionalRegistration = registrationRepository.findByToken(token);
+        if (optionalRegistration.isEmpty()) {
+            return new RegistrationValidation(null, null, ValidationCode.UNKNOWN_TOKEN);
         }
+
+        Registration registration = optionalRegistration.get();
 
         registration.setConfirmed(true);
 
@@ -180,21 +171,14 @@ public class RegistrationService {
 
         validateApplication(nickname, applicationName);
 
-        Registration registrationDefined = null;
-
-        registrationDefined = registrationRepository.findByNickname(nickname);
-        if (registrationDefined != null) {
-            return new RegistrationValidation(nickname,
-                    applicationName,
-                    ValidationCode.KNOWN_NICKNAME);
+        Optional<Registration> registrationDefined = registrationRepository.findByNickname(nickname);
+        if (registrationDefined.isPresent()) {
+            return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_NICKNAME);
         }
 
-        registrationDefined = registrationRepository
-                .findByEmail(new Email(email));
-        if (registrationDefined != null) {
-            return new RegistrationValidation(nickname,
-                    applicationName,
-                    ValidationCode.KNOWN_MAILADDRESS);
+        registrationDefined = registrationRepository.findByEmail(new Email(email));
+        if (registrationDefined.isPresent()) {
+            return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_MAILADDRESS);
         }
 
         return new RegistrationValidation(nickname, applicationName,
@@ -205,14 +189,9 @@ public class RegistrationService {
             String applicationName)
             throws RequestValidationException {
 
-        ApplicationEntity application = applicationRepository
-                .findByName(applicationName);
-
-        if (application == null) {
-            throw new RequestValidationException(
-                    new RegistrationValidation(nickname, applicationName,
-                            ValidationCode.UNKNOWN_APPLICATION));
-        }
+        ApplicationEntity application = applicationRepository.findByName(applicationName)
+                .orElseThrow(() -> new RequestValidationException(
+                        new RegistrationValidation(nickname, applicationName, ValidationCode.UNKNOWN_APPLICATION)));
 
         return application;
     }

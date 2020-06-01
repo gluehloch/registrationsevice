@@ -20,14 +20,11 @@ public class UserAccountDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String nickname) {
-        UserAccountEntity user = userRepository.findByNickname(nickname);
-        if (user == null) {
-            throw new UsernameNotFoundException(nickname);
-        }
+        UserAccountEntity user = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new UsernameNotFoundException(nickname));
         return new UserAccountDetails(user);
     }
-    
-    
+
     public static class UserAccountDetails implements UserDetails {
 
         private static final long serialVersionUID = -7882416572804994114L;
@@ -76,4 +73,3 @@ public class UserAccountDetailsService implements UserDetailsService {
     }
 
 }
-
