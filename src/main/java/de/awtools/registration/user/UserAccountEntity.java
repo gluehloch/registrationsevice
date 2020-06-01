@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 
 import de.awtools.registration.Registration;
@@ -26,7 +27,8 @@ import de.awtools.registration.Registration;
 public class UserAccountEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
@@ -258,9 +260,10 @@ public class UserAccountEntity {
     public static class UserAccountBuilder {
         private String nickname;
         private String password;
-        private String name;
-
         private String firstname;
+        private String name;
+        private LocalDateTime created;
+        private Email email;
 
         private UserAccountBuilder() {
         }
@@ -281,6 +284,21 @@ public class UserAccountEntity {
             this.firstname = firstname;
             return this;
         }
+        
+        public UserAccountBuilder created(LocalDateTime localDateTime) {
+            this.created = localDateTime;
+            return this;
+        }
+        
+        public UserAccountBuilder createdNow() {
+            this.created = LocalDateTime.now();
+            return this;
+        }
+        
+        public UserAccountBuilder email(Email email) {
+            this.email = email;
+            return this;
+        }
 
         public UserAccountEntity build() {
             UserAccountEntity ue = new UserAccountEntity();
@@ -288,6 +306,8 @@ public class UserAccountEntity {
             ue.setPassword(new Password(password));
             ue.setFirstname(firstname);
             ue.setName(name);
+            ue.setCreated(created);
+            ue.setEmail(email);
             return ue;
         }
     }

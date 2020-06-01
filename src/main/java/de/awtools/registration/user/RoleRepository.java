@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface RoleRepository extends CrudRepository<RoleEntity, Long> {
 
@@ -15,7 +16,7 @@ public interface RoleRepository extends CrudRepository<RoleEntity, Long> {
      * @return Eine Liste mit Rollen zu dem gesuchten User.
      */
     @Query("SELECT r FROM Role r JOIN FETCH r.users u WHERE u.nickname = :nickname")
-    List<RoleEntity> findRoles(String nickname);
+    List<RoleEntity> findRoles(@Param("nickname") String nickname);
 
     /**
      * Find role by role name

@@ -2,6 +2,7 @@ package de.awtools.registration.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -44,6 +45,8 @@ public class UserRepositoryTest {
         user.setNickname("Frosch");
         user.setFirstname("Andre");
         user.setName("Winkler");
+        user.setEmail(new Email("mail@mail.de"));
+        user.setCreated(LocalDateTime.now());
         user.setPassword(new Password("Password"));
         user = userAccountRepository.save(user);
         assertThat(user.getId()).isNotNull();
@@ -65,6 +68,8 @@ public class UserRepositoryTest {
                 .of("Frosch", "PasswordFrosch")
                 .firstname("Andre")
                 .name("Winkler")
+                .created(LocalDateTime.now())
+                .email(new Email("mail@mail.de"))
                 .build();
         userAccountRepository.save(frosch);
 
