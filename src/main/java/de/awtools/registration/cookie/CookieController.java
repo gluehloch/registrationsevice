@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,11 +52,14 @@ public class CookieController {
     public DateTimeJson confirmCookie(
             @Valid @RequestBody CookieJson cookieJson,
             @RequestHeader("User-Agent") String userAgent,
-            HttpServletRequest request) {
+            HttpServletRequest request, HttpServletResponse response) {
     	
     	Cookie[] cookies = request.getCookies();
+    	Cookie cookie = new Cookie("confirmCookie", Boolean.toString(cookieJson.isAcceptCookies()));
+    	cookie.setHttpOnly(true);
+    	response.addCookie(cookie);
     	
-        DateTimeJson dateTimeJson = new DateTimeJson();      
+        DateTimeJson dateTimeJson = new DateTimeJson();
         
         return dateTimeJson.setDateTime(cookieService
                 .storeCookieAcceptance(

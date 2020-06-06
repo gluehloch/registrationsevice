@@ -230,6 +230,10 @@ public class UserAccountEntity {
     public Set<RoleEntity> getRoles() {
         return roles;
     }
+    
+    public boolean hasRole(RoleEntity role) {
+        return roles.contains(role);
+    }
 
     @Override
     public int hashCode() {

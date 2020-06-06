@@ -25,16 +25,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Registration Service Configuration Factory.
- *
+ * <br/>
  * Remember: The last property source wins on property name clash!
+ * <br/>
+ * {@code /register.properties} must be located under {@link src/test/resources}.
  *
  * @author Andre Winkler
  */
 @Configuration
 @PropertySource(ignoreResourceNotFound = true, value = {
-		"classpath:/register.properties",
         "file:${AWTOOLS_CONFDIR}/register/register.properties",
-        "file:${user.home}/.register.properties"})
+        "file:${user.home}/.register.properties",
+        "classpath:/register.properties"})
 @EnableTransactionManagement
 @ComponentScan("de.awtools.registration")
 @EnableJpaRepositories(basePackages = { "de.awtools.registration" })
