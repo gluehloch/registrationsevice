@@ -1,5 +1,7 @@
 package de.awtools.registration.user;
 
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +31,14 @@ public class UserRolePrivilegeRepositoryTest {
     @Test
     @Tag(Tags.REPOSITORY)
     public void userRolePrvilegeRelation() {
-        PrivilegeEntity privilege = null;
-        // TODO 
+        PrivilegeEntity readPriv = PrivilegeEntity.PrivilegeBuilder.of("READ");
+        PrivilegeEntity writePriv = PrivilegeEntity.PrivilegeBuilder.of("WRITE");
+        PrivilegeEntity deletePriv = PrivilegeEntity.PrivilegeBuilder.of("DELETE");
+        
+        privilegeRepository.saveAll(Set.of(readPriv, writePriv, deletePriv));
+
+        Iterable<PrivilegeEntity> privileges = privilegeRepository.findAll();
+        // privileges.
         
     }
 

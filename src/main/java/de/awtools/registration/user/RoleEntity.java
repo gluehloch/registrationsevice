@@ -61,6 +61,10 @@ public class RoleEntity {
     public Set<PrivilegeEntity> getPrivileges() {
         return privileges;
     }
+    
+    public boolean hasPrivilege(PrivilegeEntity privilege) {
+        return privileges.contains(privilege);
+    }
 
     @Override
     public boolean equals(Object o) {
