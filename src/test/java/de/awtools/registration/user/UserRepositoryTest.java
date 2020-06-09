@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import de.awtools.registration.Tags;
 import de.awtools.registration.config.PersistenceJPAConfig;
 
 @WebAppConfiguration
@@ -26,7 +28,7 @@ import de.awtools.registration.config.PersistenceJPAConfig;
 @ComponentScan("de.awtools.registration")
 @Transactional
 @Rollback
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     UserAccountRepository userAccountRepository;
@@ -39,7 +41,7 @@ public class UserRepositoryTest {
 
     @DisplayName("Repository test: Find all users")
     @Test
-    @Tag("repository")
+    @Tag(Tags.REPOSITORY)
     void findUser() {
         UserAccountEntity user = new UserAccountEntity();
         user.setNickname("Frosch");
@@ -62,7 +64,7 @@ public class UserRepositoryTest {
 
     @DisplayName("Repository test: Find all roles of a user")
     @Test
-    @Tag("repository")
+    @Tag(Tags.REPOSITORY)
     void findRoles() {
         UserAccountEntity frosch = UserAccountEntity.UserAccountBuilder
                 .of("Frosch", "PasswordFrosch")
@@ -86,13 +88,32 @@ public class UserRepositoryTest {
 
     @DisplayName("Repository test: Find all privilegs of a user")
     @Test
-    @Tag("repository")
+    @Tag(Tags.REPOSITORY)
     void findPrivileges() {
         PrivilegeEntity readPriv = PrivilegeEntity.PrivilegeBuilder.of("READ_PRIV");
         PrivilegeEntity persistedReadPriv = privilegeRepository.save(readPriv);
         assertThat(persistedReadPriv.getName()).isEqualTo("READ_PRIV");
-
-        Iterable<PrivilegeEntity> all = privilegeRepository.findAll();
+        
+        PrivilegeEntity writePriv = PrivilegeEntity.PrivilegeBuilder.of("WRITE_PRIV");
+        privilegeRepository.save(writePriv);
+        
+        UserAccountEntity frosch = UserAccountEntity.UserAccountBuilder
+                .of("Frosch", "PasswordFrosch")
+                .firstname("Andre")
+                .name("Winkler")
+                .created(LocalDateTime.now())
+                .email(new Email("mail@mail.de"))
+                .build();
+        
+        RoleEntity role = RoleEntity.RoleBuilder.of("ADMIN");
+        role.addPrivilege(readPriv);
+        role.addPrivilege(writePriv);
+        roleRepository.save(role); 
+        frosch.addRole(role);
+        userAccountRepository.save(frosch);
+        
+        UserAccountEntity user = userAccountRepository.findByNickname("Frosch").orElseThrow();
+        assertThat(user.hasRole(role)).isTrue();
     }
 
 }
