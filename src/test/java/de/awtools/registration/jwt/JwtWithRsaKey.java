@@ -47,7 +47,7 @@ public class JwtWithRsaKey {
             claims.put("role", "user");
             claims.put("created", new Date());
 
-            token = Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.RS512, privateKey).compact();
+            token = Jwts.builder().setClaims(claims).signWith(privateKey, SignatureAlgorithm.RS512).compact();
 
 
         } catch (Exception e) {
@@ -77,12 +77,15 @@ public class JwtWithRsaKey {
     private static Map<String, Object> getRSAKeys() throws Exception {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(2048);
+
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         PrivateKey privateKey = keyPair.getPrivate();
         PublicKey publicKey = keyPair.getPublic();
+
         Map<String, Object> keys = new HashMap<String, Object>();
         keys.put("private", privateKey);
         keys.put("public", publicKey);
+
         return keys;
     }
     

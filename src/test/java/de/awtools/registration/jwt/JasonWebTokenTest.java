@@ -17,6 +17,7 @@ import java.security.PublicKey;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -57,6 +58,21 @@ public class JasonWebTokenTest {
         assertThat(publicKey).isNotNull();
     }
 
+    // -- TODO Ist das sinnvoll? Ueber eine Function den Wert ermitteln?
+    public Date extractExpiration(String token, String key) {
+        return extractClaim(token, key, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, String key, Function<Claims, T> claimResolver) {
+        final Claims claims = extractAllClaims(token, key);
+        return claimResolver.apply(claims);
+    }
+    
+    public static Claims extractAllClaims(String token, String key) {
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+    }
+    // -- Ende
+    
     @Test
     public void createValidJsonWebToken() {
         // Mit diesem Befehl kann man den Schluessel in einen String umwandeln und
