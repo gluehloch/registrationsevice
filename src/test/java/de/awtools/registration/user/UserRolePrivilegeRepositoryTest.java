@@ -2,7 +2,6 @@ package de.awtools.registration.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.transaction.Transactional;
