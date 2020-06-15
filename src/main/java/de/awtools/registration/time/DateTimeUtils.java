@@ -5,8 +5,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * Some utilities to convert {@link java.util.Date} to
- * {@link java.tim.LocalDate}.
+ * Some utilities to convert {@link java.util.Date} to {@link java.tim.LocalDate}.
  * 
  * @author winkler
  */

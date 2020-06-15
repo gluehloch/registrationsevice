@@ -1,14 +1,7 @@
 package de.awtools.registration.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.IncorrectClaimException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MissingClaimException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Encoders;
-import io.jsonwebtoken.security.Keys;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.security.Key;
 import java.security.KeyPair;
@@ -19,8 +12,15 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.function.Function;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.IncorrectClaimException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Encoders;
+import io.jsonwebtoken.security.Keys;
 
 /**
  * Test JWT.
