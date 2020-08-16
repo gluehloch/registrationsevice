@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -125,7 +126,7 @@ public class JasonWebTokenTest {
                 .parseClaimsJws(jws)
                 .getBody()
                 .getSubject())
-                        .isInstanceOf(io.jsonwebtoken.ExpiredJwtException.class);
+                        .isInstanceOf(ExpiredJwtException.class);
     }
 
 }
