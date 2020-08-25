@@ -29,9 +29,13 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/cookie")
 public class CookieController {
 
-    @Autowired
-    private CookieService cookieService;
+    private final CookieService cookieService;
 
+    @Autowired
+    public CookieController(CookieService cookieService) {
+        this.cookieService = cookieService;
+    }
+    
     /**
      * Ping the cookie service.
      *
