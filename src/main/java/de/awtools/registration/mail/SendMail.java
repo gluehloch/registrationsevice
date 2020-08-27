@@ -43,8 +43,7 @@ public class SendMail {
      * @throws MessagingException
      *             An exception ...
      */
-    public void sendMail(String from, String recipient, String subject,
-            String messageText)
+    public void sendMail(String from, String recipient, String subject, String messageText)
             throws AddressException, MessagingException {
 
         Session session = Session.getInstance(
@@ -54,16 +53,13 @@ public class SendMail {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(
                                 mailConfiguration.getMailAuthenticationUser(),
-                                mailConfiguration
-                                        .getMailAuthenticationPassword());
+                                mailConfiguration.getMailAuthenticationPassword());
                     }
                 });
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
-        message.setRecipients(
-                Message.RecipientType.TO,
-                InternetAddress.parse(recipient));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
         message.setSubject(subject);
 
         MimeBodyPart mimeBodyPart = new MimeBodyPart();

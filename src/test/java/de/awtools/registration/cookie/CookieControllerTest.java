@@ -45,7 +45,7 @@ public class CookieControllerTest {
 
     @Test
     public void cookies() throws Exception {
-        mockMvc.perform(get("/cookie/ping")).andDo(print()).andExpect(status().isOk());;
+        mockMvc.perform(get("/cookie/ping")).andDo(print()).andExpect(status().isOk());
     }
     
     private static class MyExceptionResolver implements HandlerExceptionResolver {
