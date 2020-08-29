@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class RegistrationController {
     public RegistrationController(RegistrationService registrationService) {
         this.registrationService = registrationService;
     }
-    
+
     /**
      * Here starts the registration process.
      *
@@ -46,11 +47,8 @@ public class RegistrationController {
      */
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
-    @PostMapping(path = "/register", headers = {
-            HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
-    public RegistrationValidationJson register(
-            @Valid @RequestBody RegistrationJson registration) {
-
+    @PostMapping(path = "/register", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
+    public ResponseEntity<RegistrationValidationJson> register(@Valid @RequestBody RegistrationJson registration) {
         RegistrationValidation validation = registrationService
                 .registerNewUserAccount(registration.getNickname(),
                         registration.getEmail(),
@@ -62,7 +60,7 @@ public class RegistrationController {
                         registration.isAcceptCookie(),
                         registration.getSupplement());
 
-        return RegistrationValidationJson.of(validation);
+        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
     }
 
     /**
@@ -77,11 +75,8 @@ public class RegistrationController {
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
-    @PostMapping(path = "/validate", headers = {
-            HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
-    public RegistrationValidationJson validate(
-            @RequestBody RegistrationJson registration) {
-
+    @PostMapping(path = "/validate", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
+    public RegistrationValidationJson validate(@RequestBody RegistrationJson registration) {
         RegistrationValidation validation = registrationService.validate(
                 registration.getNickname(),
                 registration.getEmail(),
@@ -102,8 +97,7 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
     public RegistrationValidationJson confirm(@PathVariable String token) {
-        RegistrationValidation validation = registrationService
-                .confirmAccount(new Token(token));
+        RegistrationValidation validation = registrationService.confirmAccount(new Token(token));
 
         toResponseStatusException(validation);
 
@@ -124,8 +118,7 @@ public class RegistrationController {
         // Set<ValidationCode> httpStatus400 =
         // Set.of(ValidationCode.UNKNOWN_APPLICATION);
 
-        if (rv.getValidationCodes()
-                .contains(ValidationCode.UNKNOWN_APPLICATION)) {
+        if (rv.getValidationCodes().contains(ValidationCode.UNKNOWN_APPLICATION)) {
             LOG.error("Find an unknown application.");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Invalid application parameter.");
