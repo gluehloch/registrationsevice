@@ -30,9 +30,13 @@ public class RegistrationController {
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @Autowired
-    private RegistrationService registrationService;
+    private final RegistrationService registrationService;
 
+    @Autowired
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
+    
     /**
      * Here starts the registration process.
      *
