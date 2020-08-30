@@ -4,7 +4,7 @@
 # docker run --expose 8080 -p 9090:8080 --name register-0.0.1 -d register:0.0.1
 #                             ^    ^- Port im Container
 #                             \- Port im Host
-# docker run --expose 8080 -p 9090:8080 --name register -d register:0.0.1
+# docker run --network betoffice --expose 8080 -p 9090:8080 --name register -d register:0.0.1
 #
 # Im laufenden Betrieb ein WAR installieren:
 # docker cp registrationservice-0.0.1-SNAPSHOT.war registerservice:/usr/local/tomcat/webapps/registrationservice2.war
@@ -18,7 +18,7 @@
 # Im JDBC connection string kann nun der Container Name, z.B. 'mariadb', als Host Name verwendet werden. 
 #
 
-FROM tomcat:9.0.16-jre11-slim
+FROM tomcat:9.0.35-jdk14-openjdk-oracle
 
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"

@@ -22,8 +22,7 @@ public class SendRegistrationConfirmationMail {
     public void send(Email recipient, Token token) {
         Email from = new Email("dont-reply-to-this-mail@gluehloch.de");
         String subject = "Subject";
-        String messageText = String.format("Dies ist ein Test. token=[%s]",
-                token);
+        String messageText = String.format("Dies ist ein Test. token=[%s]", token);
 
         // TEST TEST TEST
         // TODO ... send an email with a link with the token ...

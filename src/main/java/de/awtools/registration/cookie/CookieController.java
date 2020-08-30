@@ -29,9 +29,13 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/cookie")
 public class CookieController {
 
-    @Autowired
-    private CookieService cookieService;
+    private final CookieService cookieService;
 
+    @Autowired
+    public CookieController(CookieService cookieService) {
+        this.cookieService = cookieService;
+    }
+    
     /**
      * Ping the cookie service.
      *
@@ -54,7 +58,7 @@ public class CookieController {
             @RequestHeader("User-Agent") String userAgent,
             HttpServletRequest request, HttpServletResponse response) {
     	
-    	Cookie[] cookies = request.getCookies();
+    	// Cookie[] cookies = request.getCookies();
     	Cookie cookie = new Cookie("confirmCookie", Boolean.toString(cookieJson.isAcceptCookies()));
     	cookie.setHttpOnly(true);
     	response.addCookie(cookie);

@@ -25,8 +25,7 @@ import de.awtools.registration.RequestValidationException;
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { RequestValidationException.class })
-    protected ResponseEntity<Object> handleConflict(Exception ex,
-            WebRequest request) {
+    protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
 
         JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonObjectBuilder json = factory.createObjectBuilder();
