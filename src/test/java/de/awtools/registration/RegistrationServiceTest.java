@@ -58,8 +58,8 @@ public class RegistrationServiceTest {
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
 
-        Registration registration = registrationRepository.findByNickname("Frosch").orElseThrow();
-        Registration registration2 = registrationRepository.findByToken(registration.getToken()).orElseThrow();
+        RegistrationEntity registration = registrationRepository.findByNickname("Frosch").orElseThrow();
+        RegistrationEntity registration2 = registrationRepository.findByToken(registration.getToken()).orElseThrow();
 
         assertThat(registration.getId()).isEqualTo(registration2.getId());
         assertThat(validation.getValidationCodes()).contains(ValidationCode.OK);

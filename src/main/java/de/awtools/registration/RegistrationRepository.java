@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository;
 import de.awtools.registration.user.Email;
 
 @Repository
-public interface RegistrationRepository extends CrudRepository<Registration, Long> {
+public interface RegistrationRepository extends CrudRepository<RegistrationEntity, Long> {
 
-    Optional<Registration> findByNickname(String nickname);
+    Optional<RegistrationEntity> findByNickname(String nickname);
     
     // @Query("select r from Registration r where r.email.email = :email")
-    Optional<Registration> findByEmail(Email email);
+    Optional<RegistrationEntity> findByEmail(Email email);
 
-    Optional<Registration> findByToken(Token token);
+    Optional<RegistrationEntity> findByToken(Token token);
 
     @Modifying
     @Query("delete from Registration r where r.email = :email")

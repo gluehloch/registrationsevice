@@ -111,7 +111,7 @@ public class RegistrationService {
             registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
         }
 
-        Optional<Registration> registrationCheck = registrationRepository.findByNickname(nickname);
+        Optional<RegistrationEntity> registrationCheck = registrationRepository.findByNickname(nickname);
         if (registrationCheck.isPresent()) {
             registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
         }
@@ -119,7 +119,7 @@ public class RegistrationService {
         if (registrationValidation.ok()) {
             LocalDateTime now = timeService.now();
 
-            Registration registration = new Registration();
+            RegistrationEntity registration = new RegistrationEntity();
             registration.setNickname(nickname);
             registration.setFirstname(firstname);
             registration.setName(name);
@@ -158,12 +158,12 @@ public class RegistrationService {
     public RegistrationValidation confirmAccount(Token token)
             throws RequestValidationException {
 
-        Optional<Registration> optionalRegistration = registrationRepository.findByToken(token);
+        Optional<RegistrationEntity> optionalRegistration = registrationRepository.findByToken(token);
         if (optionalRegistration.isEmpty()) {
             return new RegistrationValidation(null, null, ValidationCode.UNKNOWN_TOKEN);
         }
 
-        Registration registration = optionalRegistration.get();
+        RegistrationEntity registration = optionalRegistration.get();
 
         registration.setConfirmed(true);
 
@@ -188,7 +188,7 @@ public class RegistrationService {
 
         validateApplication(nickname, applicationName);
 
-        Optional<Registration> registrationDefined = registrationRepository.findByNickname(nickname);
+        Optional<RegistrationEntity> registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined.isPresent()) {
             return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_NICKNAME);
         }

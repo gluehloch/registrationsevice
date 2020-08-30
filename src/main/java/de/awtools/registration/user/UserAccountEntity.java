@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 
-import de.awtools.registration.Registration;
+import de.awtools.registration.RegistrationEntity;
 
 @Entity(name = "UserAccount")
 @Table(name = "useraccount")
@@ -87,7 +87,7 @@ public class UserAccountEntity {
     public UserAccountEntity() {
     }
 
-    public UserAccountEntity(LocalDateTime createdAt, Registration registration) {
+    public UserAccountEntity(LocalDateTime createdAt, RegistrationEntity registration) {
         this.created = createdAt;
         this.credentialExpired = false;
         this.email = registration.getEmail();

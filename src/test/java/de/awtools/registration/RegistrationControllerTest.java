@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import javax.transaction.Transactional;
 
 import org.hamcrest.Matchers;
@@ -40,6 +42,9 @@ public class RegistrationControllerTest {
 
     @Autowired
     private RegistrationService registrationService;
+
+    @Autowired
+    private RegistrationRepository registrationRepository;
 
     @Autowired
     private ApplicationRepository applicationRepository;
@@ -102,6 +107,11 @@ public class RegistrationControllerTest {
                 .content(toString(registration)))
                 .andDo(print())
                 .andExpect(status().isOk());
+
+        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
+                .orElseThrow(() -> new IllegalArgumentException());
+        assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
+        assertThat(registrationEntity.getApplication()).isEqualTo("application");
     }
 
     private String toString(RegistrationJson registration) throws JsonProcessingException {
