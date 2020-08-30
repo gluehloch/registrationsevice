@@ -16,6 +16,10 @@ public class RegistrationValidation {
         MISSING_ACCEPT_EMAIL(1004),
         MISSING_ACCEPT_COOKIE(1005),
         UNKNOWN_TOKEN(1006),
+        PASSWORD_TOO_SHORT(1007),
+        NICKNAME_IS_EMPTY(1008),
+        EMAIL_IS_EMPTY(1009),
+        FIRSTNAME_IS_EMPTY(1010),
         ILLEGAL_ARGUMENTS(2000);
         // @formatter:on
 

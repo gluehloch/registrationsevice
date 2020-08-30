@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +85,22 @@ public class RegistrationService {
             registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
+        if (StringUtils.isBlank(password) || password.length() < 5) {
+            registrationValidation.addValidationCode(ValidationCode.PASSWORD_TOO_SHORT);
+        }
+        
+        if (StringUtils.isBlank(nickname)) {
+            registrationValidation.addValidationCode(ValidationCode.NICKNAME_IS_EMPTY);
+        }
+        
+        if (StringUtils.isBlank(firstname)) {
+            registrationValidation.addValidationCode(ValidationCode.FIRSTNAME_IS_EMPTY);
+        }
+        
+        if (StringUtils.isBlank(email)) {
+            registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_EMPTY);
+        }
+        
         Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
         if (application.isEmpty()) {
             registrationValidation.addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
