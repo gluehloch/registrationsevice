@@ -68,6 +68,7 @@ public class RegistrationControllerTest {
                 .content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(7)))
                 .andExpect(jsonPath("validationCodes.*", Matchers.containsInAnyOrder("UNKNOWN_APPLICATION",
                         "MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE", "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT",
                         "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
@@ -92,6 +93,7 @@ public class RegistrationControllerTest {
                 .content(toString(registration)))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(6)))
                 .andExpect(jsonPath("validationCodes.*",
                         Matchers.containsInAnyOrder("MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE",
                                 "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT", "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
