@@ -99,6 +99,8 @@ public class RegistrationControllerTest {
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);
         registration.setNickname("Frosch");
+        registration.setFirstname("Andre");
+        registration.setName("Winkler");
         registration.setPassword("secret-password");
         registration.setEmail("test@test.de");
 
@@ -106,8 +108,9 @@ public class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toString(registration)))
                 .andDo(print())
-                .andExpect(status().isOk());
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
+        
         RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
                 .orElseThrow(() -> new IllegalArgumentException());
         assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
