@@ -109,6 +109,7 @@ public class RegistrationControllerTest {
                 .content(toString(registration)))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
         
         RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
