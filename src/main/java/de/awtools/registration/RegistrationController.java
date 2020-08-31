@@ -76,7 +76,7 @@ public class RegistrationController {
             @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
     @PostMapping(path = "/validate", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
-    public RegistrationValidationJson validate(@RequestBody RegistrationJson registration) {
+    public ResponseEntity<RegistrationValidationJson> validate(@RequestBody RegistrationJson registration) {
         RegistrationValidation validation = registrationService.validate(
                 registration.getNickname(),
                 registration.getEmail(),
@@ -84,7 +84,7 @@ public class RegistrationController {
 
         toResponseStatusException(validation);
 
-        return RegistrationValidationJson.of(validation);
+        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
     }
 
     /**
@@ -96,12 +96,12 @@ public class RegistrationController {
      */
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
-    public RegistrationValidationJson confirm(@PathVariable String token) {
+    public ResponseEntity<RegistrationValidationJson> confirm(@PathVariable String token) {
         RegistrationValidation validation = registrationService.confirmAccount(new Token(token));
 
         toResponseStatusException(validation);
 
-        return RegistrationValidationJson.of(validation);
+        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
     }
 
     /**
