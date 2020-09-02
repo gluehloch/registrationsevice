@@ -120,6 +120,37 @@ public class RegistrationControllerTest {
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
     }
 
+    /**
+     * Die Annotation {@code @Transactional} sorgt dafuer, dass die angelegten Testdaten nach Testausfuehrung zurueck
+     * gerollt werden.
+     * 
+     * @throws Exception
+     *             ...
+     */
+    @Test
+    @Transactional
+    public void invalidEmailRegistration() throws Exception {
+        setupDatabase();
+        RegistrationJson registration = new RegistrationJson();
+        registration.setApplicationName("application");
+
+        registration.setAcceptCookie(true);
+        registration.setAcceptMail(true);
+        registration.setNickname("Frosch");
+        registration.setFirstname("Andre");
+        registration.setName("Winkler");
+        registration.setPassword("secret-password");
+        registration.setEmail("test(at)test.de");
+
+        mockMvc.perform(post("/registration/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toString(registration)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
+                .andExpect(jsonPath("validationCodes", Matchers.contains("EMAIL_IS_NOT_VALID")));
+    }
+    
     private String toString(RegistrationJson registration) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);

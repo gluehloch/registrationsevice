@@ -20,6 +20,8 @@ public class RegistrationValidation {
         NICKNAME_IS_EMPTY(1008),
         EMAIL_IS_EMPTY(1009),
         FIRSTNAME_IS_EMPTY(1010),
+        EMAIL_IS_NOT_VALID(1011),
+        EMAIL_IS_RESERVED(1012),
         ILLEGAL_ARGUMENTS(2000);
         // @formatter:on
 

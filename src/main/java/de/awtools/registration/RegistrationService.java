@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,6 +100,14 @@ public class RegistrationService {
         
         if (StringUtils.isBlank(email)) {
             registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_EMPTY);
+        } else {
+            if (!EmailValidator.getInstance().isValid(email)) {
+                registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_NOT_VALID);
+            }
+            
+            if (registrationRepository.findByEmail(new Email(email)).isPresent()) {
+                registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_RESERVED);
+            }     
         }
         
         Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
