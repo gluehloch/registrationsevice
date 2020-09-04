@@ -18,7 +18,8 @@
 # Im JDBC connection string kann nun der Container Name, z.B. 'mariadb', als Host Name verwendet werden. 
 #
 
-FROM tomcat:9.0.35-jdk14-openjdk-oracle
+# FROM tomcat:9.0.35-jdk14-openjdk-oracle
+FROM tomcat:9.0.37-jdk14-openjdk-buster
 
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
