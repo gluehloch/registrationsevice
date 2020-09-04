@@ -1,6 +1,6 @@
 #!/bin/bash
 export DOCKER_NAME='registerdb'
-export DOCKER_DB_HOST='192.168.99.101'
+export DOCKER_DB_HOST='127.0.0.1'
 
 # Mit der nativen Windows Variante von Docker entfällt der Parameter --expose. Der Parameter -p fuer
 # das Port-Binding ist dennoch wichtig:
@@ -13,5 +13,5 @@ export DOCKER_DB_HOST='192.168.99.101'
 # sleep 10s
 
 # mysql -u root -h 192.168.99.100 -P 3308
-mysql -u root --password=root -h ${DOCKER_DB_HOST} < mysql-prod.sql
+mysql -u root -h ${DOCKER_DB_HOST} < mysql-prod.sql
 mysql -u registersu --password=register -h ${DOCKER_DB_HOST} -D register < mysql.sql
