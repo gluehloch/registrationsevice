@@ -33,6 +33,15 @@ public class JasonWebTokenTest {
     private Date now;
     private Date yesterday;
     private Date tomorrow;
+    
+    /**
+     * Abstraktion fuer einen Schluessel. Allen Schluesseln ist folgendes gemeinsam:
+     * <ul>
+     *   <li>Encoding</li>
+     *   <li>Algorithmus</li>
+     * </ul>
+     * Fuer mich: Kann ein 'public' oder ein 'private' Key sein.
+     */
     private Key key;
 
     @BeforeEach
@@ -45,18 +54,8 @@ public class JasonWebTokenTest {
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
 
+        // Legt einen sogenannten 'Secret-Key' an.
         key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    }
-
-    @Test
-    public void generatePublicPrivateKeyPair() {
-        // Erstellt einen asymmetrischen (public/private) Schluessel.
-        KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.RS256);
-        PrivateKey privateKey = keyPair.getPrivate();
-        PublicKey publicKey = keyPair.getPublic();
-
-        assertThat(privateKey).isNotNull();
-        assertThat(publicKey).isNotNull();
     }
 
     // -- TODO Ist das sinnvoll? Ueber eine Function den Wert ermitteln?
@@ -64,10 +63,18 @@ public class JasonWebTokenTest {
         return extractClaim(token, key, Claims::getExpiration);
     }
 
+    // -- Das ist die Alternative zu #extractExpiration
+    public Date extractExpiration2(String token, String key) {
+        Claims extractAllClaims = extractAllClaims(token, key);
+        Date expiration = extractAllClaims.getExpiration();
+        return expiration;
+    }
+
     public <T> T extractClaim(String token, String key, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token, key);
         return claimResolver.apply(claims);
     }
+
     
     public static Claims extractAllClaims(String token, String key) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
