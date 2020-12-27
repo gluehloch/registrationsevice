@@ -50,7 +50,7 @@ public class RegistrationController {
     @PostMapping(path = "/register", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(@Valid @RequestBody RegistrationJson registration) {
         RegistrationValidation validation = registrationService
-                .registerNewUserAccount(registration.getNickname(),
+                .registerNewAccount(registration.getNickname(),
                         registration.getEmail(),
                         registration.getPassword(),
                         registration.getName(),

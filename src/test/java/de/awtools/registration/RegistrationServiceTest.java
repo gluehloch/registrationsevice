@@ -54,7 +54,7 @@ public class RegistrationServiceTest {
         applicationRepository.save(application);
 
         RegistrationValidation validation = registrationService
-                .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
+                .registerNewAccount("Frosch", "frosch@web.de", "Frosch",
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
 
@@ -68,7 +68,7 @@ public class RegistrationServiceTest {
         assertThat(registration.isAcceptingMail()).isTrue();
 
         RegistrationValidation restartUserAccount = registrationService
-                .restartUserAccount("Frosch", "frosch@web.de", "Frosch",
+                .restartAccount("Frosch", "frosch@web.de", "Frosch",
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
 
@@ -88,7 +88,7 @@ public class RegistrationServiceTest {
         UserAccountEntity userAccount = new UserAccountEntity();
         userAccount.setCreated(LocalDateTime.now());
         userAccount.setCredentialExpired(false);
-        userAccount.setEmail(new Email("frosch@web.de"));
+        userAccount.setEmail(Email.of("frosch@web.de"));
         userAccount.setEnabled(true);
         userAccount.setExpired(false);
         userAccount.setFirstname("Andre");
