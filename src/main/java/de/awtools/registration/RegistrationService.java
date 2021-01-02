@@ -70,7 +70,7 @@ public class RegistrationService {
      *             Request validation exception
      */
     @Transactional
-    public RegistrationValidation registerNewUserAccount(String nickname,
+    public RegistrationValidation registerNewAccount(String nickname,
             String email, String password, String name, String firstname,
             String applicationName, boolean acceptMail, boolean acceptCookie,
             String supplement)
@@ -105,7 +105,7 @@ public class RegistrationService {
                 registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_NOT_VALID);
             }
             
-            if (registrationRepository.findByEmail(new Email(email)).isPresent()) {
+            if (registrationRepository.findByEmail(Email.of(email)).isPresent()) {
                 registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_RESERVED);
             }     
         }
@@ -133,7 +133,7 @@ public class RegistrationService {
             registration.setFirstname(firstname);
             registration.setName(name);
             registration.setPassword(new Password(passwordEncoder.encode(password)));
-            registration.setEmail(new Email(email));
+            registration.setEmail(Email.of(email));
             registration.setCreated(now);
             UUID token = UUID.randomUUID();
             registration.setToken(new Token(token.toString()));
@@ -152,14 +152,14 @@ public class RegistrationService {
     }
 
     @Transactional
-    public RegistrationValidation restartUserAccount(String nickname,
+    public RegistrationValidation restartAccount(String nickname,
             String email, String password, String name, String firstname,
             String application, boolean acceptMail, boolean acceptCookie,
             String supplement)
             throws RequestValidationException {
 
-        registrationRepository.deleteByEmail(new Email(email));
-        return registerNewUserAccount(nickname, email, password, name,
+        registrationRepository.deleteByEmail(Email.of(email));
+        return registerNewAccount(nickname, email, password, name,
                 firstname, application, acceptMail, acceptCookie, supplement);
     }
 
@@ -202,7 +202,7 @@ public class RegistrationService {
             return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_NICKNAME);
         }
 
-        registrationDefined = registrationRepository.findByEmail(new Email(email));
+        registrationDefined = registrationRepository.findByEmail(Email.of(email));
         if (registrationDefined.isPresent()) {
             return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_MAILADDRESS);
         }

@@ -46,7 +46,7 @@ class UserRepositoryTest {
         user.setNickname("Frosch");
         user.setFirstname("Andre");
         user.setName("Winkler");
-        user.setEmail(new Email("mail@mail.de"));
+        user.setEmail(Email.of("mail@mail.de"));
         user.setCreated(LocalDateTime.now());
         user.setPassword(new Password("Password"));
         user = userAccountRepository.save(user);
@@ -70,7 +70,7 @@ class UserRepositoryTest {
                 .firstname("Andre")
                 .name("Winkler")
                 .created(LocalDateTime.now())
-                .email(new Email("mail@mail.de"))
+                .email(Email.of("mail@mail.de"))
                 .build();
         userAccountRepository.save(frosch);
 
@@ -101,7 +101,7 @@ class UserRepositoryTest {
                 .firstname("Andre")
                 .name("Winkler")
                 .created(LocalDateTime.now())
-                .email(new Email("mail@mail.de"))
+                .email(Email.of("mail@mail.de"))
                 .build();
         
         RoleEntity role = RoleEntity.RoleBuilder.of("ADMIN");

@@ -13,10 +13,10 @@ public class Email {
     @Size(min = 8, max = 60)
     private String email;
 
-    public Email() {
+    Email() {
     }
     
-    public Email(String email) {
+    private Email(String email) {
         this.email = email;
     }
 
@@ -28,4 +28,8 @@ public class Email {
         this.email = email;
     }
 
+    public static Email of(String email) {
+        return new Email(email);
+    }
+    
 }
