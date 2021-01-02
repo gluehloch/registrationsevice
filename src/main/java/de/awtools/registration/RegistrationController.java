@@ -72,8 +72,7 @@ public class RegistrationController {
      * @return A copy of the registration data.
      */
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
-    @ApiResponses(value = {
-            @ApiResponse(code = 400, message = "Invalid application name") })
+    @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
     @PostMapping(path = "/validate", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> validate(@RequestBody RegistrationJson registration) {
