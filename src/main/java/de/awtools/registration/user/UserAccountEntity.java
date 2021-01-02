@@ -1,27 +1,34 @@
-package de.awtools.registration;
+package de.awtools.registration.user;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 
-@Entity
+import de.awtools.registration.RegistrationEntity;
+
+@Entity(name = "UserAccount")
 @Table(name = "useraccount")
-public class UserAccount {
+public class UserAccountEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
     @Column(name = "id", updatable = false, nullable = false)
     private Long id;
 
@@ -66,17 +73,21 @@ public class UserAccount {
 
     @Column(name = "acceptmail")
     private boolean acceptMail;
-    
+
     @Column(name = "acceptcookie")
     private boolean acceptCookie;
 
     @ManyToMany(mappedBy = "userAccounts")
-    private Set<Application> applications = new HashSet<>();
+    private Set<ApplicationEntity> applications = new HashSet<>();
 
-    public UserAccount() {
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "useraccount_role", joinColumns = @JoinColumn(name = "useraccount_ref"), inverseJoinColumns = @JoinColumn(name = "role_ref"))
+    private Set<RoleEntity> roles = new HashSet<>();
+
+    public UserAccountEntity() {
     }
-    
-    public UserAccount(LocalDateTime createdAt, Registration registration) {
+
+    public UserAccountEntity(LocalDateTime createdAt, RegistrationEntity registration) {
         this.created = createdAt;
         this.credentialExpired = false;
         this.email = registration.getEmail();
@@ -89,7 +100,7 @@ public class UserAccount {
         this.nickname = registration.getNickname();
         this.password = registration.getPassword();
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -189,21 +200,39 @@ public class UserAccount {
     public void setAcceptMail(boolean acceptMail) {
         this.acceptMail = acceptMail;
     }
-    
+
     public boolean isAcceptingMail() {
         return acceptMail;
     }
-    
+
     public void setAcceptCookie(boolean acceptCookie) {
         this.acceptCookie = acceptCookie;
     }
-    
+
     public boolean isAcceptingCookie() {
         return acceptCookie;
     }
 
-    Set<Application> getApplications() {
+    Set<ApplicationEntity> getApplications() {
         return applications;
+    }
+
+    public void addRole(RoleEntity role) {
+        roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(RoleEntity role) {
+        roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
+    public Set<RoleEntity> getRoles() {
+        return roles;
+    }
+    
+    public boolean hasRole(RoleEntity role) {
+        return roles.contains(role);
     }
 
     @Override
@@ -223,13 +252,68 @@ public class UserAccount {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        UserAccount other = (UserAccount) obj;
+        UserAccountEntity other = (UserAccountEntity) obj;
         if (nickname == null) {
             if (other.nickname != null)
                 return false;
         } else if (!nickname.equals(other.nickname))
             return false;
         return true;
+    }
+
+    public static class UserAccountBuilder {
+        private String nickname;
+        private String password;
+        private String firstname;
+        private String name;
+        private LocalDateTime created;
+        private Email email;
+
+        private UserAccountBuilder() {
+        }
+
+        public static UserAccountBuilder of(String nickname, String password) {
+            UserAccountBuilder ub = new UserAccountBuilder();
+            ub.nickname = nickname;
+            ub.password = password;
+            return ub;
+        }
+
+        public UserAccountBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public UserAccountBuilder firstname(String firstname) {
+            this.firstname = firstname;
+            return this;
+        }
+        
+        public UserAccountBuilder created(LocalDateTime localDateTime) {
+            this.created = localDateTime;
+            return this;
+        }
+        
+        public UserAccountBuilder createdNow() {
+            this.created = LocalDateTime.now();
+            return this;
+        }
+        
+        public UserAccountBuilder email(Email email) {
+            this.email = email;
+            return this;
+        }
+
+        public UserAccountEntity build() {
+            UserAccountEntity ue = new UserAccountEntity();
+            ue.setNickname(nickname);
+            ue.setPassword(new Password(password));
+            ue.setFirstname(firstname);
+            ue.setName(name);
+            ue.setCreated(created);
+            ue.setEmail(email);
+            return ue;
+        }
     }
 
 }

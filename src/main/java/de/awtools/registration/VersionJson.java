@@ -7,7 +7,7 @@ package de.awtools.registration;
  */
 public class VersionJson {
 
-    private static final String VERSION = "V0.0.0.1-dev";
+    private static final String VERSION = "V0.2.0";
     private static final VersionJson VERSION_JSON = new VersionJson();
 
     private VersionJson() {

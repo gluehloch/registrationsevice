@@ -13,6 +13,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+import de.awtools.registration.user.UserAccountEntity;
+
 @Entity
 @Table(name = "useraccount_session")
 public class Session {
@@ -25,7 +27,7 @@ public class Session {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_ref")
-    private UserAccount user;
+    private UserAccountEntity user;
 
     @NotNull
     @Column(name = "login")
@@ -61,11 +63,11 @@ public class Session {
         this.login = login;
     }
 
-    public UserAccount getUser() {
+    public UserAccountEntity getUser() {
         return user;
     }
 
-    public void setUser(UserAccount user) {
+    public void setUser(UserAccountEntity user) {
         this.user = user;
     }
 

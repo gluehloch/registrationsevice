@@ -19,6 +19,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.awtools.registration.RegistrationValidation.ValidationCode;
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.user.ApplicationEntity;
+import de.awtools.registration.user.ApplicationRepository;
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+import de.awtools.registration.user.UserAccountEntity;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -43,20 +48,18 @@ public class RegistrationServiceTest {
     public void registerNewAccount() throws Exception {
         LOG.info("Start of the test...");
 
-        Application application = new Application();
+        ApplicationEntity application = new ApplicationEntity();
         application.setName("applicationName");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
         RegistrationValidation validation = registrationService
-                .registerNewUserAccount("Frosch", "frosch@web.de", "Frosch",
+                .registerNewAccount("Frosch", "frosch@web.de", "Frosch",
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
 
-        Registration registration = registrationRepository
-                .findByNickname("Frosch");
-        Registration registration2 = registrationRepository
-                .findByToken(registration.getToken());
+        RegistrationEntity registration = registrationRepository.findByNickname("Frosch").orElseThrow();
+        RegistrationEntity registration2 = registrationRepository.findByToken(registration.getToken()).orElseThrow();
 
         assertThat(registration.getId()).isEqualTo(registration2.getId());
         assertThat(validation.getValidationCodes()).contains(ValidationCode.OK);
@@ -65,28 +68,27 @@ public class RegistrationServiceTest {
         assertThat(registration.isAcceptingMail()).isTrue();
 
         RegistrationValidation restartUserAccount = registrationService
-                .restartUserAccount("Frosch", "frosch@web.de", "Frosch",
+                .restartAccount("Frosch", "frosch@web.de", "Frosch",
                         "Winkler", "Andre", "applicationName", true, true,
                         "Supplement data");
 
         assertThat(restartUserAccount).isNotNull();
         assertThat(restartUserAccount.getNickname()).isEqualTo("Frosch");
         assertThat(restartUserAccount.getValidationCodes()).hasSize(1);
-        assertThat(restartUserAccount.getValidationCodes())
-                .contains(ValidationCode.OK);
+        assertThat(restartUserAccount.getValidationCodes()).contains(ValidationCode.OK);
     }
 
     @Test
     public void saveNewAccount() {
-        Application application = new Application();
+        ApplicationEntity application = new ApplicationEntity();
         application.setName("applicationId");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
-        UserAccount userAccount = new UserAccount();
+        UserAccountEntity userAccount = new UserAccountEntity();
         userAccount.setCreated(LocalDateTime.now());
         userAccount.setCredentialExpired(false);
-        userAccount.setEmail(new Email("frosch@web.de"));
+        userAccount.setEmail(Email.of("frosch@web.de"));
         userAccount.setEnabled(true);
         userAccount.setExpired(false);
         userAccount.setFirstname("Andre");

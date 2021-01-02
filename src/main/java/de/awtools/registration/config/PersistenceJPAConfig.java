@@ -25,8 +25,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Registration Service Configuration Factory.
- *
+ * <br/>
  * Remember: The last property source wins on property name clash!
+ * <br/>
+ * {@code /register.properties} must be located under {@link src/test/resources}.
  *
  * @author Andre Winkler
  */

@@ -1,9 +1,11 @@
-package de.awtools.registration;
+package de.awtools.registration.cookie;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import de.awtools.registration.time.TimeService;
 
 @Service
 public class CookieService {
@@ -15,10 +17,10 @@ public class CookieService {
     private CookieRepository cookieRepository;
 
     @Transactional
-    public Cookie storeCookieAcceptance(String website, String browser,
+    public CookieEntity storeCookieAcceptance(String website, String browser,
             String remoteaddress, boolean acceptCookies) {
 
-        Cookie cookie = new Cookie();
+        CookieEntity cookie = new CookieEntity();
         cookie.setWebsite(website);
         cookie.setAcceptCookie(acceptCookies);
         cookie.setBrowser(browser);

@@ -1,21 +1,24 @@
 package de.awtools.registration;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface RegistrationRepository
-        extends CrudRepository<Registration, Long> {
+import de.awtools.registration.user.Email;
 
-    Registration findByNickname(String nickname);
+@Repository
+public interface RegistrationRepository extends CrudRepository<RegistrationEntity, Long> {
+
+    Optional<RegistrationEntity> findByNickname(String nickname);
     
     // @Query("select r from Registration r where r.email.email = :email")
-    Registration findByEmail(Email email);
+    Optional<RegistrationEntity> findByEmail(Email email);
 
-    Registration findByToken(Token token);
+    Optional<RegistrationEntity> findByToken(Token token);
 
     @Modifying
     @Query("delete from Registration r where r.email = :email")

@@ -1,8 +1,10 @@
-package de.awtools.registration;
+package de.awtools.registration.cookie;
 
 import java.time.LocalDateTime;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.awtools.registration.HttpConst;
+import de.awtools.registration.time.DateTimeJson;
 import io.swagger.annotations.ApiOperation;
 
 /**
@@ -25,9 +29,13 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/cookie")
 public class CookieController {
 
-    @Autowired
-    private CookieService cookieService;
+    private final CookieService cookieService;
 
+    @Autowired
+    public CookieController(CookieService cookieService) {
+        this.cookieService = cookieService;
+    }
+    
     /**
      * Ping the cookie service.
      *
@@ -48,9 +56,14 @@ public class CookieController {
     public DateTimeJson confirmCookie(
             @Valid @RequestBody CookieJson cookieJson,
             @RequestHeader("User-Agent") String userAgent,
-            HttpServletRequest request) {
-
-        DateTimeJson dateTimeJson = new DateTimeJson();      
+            HttpServletRequest request, HttpServletResponse response) {
+    	
+    	// Cookie[] cookies = request.getCookies();
+    	Cookie cookie = new Cookie("confirmCookie", Boolean.toString(cookieJson.isAcceptCookies()));
+    	cookie.setHttpOnly(true);
+    	response.addCookie(cookie);
+    	
+        DateTimeJson dateTimeJson = new DateTimeJson();
         
         return dateTimeJson.setDateTime(cookieService
                 .storeCookieAcceptance(

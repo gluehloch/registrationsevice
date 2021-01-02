@@ -1,34 +1,38 @@
 
-select 'Start installation of registerservice 0.0.1 MySQL schema.' as INFO;
-select version();
+SELECT 'Start installation of registerservice 0.0.1 MySQL schema.' as INFO;
+SELECT version();
 
-drop table if exists cookie;
-drop table if exists registration;
-drop table if exists useraccount_session;
-drop table if exists useraccount_application;
-drop table if exists useraccount;
-drop table if exists application;
+DROP TABLE IF EXISTS cookie;
+DROP TABLE IF EXISTS registration;
+DROP TABLE IF EXISTS useraccount_session;
+DROP TABLE IF EXISTS useraccount_application;
+DROP TABLE IF EXISTS useraccount_role;
+DROP TABLE IF EXISTS role_privilege;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS privilege;
+DROP TABLE IF EXISTS application;
+DROP TABLE IF EXISTS useraccount;
 
-create table cookie(
-    id bigint not null auto_increment,
+CREATE TABLE cookie(
+    id bigint NOT NULL auto_increment,
     website VARCHAR(50),
-    remoteaddress VARCHAR(100) not null comment 'the user remote address',
-    browser VARCHAR(200) not null comment 'the user browser',
-    created datetime not null comment 'entry creation time',
+    remoteaddress VARCHAR(100) NOT NULL comment 'the user remote address',
+    browser VARCHAR(200) NOT NULL comment 'the user browser',
+    created datetime NOT NULL comment 'entry creation time',
     acceptcookie bit comment 'user accepts cookies',
     primary key (id)
 ) ENGINE=InnoDB;
 
-create table registration (
-    id bigint not null auto_increment,
-    nickname varchar(20) not null unique,
-    name varchar(50) not null,
-    firstname varchar(50) not null,
-    password varchar(60) not null,
-    email varchar(50) not null comment 'email address',
-    created datetime not null comment 'cretion time',
-    token varchar(60) not null unique comment 'token to confirm email address',
-    application varchar(50) not null comment 'name of the appliction',
+CREATE TABLE registration (
+    id bigint NOT NULL auto_increment,
+    nickname varchar(20) NOT NULL UNIQUE,
+    name varchar(50) NOT NULL,
+    firstname varchar(50) NOT NULL,
+    password varchar(60) NOT NULL,
+    email varchar(50) NOT NULL comment 'email address',
+    created datetime NOT NULL comment 'creation time',
+    token varchar(60) NOT NULL UNIQUE comment 'token to confirm email address',
+    application varchar(50) NOT NULL comment 'name of the appliction',
     confirmed bit comment 'registration completed successful',
     acceptmail bit comment 'user accepts emails',
     acceptcookie bit comment 'user accepts cookies',
@@ -36,14 +40,14 @@ create table registration (
     primary key(id)
 ) ENGINE=InnoDB;
 
-create table useraccount (
-    id bigint not null auto_increment,
-    nickname varchar(20) not null unique,
-    name varchar(50) not null,
-    firstname varchar(50) not null,
-    password varchar(60) not null,
-    email varchar(50) not null,
-    created datetime not null,
+CREATE TABLE useraccount (
+    id bigint NOT NULL auto_increment,
+    nickname varchar(20) NOT NULL UNIQUE,
+    name varchar(50) NOT NULL,
+    firstname varchar(50) NOT NULL,
+    password varchar(60) NOT NULL,
+    email varchar(50) NOT NULL,
+    created datetime NOT NULL,
     last_change datetime comment 'Last password change',
     enabled bit comment 'account enabled',
     expired bit comment 'password expired',
@@ -54,17 +58,17 @@ create table useraccount (
     primary key(id)
 ) ENGINE=InnoDB;
 
-create table application (
-    id bigint not null auto_increment,
-    name varchar(50) not null unique,
-    description varchar(500) not null,
+CREATE TABLE application (
+    id bigint NOT NULL auto_increment,
+    name varchar(50) NOT NULL UNIQUE,
+    description varchar(500) NOT NULL,
     primary key(id)
 ) ENGINE=InnoDB;
 
-create table useraccount_session (
-    id bigint not null auto_increment,
+CREATE TABLE useraccount_session (
+    id bigint NOT NULL auto_increment,
     useraccount_ref bigint,
-    token varchar(2048) not null comment 'Session Token',
+    token varchar(2048) NOT NULL comment 'Session Token',
     login datetime comment 'Login date and time',
     logout datetime comment 'Logout date and time',
     remoteaddress varchar(30) comment 'IP address',
@@ -72,23 +76,72 @@ create table useraccount_session (
     primary key(id)
 ) ENGINE=InnoDB;
 
-create table useraccount_application (
-    useraccount_ref bigint not null,
-    application_ref bigint not null,
+CREATE TABLE useraccount_application (
+    useraccount_ref bigint NOT NULL,
+    application_ref bigint NOT NULL,
     primary key(useraccount_ref, application_ref)
 ) ENGINE=InnoDB;
 
-alter table useraccount_session
-    add constraint fk_useraccount_session_user
-    foreign key (useraccount_ref)
-    references useraccount(id);
+CREATE TABLE role (
+    id bigint NOT NULL auto_increment,
+    name varchar(50) NOT NULL UNIQUE,
+    primary key(id)
+) ENGINE=InnoDB;
 
-alter table useraccount_application
-    add constraint fk_useracc_app_useracc
-    foreign key (useraccount_ref)
-    references useraccount(id);
+CREATE TABLE privilege (
+    id bigint NOT NULL auto_increment,
+    name varchar(50) NOT NULL UNIQUE,
+    primary key(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE useraccount_role (
+    useraccount_ref bigint NOT NULL comment 'Reference to table useraccount',
+    role_ref bigint NOT NULL comment 'Reference to table role'
+) ENGINE=InnoDB;
+
+CREATE TABLE role_privilege (
+    role_ref bigint NOT NULL comment 'Reference to table role',
+    privilege_ref bigint NOT NULL comment 'Reference to table privilege'
+) ENGINE=InnoDB;
+
+
+/* TABLE useraccount_session */
+ALTER TABLE useraccount_session
+    ADD CONSTRAINT fk_useraccount_session_user
+    FOREIGN KEY (useraccount_ref)
+    REFERENCES useraccount(id);
+
+/* TABLE useraccount_application */
+ALTER TABLE useraccount_application
+    ADD CONSTRAINT fk_useracc_app_useracc
+    FOREIGN KEY (useraccount_ref)
+    REFERENCES useraccount(id);
     
-alter table  useraccount_application
-    add constraint fk_useracc_app_app
-    foreign key (application_ref)
-    references application(id);
+ALTER TABLE useraccount_application
+    ADD CONSTRAINT fk_useracc_app_app
+    FOREIGN KEY (application_ref)
+    REFERENCES application(id);
+
+/* TABLE useraccount_role */
+ALTER TABLE useraccount_role
+    ADD CONSTRAINT fk_useracc_role_useracc
+    FOREIGN KEY (useraccount_ref)
+    REFERENCES useraccount(id);
+
+ALTER TABLE useraccount_role
+    ADD CONSTRAINT fk_useracc_role_role
+    FOREIGN KEY (role_ref)
+    REFERENCES role(id);
+
+/* TABLE role_privilege */
+ALTER TABLE role_privilege
+    ADD CONSTRAINT fk_role_privilege_role
+    FOREIGN KEY (role_ref)
+    REFERENCES role(id);
+
+ALTER TABLE role_privilege
+    ADD CONSTRAINT fk_role_privilege_privilege
+    FOREIGN KEY (privilege_ref)
+    REFERENCES privilege(id);
+
+

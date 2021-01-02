@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.user;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -15,9 +15,12 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.NaturalId;
 
-@Entity
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+
+@Entity(name = "Registration")
 @Table(name = "registration")
-public class Registration {
+public class RegistrationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -187,7 +190,7 @@ public class Registration {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Registration other = (Registration) obj;
+        RegistrationEntity other = (RegistrationEntity) obj;
         if (nickname == null) {
             if (other.nickname != null)
                 return false;
