@@ -1,11 +1,5 @@
 CREATE DATABASE `register` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-CREATE USER 'register'@'localhost' IDENTIFIED BY 'register';
-CREATE USER 'register'@'%' IDENTIFIED BY 'register';
-
-CREATE USER 'registersu'@'localhost' IDENTIFIED BY 'register';
-CREATE USER 'registersu'@'%' IDENTIFIED BY 'register';
-
 REVOKE ALL PRIVILEGES ON * . * FROM 'register'@'localhost';
 REVOKE ALL PRIVILEGES ON * . * FROM 'register'@'%';
 
