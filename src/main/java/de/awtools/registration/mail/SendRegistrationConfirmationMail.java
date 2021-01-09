@@ -29,11 +29,7 @@ public class SendRegistrationConfirmationMail {
         // TODO ... send an email with a link with the token ...
         //
 
-        try {
-            sendMail.sendMail(DONT_REPLY_SENDER.get(), recipient.get(), subject, messageText);
-        } catch (MessagingException ex) {
-            ex.printStackTrace();
-        }
+        sendMail.sendMail(DONT_REPLY_SENDER.get(), recipient.get(), subject, messageText);
     }
 
 }

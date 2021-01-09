@@ -13,6 +13,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +26,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class SendMail {
 
+    private static final Logger LOG = LogManager.getLogger();
+
+    private final MailConfiguration mailConfiguration;
+
     @Autowired
-    private MailConfiguration mailConfiguration;
+    public SendMail(MailConfiguration mailConfiguration) {
+        this.mailConfiguration = mailConfiguration;
+    }
 
     /**
      * Sends an email.
@@ -43,9 +51,7 @@ public class SendMail {
      * @throws MessagingException
      *             An exception ...
      */
-    public void sendMail(String from, String recipient, String subject, String messageText)
-            throws AddressException, MessagingException {
-
+    public void sendMail(String from, String recipient, String subject, String messageText) {
         Session session = Session.getInstance(
                 mailConfiguration.properties(),
                 new Authenticator() {
@@ -57,19 +63,24 @@ public class SendMail {
                     }
                 });
 
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(from));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-        message.setSubject(subject);
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+            message.setSubject(subject);
 
-        MimeBodyPart mimeBodyPart = new MimeBodyPart();
-        mimeBodyPart.setContent(messageText, "text/html");
+            MimeBodyPart mimeBodyPart = new MimeBodyPart();
+            mimeBodyPart.setContent(messageText, "text/html");
 
-        Multipart multipart = new MimeMultipart();
-        multipart.addBodyPart(mimeBodyPart);
-        message.setContent(multipart);
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(mimeBodyPart);
+            message.setContent(multipart);
 
-        Transport.send(message);
+            Transport.send(message);
+        } catch (MessagingException ex) {
+            LOG.error("Mail sending failed.", ex);
+            throw new RuntimeException(ex);
+        }
     }
 
 }

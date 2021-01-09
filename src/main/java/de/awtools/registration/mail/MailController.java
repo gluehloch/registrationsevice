@@ -17,8 +17,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/mail")
 public class MailController {
 
-    private static final Logger LOG = LogManager.getLogger();
-
     private final SendMail sendMail;
     
     public MailController(SendMail sendMail) {
@@ -33,13 +31,9 @@ public class MailController {
         final String recipient = "gluehloch@googlemail.com";
         final String subject = "Test";
         final String messageText = "Das ist ein Test.";
-        
-        try {
-            sendMail.sendMail(from, recipient, subject, messageText);
-        } catch (MessagingException ex) {
-            LOG.error(ex);
-        }
-        
+
+        sendMail.sendMail(from, recipient, subject, messageText);
+
         return ResponseEntity.ok(Boolean.TRUE);
     }
     

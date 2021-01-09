@@ -5,8 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import javax.mail.internet.MimeMessage;
 
 import com.icegreen.greenmail.spring.GreenMailBean;
+import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
 import de.awtools.registration.config.PersistenceJPAConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +50,22 @@ public class MailControllerTest {
     @Test
     @DisplayName("Send an email with GreenMail test.")
     void sendRegistrationConfirmationEmail() {
+        greenMailBean.setHostname("localhost");
+        greenMailBean.setPortOffset(10000);
+        greenMailBean.setSmtpProtocol(true);
+        greenMailBean.setImapProtocol(true);
+
+        GreenMail greenMail = greenMailBean.getGreenMail();
+        greenMail.start();
+
+        GreenMailUser user1 = greenMail.setUser("test@localhost", "test");
+
         mailController.register();
+        final MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+        final MimeMessage receivedMessage = receivedMessages[0];
+        assertThat(GreenMailUtil.getBody(receivedMessage)).isEqualTo("some body");
+
+        greenMail.stop();
     }
 
 }
