@@ -29,7 +29,7 @@ public class MailController {
     public ResponseEntity<Boolean> register() {
         final String from = "mail@andre-winkler.de";
         final String recipient = "gluehloch@googlemail.com";
-        final String subject = "Test";
+        final String subject = "Subject";
         final String messageText = "Das ist ein Test.";
 
         sendMail.sendMail(from, recipient, subject, messageText);
