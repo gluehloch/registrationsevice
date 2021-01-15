@@ -24,14 +24,14 @@ import org.springframework.stereotype.Component;
  * @author Andre Winkler
  */
 @Component
-public class SendMail {
+public class SendMailService {
 
     private static final Logger LOG = LogManager.getLogger();
 
     private final MailConfiguration mailConfiguration;
 
     @Autowired
-    public SendMail(MailConfiguration mailConfiguration) {
+    public SendMailService(MailConfiguration mailConfiguration) {
         this.mailConfiguration = mailConfiguration;
     }
 

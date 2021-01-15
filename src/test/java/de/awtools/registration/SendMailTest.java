@@ -10,7 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
-import de.awtools.registration.mail.SendMail;
+import de.awtools.registration.mail.SendMailService;
 
 /**
  * Tries to send an emai.
@@ -24,12 +24,12 @@ import de.awtools.registration.mail.SendMail;
 public class SendMailTest {
 
     @Autowired
-    private SendMail sendMail;
+    private SendMailService sendMailService;
 
     @Disabled
     @Test
     public void sendMail() throws Exception {
-        sendMail.sendMail("donotreply@wp1057914.server-he.de",
+        sendMailService.sendMail("donotreply@wp1057914.server-he.de",
                 "mail@andre-winkler.de",
                 "Register DB test", "This is a link.");
     }

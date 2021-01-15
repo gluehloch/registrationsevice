@@ -1,7 +1,5 @@
 package de.awtools.registration.mail;
 
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +17,7 @@ public class SendRegistrationConfirmationMail {
     private static final Email DONT_REPLY_SENDER = Email.of("dont-reply-to-this-mail@gluehloch.de");
     
     @Autowired
-    private SendMail sendMail;
+    private SendMailService sendMailService;
 
     public void send(Email recipient, Token token) {
         String subject = "Subject";
@@ -29,7 +27,7 @@ public class SendRegistrationConfirmationMail {
         // TODO ... send an email with a link with the token ...
         //
 
-        sendMail.sendMail(DONT_REPLY_SENDER.get(), recipient.get(), subject, messageText);
+        sendMailService.sendMail(DONT_REPLY_SENDER.get(), recipient.get(), subject, messageText);
     }
 
 }

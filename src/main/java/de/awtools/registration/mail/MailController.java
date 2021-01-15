@@ -1,26 +1,21 @@
 package de.awtools.registration.mail;
 
-import javax.mail.MessagingException;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import de.awtools.registration.HttpConst;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.awtools.registration.HttpConst;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 @RequestMapping("/mail")
 public class MailController {
 
-    private final SendMail sendMail;
-    
-    public MailController(SendMail sendMail) {
-        this.sendMail = sendMail;
+    private final SendMailService sendMailService;
+
+    public MailController(SendMailService sendMailService) {
+        this.sendMailService = sendMailService;
     }
 
     @ApiOperation(value = "submit", notes = "Starts the registration process")
@@ -32,9 +27,9 @@ public class MailController {
         final String subject = "Subject";
         final String messageText = "Das ist ein Test.";
 
-        sendMail.sendMail(from, recipient, subject, messageText);
+        sendMailService.sendMail(from, recipient, subject, messageText);
 
         return ResponseEntity.ok(Boolean.TRUE);
     }
-    
+
 }

@@ -64,7 +64,7 @@ public class MailControllerTest {
 
     @Test
     @DisplayName("Send an email with GreenMail test.")
-    void testSend() {
+    void sendEmailWithGreenMail() {
         GreenMailUtil.sendTextEmailTest("to@localhost", "from@localhost", "some subject", "some body");
         final MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
         final MimeMessage receivedMessage = receivedMessages[0];
@@ -73,7 +73,9 @@ public class MailControllerTest {
 
     @Test
     @DisplayName("Send an email with GreenMail test.")
-    void sendRegistrationConfirmationEmail() throws MessagingException, IOException {
+    void sendPingEmail() throws MessagingException, IOException {
+        assertThat(greenMail.getSmtp().getPort()).isEqualTo(3025);
+
         GreenMailUser user1 = greenMail.setUser("test@localhost", "test");
 
         mailController.register();
