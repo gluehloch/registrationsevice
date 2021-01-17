@@ -98,4 +98,20 @@ public class ApplicationEntity {
         return true;
     }
 
+    public static class ApplicationBuilder {
+        private String name;
+        public static ApplicationBuilder of(String name) {
+            ApplicationBuilder builder = new ApplicationBuilder();
+            builder.name = name;
+            return builder;
+        }
+        
+        public ApplicationEntity description(String description) {
+            ApplicationEntity app = new ApplicationEntity();
+            app.setName(name);
+            app.setDescription(description);
+            return app;
+        }
+    }
+    
 }
