@@ -82,6 +82,7 @@ public class BetofficeApplicationUserRoleTest {
         
         admin.addPrivileges(createUpdateDeleteReadSeason);
         
+        
     }
 
     @DisplayName("Repository test: Find all users")
