@@ -1,5 +1,6 @@
 package de.awtools.registration.user;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -56,6 +57,10 @@ public class RoleEntity {
     public void addPrivilege(PrivilegeEntity privilege) {
         privileges.add(privilege);
         privilege.getRoles().add(this);
+    }
+    
+    public void addPrivileges(Collection<PrivilegeEntity> privileges) {
+       privileges.forEach(pv -> addPrivilege(pv)); 
     }
 
     public Set<PrivilegeEntity> getPrivileges() {
