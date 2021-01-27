@@ -1,7 +1,9 @@
 package de.awtools.registration.user;
 
+import static de.awtools.registration.user.UserAccountEntity.UserAccountBuilder.of;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -39,6 +41,9 @@ public class BetofficeApplicationUserRoleTest {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     @BeforeEach
     void before() {
@@ -81,34 +86,62 @@ public class BetofficeApplicationUserRoleTest {
         privilegeRepository.saveAll(
                 List.of(createCommunity, updateCommunity, deleteCommunity, readCommunity));
 
-        RoleEntity admin = RoleBuilder.of("ADMIN");
-        RoleEntity communityManager = RoleBuilder.of("Community Manager");
-        RoleEntity tipper = RoleBuilder.of("Tipper");
+        RoleEntity adminRole = RoleBuilder.of("ADMIN");
+        RoleEntity communityManagerRole = RoleBuilder.of("Community Manager");
+        RoleEntity tipperRole = RoleBuilder.of("Tipper");
 
-        roleRepository.saveAll(List.of(admin, communityManager, tipper));
+        roleRepository.saveAll(List.of(adminRole, communityManagerRole, tipperRole));
         
-        admin.addPrivilege(createSeason, updateSeason, deleteSeason);
-        admin.addPrivilege(createRound, updateRound, deleteRound, readRound);
-        admin.addPrivilege(createGame, updateGame, deleteGame, readGame);
-        admin.addPrivilege(createCommunity, updateCommunity, deleteCommunity, readCommunity);
+        adminRole.addPrivilege(createSeason, updateSeason, deleteSeason);
+        adminRole.addPrivilege(createRound, updateRound, deleteRound, readRound);
+        adminRole.addPrivilege(createGame, updateGame, deleteGame, readGame);
+        adminRole.addPrivilege(createCommunity, updateCommunity, deleteCommunity, readCommunity);
 
-        communityManager.addPrivilege(updateCommunity, readCommunity);
+        communityManagerRole.addPrivilege(updateCommunity, readCommunity);
 
-        tipper.addPrivilege(readSeason, readRound, readGame, readTipp, createTipp, updateTipp, deleteTipp, readCommunity);
+        tipperRole.addPrivilege(readSeason, readRound, readGame, readTipp, createTipp, updateTipp, deleteTipp, readCommunity);
 
-        roleRepository.save(admin);
-        roleRepository.save(communityManager);
-        roleRepository.save(tipper);
+        roleRepository.save(adminRole);
+        roleRepository.save(communityManagerRole);
+        roleRepository.save(tipperRole);
+
+        UserAccountEntity tipper = of("Frosch", "secret-Password")
+                .firstname("Tipp")
+                .name("King")
+                .created(LocalDateTime.now())
+                .email(Email.of("test@testmail.com"))
+                .build();
+        UserAccountEntity communityManager = of("CommuniyManager", "another-secret")
+                .firstname("Community")
+                .name("Manager")
+                .created(LocalDateTime.now())
+                .email(Email.of("test@testmail.com"))
+                .build();
+        UserAccountEntity admin = of("admin", "super-secret-admin-password")
+                .firstname("admin")
+                .name("admin")
+                .email(Email.of("test@testmail.com"))
+                .created(LocalDateTime.now())
+                .build();
+
+        tipper.addRole(tipperRole);
+        communityManager.addRole(communityManagerRole);
+        admin.addRole(adminRole);
+
+        userAccountRepository.saveAll(List.of(tipper, communityManager, admin));
     }
 
     @DisplayName("Repository test: Find all users")
     @Test
     @Tag(Tags.REPOSITORY)
-    public void userRolePrvilegeRelation() {
+    public void userRolePrivilegeRelation() {
         Iterable<PrivilegeEntity> privileges = privilegeRepository.findAll();
         assertThat(privileges).isNotNull();
         assertThat(privileges).hasSize(19);
-        // assertThat(privileges).contains(readPriv, writePriv, deletePriv);
+
+        RoleEntity tipperRole = roleRepository.findByName("Tipper").orElseThrow();
+        UserAccountEntity frosch = userAccountRepository.findByNickname("Frosch").orElseThrow();
+        assertThat(frosch.hasRole(tipperRole)).isTrue();
     }
 
 }
