@@ -17,6 +17,36 @@
 		</plugins>
 	</build>
 	-->
+
+	<repositories>
+		<repository>
+			<id>gluehloch-repository</id>
+			<name>Betoffice Repository</name>
+			<url>https://maven.gluehloch.de/repository</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>gluehloch-snap-repository</id>
+			<name>Betoffice Snapshot Repository</name>
+			<url>https://maven-snap.gluehloch.de/repository</url>
+			<releases>
+				<enabled>false</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<parent>
 		<groupId>de.awtools</groupId>
 		<artifactId>master-pom</artifactId>
