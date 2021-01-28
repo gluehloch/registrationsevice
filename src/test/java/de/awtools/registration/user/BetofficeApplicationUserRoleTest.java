@@ -136,8 +136,7 @@ public class BetofficeApplicationUserRoleTest {
     @Tag(Tags.REPOSITORY)
     public void userRolePrivilegeRelation() {
         Iterable<PrivilegeEntity> privileges = privilegeRepository.findAll();
-        assertThat(privileges).isNotNull();
-        assertThat(privileges).hasSize(19);
+        assertThat(privileges).isNotNull().hasSize(19);
 
         RoleEntity tipperRole = roleRepository.findByName("Tipper").orElseThrow();
         UserAccountEntity frosch = userAccountRepository.findByNickname("Frosch").orElseThrow();
