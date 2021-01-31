@@ -54,9 +54,11 @@ public class RoleEntity {
         return users;
     }
 
-    public void addPrivilege(PrivilegeEntity privilege) {
-        privileges.add(privilege);
-        privilege.getRoles().add(this);
+    public void addPrivilege(PrivilegeEntity ... privileges) {
+        for (PrivilegeEntity privilege : privileges) {
+            this.privileges.add(privilege);
+            privilege.getRoles().add(this);
+        }
     }
     
     public void addPrivileges(Collection<PrivilegeEntity> privileges) {
