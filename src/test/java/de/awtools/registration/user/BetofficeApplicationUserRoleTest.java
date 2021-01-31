@@ -39,6 +39,9 @@ public class BetofficeApplicationUserRoleTest {
     @Autowired
     private PrivilegeRepository privilegeRepository;
     
+    @Autowired
+    private RoleRepository roleRepository;
+    
     @BeforeAll
     public void before() {
         ApplicationEntity betofficeApplication = ApplicationBuilder.of("betoffice").description("Betoffice Community");
@@ -64,6 +67,11 @@ public class BetofficeApplicationUserRoleTest {
         PrivilegeEntity deleteTipp = PrivilegeBuilder.of("DELETE tipp");
         PrivilegeEntity readTipp = PrivilegeBuilder.of("READ tipp");
 
+        PrivilegeEntity createCommunity = PrivilegeBuilder.of("CREATE community");
+        PrivilegeEntity updateCommunity = PrivilegeBuilder.of("UPDATE community");
+        PrivilegeEntity deleteCommunity = PrivilegeBuilder.of("DELETE community");
+        PrivilegeEntity readCommunity = PrivilegeBuilder.of("READ community");
+        
         List<PrivilegeEntity> createUpdateDeleteReadSeason =
             List.of(createSeason, updateSeason, deleteSeason,
                 createRound, updateRound, deleteRound, readRound,
@@ -76,13 +84,13 @@ public class BetofficeApplicationUserRoleTest {
         
         privilegeRepository.saveAll(createUpdateDeleteReadTipp);
 
-        RoleEntity admin = RoleBuilder.of("ADMIN");
-        RoleEntity communityManager = RoleBuilder.of("Community Manager");
-        RoleEntity tipper = RoleBuilder.of("Tipper");
+        RoleEntity adminRole = RoleBuilder.of("ADMIN");
+        RoleEntity communityManagerRole = RoleBuilder.of("Community Manager");
+        RoleEntity tipperRole = RoleBuilder.of("Tipper");
         
-        admin.addPrivileges(createUpdateDeleteReadSeason);
+        roleRepository.saveAll(List.of(adminRole, communityManagerRole, tipperRole));
         
-        
+        adminRole.addPrivileges(createUpdateDeleteReadSeason);
     }
 
     @DisplayName("Repository test: Find all users")
