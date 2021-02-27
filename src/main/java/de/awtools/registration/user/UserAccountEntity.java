@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 
-import de.awtools.registration.RegistrationEntity;
+import de.awtools.registration.register.RegistrationEntity;
 
 @Entity(name = "UserAccount")
 @Table(name = "useraccount")

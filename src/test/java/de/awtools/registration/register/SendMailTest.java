@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

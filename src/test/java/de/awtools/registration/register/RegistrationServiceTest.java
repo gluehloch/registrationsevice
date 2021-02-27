@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 
 import javax.transaction.Transactional;
 
+import de.awtools.registration.register.RegistrationEntity;
+import de.awtools.registration.register.RegistrationRepository;
+import de.awtools.registration.register.RegistrationService;
+import de.awtools.registration.register.RegistrationValidation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -17,7 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import de.awtools.registration.RegistrationValidation.ValidationCode;
+import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import de.awtools.registration.config.PersistenceJPAConfig;
 import de.awtools.registration.user.ApplicationEntity;
 import de.awtools.registration.user.ApplicationRepository;

@@ -52,7 +52,7 @@ public class CookieController {
     @ApiOperation(value = "confirmCookie", nickname = "Confirm Cookie", response = DateTimeJson.class, notes = "The user confirmed a cookie.")
     @CrossOrigin
     @PostMapping(path = "confirmCookie", headers = {
-            HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
+            HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public DateTimeJson confirmCookie(
             @Valid @RequestBody CookieJson cookieJson,
             @RequestHeader("User-Agent") String userAgent,

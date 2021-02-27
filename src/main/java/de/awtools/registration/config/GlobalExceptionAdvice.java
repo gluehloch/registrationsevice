@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import de.awtools.registration.RegistrationValidation;
+import de.awtools.registration.register.RegistrationValidation;
 import de.awtools.registration.RequestValidationException;
 
 @ControllerAdvice

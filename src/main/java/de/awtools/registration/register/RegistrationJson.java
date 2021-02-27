@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import java.io.Serializable;
 

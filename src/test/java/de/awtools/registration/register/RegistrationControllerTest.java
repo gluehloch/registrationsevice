@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.transaction.Transactional;
 
+import de.awtools.registration.register.*;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

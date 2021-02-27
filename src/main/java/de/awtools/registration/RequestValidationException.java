@@ -1,5 +1,6 @@
 package de.awtools.registration;
 
+import de.awtools.registration.register.RegistrationValidation;
 import org.springframework.http.HttpStatus;
 
 /**

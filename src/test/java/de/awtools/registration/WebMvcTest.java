@@ -7,11 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.servlet.ServletContext;
 
+import de.awtools.registration.register.RegistrationController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -55,8 +57,8 @@ public class WebMvcTest {
 
         MvcResult result = mockMvc
                 .perform(get("/ping")
-                        .header("Content-type", "application/json")
-                        .header("charset", "UTF-8"))
+                        .header(HttpHeaders.CONTENT_TYPE,"application/json")
+                        .header(HttpHeaders.ACCEPT_CHARSET, "charset", "UTF-8"))
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
 

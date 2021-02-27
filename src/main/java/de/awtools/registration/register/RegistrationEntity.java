@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import de.awtools.registration.Token;
 import org.hibernate.annotations.NaturalId;
 
 import de.awtools.registration.user.Email;

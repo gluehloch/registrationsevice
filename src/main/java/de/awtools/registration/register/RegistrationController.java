@@ -1,7 +1,9 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import javax.validation.Valid;
 
+import de.awtools.registration.HttpConst;
+import de.awtools.registration.Token;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import de.awtools.registration.RegistrationValidation.ValidationCode;
+import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -47,7 +49,7 @@ public class RegistrationController {
      */
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
-    @PostMapping(path = "/register", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
+    @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(@Valid @RequestBody RegistrationJson registration) {
         RegistrationValidation validation = registrationService
                 .registerNewAccount(registration.getNickname(),
@@ -74,7 +76,7 @@ public class RegistrationController {
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
     @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid application name") })
     @CrossOrigin
-    @PostMapping(path = "/validate", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
+    @PostMapping(path = "/validate", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> validate(@RequestBody RegistrationJson registration) {
         RegistrationValidation validation = registrationService.validate(
                 registration.getNickname(),

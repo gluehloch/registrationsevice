@@ -1,4 +1,4 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -6,12 +6,14 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import de.awtools.registration.RequestValidationException;
+import de.awtools.registration.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.awtools.registration.RegistrationValidation.ValidationCode;
+import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import de.awtools.registration.password.PasswordEncoderWrapper;
 import de.awtools.registration.time.TimeService;
 import de.awtools.registration.user.ApplicationEntity;

@@ -1,7 +1,8 @@
-package de.awtools.registration;
+package de.awtools.registration.register;
 
 import java.util.Optional;
 
+import de.awtools.registration.Token;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

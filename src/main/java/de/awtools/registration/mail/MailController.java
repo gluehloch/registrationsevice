@@ -20,7 +20,7 @@ public class MailController {
 
     @ApiOperation(value = "submit", notes = "Starts the registration process")
     @CrossOrigin
-    @PostMapping(path = "/submit", headers = { HttpConst.HEADER }, produces = HttpConst.JSON_UTF_8)
+    @PostMapping(path = "/submit", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Boolean> register() {
         final String from = "mail@andre-winkler.de";
         final String recipient = "gluehloch@googlemail.com";
