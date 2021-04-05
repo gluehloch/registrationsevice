@@ -15,8 +15,12 @@ import de.awtools.registration.user.UserAccountRepository;
 @Service
 public class UserAccountDetailsService implements UserDetailsService {
 
+    private final UserAccountRepository userRepository;
+
     @Autowired
-    private UserAccountRepository userRepository;
+    public UserAccountDetailsService(UserAccountRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String nickname) {
