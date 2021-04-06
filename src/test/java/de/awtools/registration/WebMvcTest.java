@@ -39,8 +39,8 @@ public class WebMvcTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
+    public void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
     }
 
     @Test
@@ -49,10 +49,8 @@ public class WebMvcTest {
 
         assertThat(context).isNotNull();
         assertThat(context).isInstanceOf(MockServletContext.class);
-        assertThat(context.getServletContextName())
-                .isEqualTo("MockServletContext");
-        assertThat(webAppContext.getBean(RegistrationController.class))
-                .isNotNull();
+        assertThat(context.getServletContextName()).isEqualTo("MockServletContext");
+        assertThat(webAppContext.getBean(RegistrationController.class)).isNotNull();
 
         MvcResult result = mockMvc
                 .perform(get("/ping")
@@ -61,8 +59,7 @@ public class WebMvcTest {
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
 
-        assertThat(result.getResponse().getContentType())
-                .isEqualTo("application/json;charset=utf-8");
+        assertThat(result.getResponse().getContentType()).isEqualTo("application/json;charset=utf-8");
     }
 
 }
