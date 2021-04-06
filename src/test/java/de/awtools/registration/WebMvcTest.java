@@ -40,8 +40,7 @@ public class WebMvcTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webAppContext)
-                .build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webAppContext).build();
     }
 
     @Test
