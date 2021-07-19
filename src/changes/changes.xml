@@ -18,7 +18,9 @@
 		<!-- *** STILL UNDER DEVELOPMENT x.x.x (SNAPSHOT) *** -->
 
 		<!-- UNDER DEVELOPMENT -->
-        <release version="registrationservice-0.2.0" date="2021-??-??" description="Refactoring">
+		
+		<!-- RELEASED -->
+        <release version="registrationservice-0.2.0" date="2021-07-19" description="Refactoring. JDK 16">
             <action dev="andrewinkler" type="add" date="2020-01-25">
                 Moving controllers: ping and cookie gets their own controller.
             </action>
