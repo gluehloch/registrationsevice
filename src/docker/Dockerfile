@@ -18,7 +18,7 @@
 #
 
 # FROM tomcat:9.0.35-jdk14-openjdk-oracle
-FROM tomcat:9.0.43-jdk15-openjdk-buster
+FROM tomcat:9.0.46-jdk16-openjdk-buster
 
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
