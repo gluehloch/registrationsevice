@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.transaction.Transactional;
 
-import de.awtools.registration.register.*;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

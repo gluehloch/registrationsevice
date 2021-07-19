@@ -14,4 +14,8 @@ public class PasswordEncoderWrapper {
         return passwordEncoder.encode(password);
     }
     
+    PasswordEncoder unwrap() {
+        return passwordEncoder;
+    }
+    
 }
