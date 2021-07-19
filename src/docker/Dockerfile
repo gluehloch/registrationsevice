@@ -1,4 +1,4 @@
-# docker build -t register:0.2.0-SNAP .
+# docker build -t register:0.2.0 .
 # Namensvorschlaege: register
 #                    
 # docker run --network betoffice --expose 8080 -p 9090:8080 --name register-0.2.0-SNAP -d register:0.2.0-SNAP
