@@ -15,7 +15,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtWithRsaKey {
 
     public static void main(String[] args) {
-
         System.out.println("generating keys");
         Map<String, Object> rsaKeys = null;
 

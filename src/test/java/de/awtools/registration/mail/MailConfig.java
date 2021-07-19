@@ -1,8 +1,9 @@
 package de.awtools.registration.mail;
 
-import com.icegreen.greenmail.spring.GreenMailBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.icegreen.greenmail.spring.GreenMailBean;
 
 @Configuration
 public class MailConfig {

@@ -6,8 +6,6 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
-import de.awtools.registration.Tags;
-import de.awtools.registration.config.PersistenceJPAConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -18,6 +16,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import de.awtools.registration.Tags;
+import de.awtools.registration.config.PersistenceJPAConfig;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)

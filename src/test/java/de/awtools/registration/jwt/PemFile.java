@@ -1,9 +1,11 @@
 package de.awtools.registration.jwt;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
-
-import java.io.*;
 
 public class PemFile {
 

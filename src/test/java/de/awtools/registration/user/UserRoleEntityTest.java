@@ -2,8 +2,9 @@ package de.awtools.registration.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.awtools.registration.user.UserAccountEntity.UserAccountBuilder;
 import org.junit.jupiter.api.Test;
+
+import de.awtools.registration.user.UserAccountEntity.UserAccountBuilder;
 
 class UserRoleEntityTest {
 

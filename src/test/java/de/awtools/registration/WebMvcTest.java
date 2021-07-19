@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import javax.servlet.ServletContext;
 
-import de.awtools.registration.register.RegistrationController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.register.RegistrationController;
 
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
