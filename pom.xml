@@ -58,7 +58,7 @@
 	</parent>
 
 	<artifactId>registrationservice</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.2.0</version>
 	<name>Registration REST API project</name>
 	<packaging>war</packaging>
 
