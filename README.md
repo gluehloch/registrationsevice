@@ -14,6 +14,11 @@ dos2unix prepare-docker.sh
 ./prepare-docker.sh
 ```
 
+Eclipse Workspace aufsetzen:
+```
+mvn clean eclipse:clean eclipse:eclipse
+```
+
 ## Configuration
 Beispiel:
 
