@@ -1,5 +1,9 @@
 package de.awtools.registration.authentication;
 
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.register.RegistrationValidationJson;
+import de.awtools.registration.user.Password;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -28,17 +33,16 @@ public class AuthenticationController {
     @ApiOperation(value = "login", nickname = "login", response = RegistrationValidationJson.class, notes = "Authentication login.")
     @CrossOrigin
     @PostMapping(path = "/login", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
-    public Token login(@ApiParam(name = "nickname", type = "String", required = true) @RequestParam String nickname, @RequestParam String password) {
-        Token loginToken = authenticationService.login(nickname, password);
-        return loginToken;
+    public ResponseEntity<Token> login(@ApiParam(name = "nickname", type = "String", required = true) @RequestParam String nickname, @RequestParam String password) {
+        Optional<Token> loginToken = authenticationService.login(nickname, Password.of(password));
+        return loginToken.map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
 
     @ApiOperation(value = "logout", nickname = "logout", response = RegistrationValidationJson.class, notes = "Authentication logout.")
     @CrossOrigin
     @PostMapping(path = "/logout", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public void logout(@RequestBody LogoutJson logoutJson) {
-        String tokenAsString = logoutJson.getToken();
-        Token token = new Token(tokenAsString);
+        // TODO Token token = new Token( logoutJson.getToken());
         authenticationService.logout(null);
     }
 
