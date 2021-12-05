@@ -63,12 +63,8 @@ public class AuthenticationService implements UserDetailsService {
 	}
 
 	public Optional<Token> login(String nickname, Password password) {
-		UserAccountEntity user = userAccountRepository.findByNickname(nickname)
-				.orElseThrow(() -> new EntityNotFoundException("Unknown user with nickname=[" + nickname + "]."));
-
-		if (Password.isEqual(user.getPassword(), password)) {
-			return Optional.empty();
-		}
+		Optional<UserAccountEntity> user = userAccountRepository.findByNickname(nickname)
+		        .filter(p -> Password.isEqual(p.getPassword(), password));
 
 		Token token = Result.attempt(() -> loadUserByUsername(nickname)).map(this::token).orElseThrow();
 		return Optional.ofNullable(token);
