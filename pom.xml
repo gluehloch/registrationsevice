@@ -54,7 +54,7 @@
 	<parent>
 		<groupId>de.awtools</groupId>
 		<artifactId>master-pom</artifactId>
-		<version>12-java16</version>
+		<version>13-java16</version>
 	</parent>
 
 	<artifactId>registrationservice</artifactId>

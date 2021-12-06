@@ -3,12 +3,8 @@ package de.awtools.registration.authentication;
 import java.security.KeyPair;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-
-import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import de.awtools.registration.function.Result;
 import de.awtools.registration.time.TimeService;
 import de.awtools.registration.user.Password;
 import de.awtools.registration.user.PrivilegeEntity;
@@ -66,8 +63,10 @@ public class AuthenticationService implements UserDetailsService {
 		Optional<UserAccountEntity> user = userAccountRepository.findByNickname(nickname)
 		        .filter(p -> Password.isEqual(p.getPassword(), password));
 
-		Token token = Result.attempt(() -> loadUserByUsername(nickname)).map(this::token).orElseThrow();
-		return Optional.ofNullable(token);
+		return user.map(UserAccountEntity::getNickname).map(this::token);
+
+		// Token token = Result.attempt(() -> loadUserByUsername(nickname).getUsername()).map(this::token).orElseThrow();
+		// return Optional.ofNullable(token);
 	}
 
 	public void logout(Token token) {
@@ -90,71 +89,15 @@ public class AuthenticationService implements UserDetailsService {
 		return userDetailsBuilder.build();
 	}
 
-	Token token(UserDetails user) {
+	Token token(String nickname) {
 		LocalDateTime tokenExpiration = timeService.now().plusDays(EXPIRATION_DAYS);
 
-		String jws = Jwts.builder().setSubject(user.getUsername()).setIssuer(ISSUER)
+		String jws = Jwts.builder().setSubject(nickname).setIssuer(ISSUER)
 				.setIssuedAt(timeService.currently())
 				.setExpiration(TimeService.convertToDateViaInstant(DEFAULT_TIME_ZONE_ID, tokenExpiration))
 				.signWith(KEY_PAIR.getPrivate()).compact();
 
 		return new Token(jws);
-	}
-
-	@FunctionalInterface
-	public interface CheckedSupplier<V, E extends Throwable> {
-		V get() throws E;
-
-		public static <V, E extends Throwable> Result<V, E> attempt(CheckedSupplier<? extends V, ? extends E> p) {
-			try {
-				return Result.success(p.get());
-			} catch (Throwable e) {
-				@SuppressWarnings("unchecked")
-				E err = (E) e;
-				return Result.failure(err);
-			}
-		}
-	}
-
-	public static class Result<V, E extends Throwable> {
-
-		private final V value;
-		private final E error;
-
-		private Result(V value, E error) {
-			this.value = value;
-			this.error = error;
-		}
-
-		public static <V, E extends Throwable> Result<V, E> failure(E error) {
-			return new Result<>(null, Objects.requireNonNull(error));
-		}
-
-		public static <V, E extends Throwable> Result<V, E> success(V value) {
-			return new Result<>(Objects.requireNonNull(value), null);
-		}
-
-	    public static <V, E extends Throwable> Result<V, E> attempt(CheckedSupplier<? extends V, ? extends E> p) {
-	        try {
-	            return Result.success(p.get());
-	        } catch (Throwable e) {
-	            @SuppressWarnings("unchecked")
-	            E err = (E) e;
-	            return Result.failure(err);
-	        }
-	    }
-
-		// ----
-
-		public <T> Result<T, E> map(Function<? super V, ? extends T> mapper) {
-			return Optional.ofNullable(error).map(e -> Result.<T, E>failure(e))
-					.orElseGet(() -> Result.success(mapper.apply(value)));
-		}
-
-		public V orElseThrow() throws E {
-			return Optional.ofNullable(value).orElseThrow(() -> error);
-		}
-
 	}
 
 }
