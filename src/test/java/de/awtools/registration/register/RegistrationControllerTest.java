@@ -10,6 +10,8 @@ import javax.transaction.Transactional;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
@@ -35,7 +37,7 @@ import de.awtools.registration.user.ApplicationRepository;
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
 @ComponentScan("de.awtools.registration")
 @WebAppConfiguration
-public class RegistrationControllerTest {
+class RegistrationControllerTest {
 
     private MockMvc mockMvc;
 
@@ -49,15 +51,18 @@ public class RegistrationControllerTest {
     private ApplicationRepository applicationRepository;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(new RegistrationController(registrationService))
                 .build();
     }
 
+    @Tag("registration")
+    @Tag("controller")
+    @DisplayName("registration should not be empty")
     @Test
-    public void emptyRegistration() throws Exception {
+    void emptyRegistration() throws Exception {
         RegistrationJson registration = new RegistrationJson();
 
         String requestJson = toString(registration);
@@ -80,9 +85,12 @@ public class RegistrationControllerTest {
      * @throws Exception
      *             ...
      */
+    @Tag("registration")
+    @Tag("controller")
+    @DisplayName("accept a valid registration")
     @Test
     @Transactional
-    public void validRegistration() throws Exception {
+    void validRegistration() throws Exception {
         setupDatabase();
         RegistrationJson registration = new RegistrationJson();
         registration.setApplicationName("application");
@@ -126,9 +134,12 @@ public class RegistrationControllerTest {
      * @throws Exception
      *             ...
      */
+    @Tag("registration")
+    @Tag("controller")
+    @DisplayName("deny an invalid registration")
     @Test
     @Transactional
-    public void invalidEmailRegistration() throws Exception {
+    void invalidEmailRegistration() throws Exception {
         setupDatabase();
         RegistrationJson registration = new RegistrationJson();
         registration.setApplicationName("application");
