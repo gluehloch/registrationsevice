@@ -1,9 +1,14 @@
 package de.awtools.registration.authentication;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDateTime;
+
+import javax.transaction.Transactional;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +27,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
-import de.awtools.registration.register.RegistrationJson;
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+import de.awtools.registration.user.UserAccountEntity;
+import de.awtools.registration.user.UserAccountRepository;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
@@ -35,6 +43,9 @@ class AuthenticationControllerTest {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
+    private UserAccountRepository userAccountRepository;
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.initMocks(this);
@@ -45,23 +56,44 @@ class AuthenticationControllerTest {
 
     @Tag("authentication")
     @Tag("controller")
-    @DisplayName("login and logout")
+    @DisplayName("login failed, nickname is unknown")
     @Test
-    void loginLogout() throws Exception {
-//        RegistrationJson registration = new RegistrationJson();
-//
-//        String requestJson = toString(registration);
-
+    void loginFailedUnknownUser() throws Exception {
         mockMvc.perform(post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("nickname", "myNickname")
                         .param("password", "myPassword"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(7)))
-                .andExpect(jsonPath("validationCodes.*", Matchers.containsInAnyOrder("UNKNOWN_APPLICATION",
-                        "MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE", "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT",
-                        "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
+                .andExpect(status().isForbidden());
+//                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(7)))
+//                .andExpect(jsonPath("validationCodes.*", Matchers.containsInAnyOrder("UNKNOWN_APPLICATION",
+//                        "MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE", "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT",
+//                        "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
+    }
+
+    @Tag("authentication")
+    @Tag("controller")
+    @DisplayName("login logout successful")
+    @Test
+    @Transactional
+    void loginSuccessful() throws Exception {
+        UserAccountEntity userAccount = new UserAccountEntity();
+        userAccount.setFirstname("firstname");
+        userAccount.setName("name");
+        userAccount.setNickname("nickname");
+        userAccount.setEmail(Email.of("mail@mail.de"));
+        userAccount.setPassword(Password.of("password"));
+        userAccount.setLocked(false);
+        userAccount.setEnabled(true);
+        userAccount.setCreated(LocalDateTime.now());
+        userAccountRepository.save(userAccount);
+
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .param("nickname", "nickname")
+                        .param("password", "password"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 }
