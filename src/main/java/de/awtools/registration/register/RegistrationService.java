@@ -99,7 +99,11 @@ public class RegistrationService {
         if (StringUtils.isBlank(firstname)) {
             registrationValidation.addValidationCode(ValidationCode.FIRSTNAME_IS_EMPTY);
         }
-        
+
+        if (StringUtils.equalsAnyIgnoreCase(nickname, password)) {
+            registrationValidation.addValidationCode(ValidationCode.PASSWORD_IS_TOO_SIMPEL);
+        }
+
         if (StringUtils.isBlank(email)) {
             registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_EMPTY);
         } else {
@@ -206,7 +210,7 @@ public class RegistrationService {
 
         registrationDefined = registrationRepository.findByEmail(Email.of(email));
         if (registrationDefined.isPresent()) {
-            return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_MAILADDRESS);
+            return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_MAIL_ADDRESS);
         }
 
         return new RegistrationValidation(nickname, applicationName,

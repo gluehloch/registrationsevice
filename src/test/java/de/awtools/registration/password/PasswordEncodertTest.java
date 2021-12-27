@@ -30,6 +30,8 @@ public class PasswordEncodertTest {
         System.out.printf("Encoded password: %s", encode);
         System.out.println();
         System.out.printf("Encoder class: %s", passwordEncoderWrapper.unwrap().getClass());
+
+
     }
     
 }
