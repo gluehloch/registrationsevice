@@ -1,6 +1,7 @@
 package de.awtools.registration.ping;
 
 import java.time.LocalDateTime;
+import java.util.Properties;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +15,27 @@ import de.awtools.registration.time.DateTimeJson;
 @RestController
 public class PingController {
 
+    private static final String version;
+    private static final String artifactId;
+    private static final String groupId;
+
+    private static final VersionJson VERSION_JSON;
+
+    static {
+        Properties properties = new Properties();
+        try {
+            properties.load(PingController.class.getResourceAsStream("/pom.properties"));
+        } catch (Exception ex) {
+            // Ignored.
+        }
+
+        version = properties.getProperty("version");
+        artifactId = properties.getProperty("artifactId");
+        groupId = properties.getProperty("groupId");
+
+        VERSION_JSON = VersionJson.of(groupId, artifactId, version);
+    }
+
     /**
      * Shows the current version of this API.
      *
@@ -23,7 +45,7 @@ public class PingController {
     @CrossOrigin
     @GetMapping(path = "/version", produces = HttpConst.JSON_UTF_8)
     public VersionJson versionInfo() {
-        return VersionJson.of();
+        return PingController.VERSION_JSON;
     }
 
     /**
