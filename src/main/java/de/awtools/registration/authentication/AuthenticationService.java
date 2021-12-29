@@ -6,9 +6,6 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.Set;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +14,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import de.awtools.registration.time.TimeService;
-import de.awtools.registration.user.*;
+import de.awtools.registration.user.Password;
+import de.awtools.registration.user.PrivilegeEntity;
+import de.awtools.registration.user.PrivilegeRepository;
+import de.awtools.registration.user.UserAccountEntity;
+import de.awtools.registration.user.UserAccountRepository;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class AuthenticationService implements UserDetailsService {

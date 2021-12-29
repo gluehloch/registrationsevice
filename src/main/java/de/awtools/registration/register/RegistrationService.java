@@ -16,7 +16,12 @@ import de.awtools.registration.Token;
 import de.awtools.registration.password.PasswordEncoderWrapper;
 import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import de.awtools.registration.time.TimeService;
-import de.awtools.registration.user.*;
+import de.awtools.registration.user.ApplicationEntity;
+import de.awtools.registration.user.ApplicationRepository;
+import de.awtools.registration.user.Email;
+import de.awtools.registration.user.Password;
+import de.awtools.registration.user.UserAccountEntity;
+import de.awtools.registration.user.UserAccountRepository;
 
 /**
  * Register and confirm a new user.
