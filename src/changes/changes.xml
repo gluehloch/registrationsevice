@@ -22,6 +22,9 @@
             <action dev="andrewinkler" type="add" date="2021-11-20">
                 Request to get a refresh token.
             </action>
+            <action dev="andrewinkler" type="remove" date="2021-12-29">
+                Removed log4j.
+            </action>
         </release>
 
 		<!-- RELEASED -->

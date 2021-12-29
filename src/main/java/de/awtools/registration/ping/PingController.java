@@ -2,6 +2,7 @@ package de.awtools.registration.ping;
 
 import java.time.LocalDateTime;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.VersionJson;
 import de.awtools.registration.time.DateTimeJson;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class PingController {

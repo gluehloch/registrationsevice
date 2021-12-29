@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import de.awtools.registration.authentication.AuthenticationService;
-
 public class Result<V, E extends Throwable> {
 
     private final V value;

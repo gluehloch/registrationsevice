@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.transaction.Transactional;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.Rollback;
@@ -25,7 +25,7 @@ import de.awtools.registration.config.PersistenceJPAConfig;
 @Rollback
 public class CookieServiceTest {
 
-    private static final Logger LOG = LogManager.getLogger();
+    private static final Logger LOG = LoggerFactory.getLogger(CookieServiceTest.class);
 
     @Autowired
     private CookieService cookieService;

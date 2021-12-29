@@ -6,22 +6,17 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import de.awtools.registration.RequestValidationException;
-import de.awtools.registration.Token;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.awtools.registration.register.RegistrationValidation.ValidationCode;
+import de.awtools.registration.RequestValidationException;
+import de.awtools.registration.Token;
 import de.awtools.registration.password.PasswordEncoderWrapper;
+import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import de.awtools.registration.time.TimeService;
-import de.awtools.registration.user.ApplicationEntity;
-import de.awtools.registration.user.ApplicationRepository;
-import de.awtools.registration.user.Email;
-import de.awtools.registration.user.Password;
-import de.awtools.registration.user.UserAccountEntity;
-import de.awtools.registration.user.UserAccountRepository;
+import de.awtools.registration.user.*;
 
 /**
  * Register and confirm a new user.

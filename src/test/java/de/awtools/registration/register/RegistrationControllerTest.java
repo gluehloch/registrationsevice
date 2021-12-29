@@ -72,10 +72,10 @@ class RegistrationControllerTest {
                 .content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(7)))
+                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(8)))
                 .andExpect(jsonPath("validationCodes.*", Matchers.containsInAnyOrder("UNKNOWN_APPLICATION",
                         "MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE", "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT",
-                        "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
+                        "PASSWORD_IS_TOO_SIMPEL", "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
     }
 
     /**
@@ -100,10 +100,11 @@ class RegistrationControllerTest {
                 .content(toString(registration)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(6)))
+                .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(7)))
                 .andExpect(jsonPath("validationCodes.*",
                         Matchers.containsInAnyOrder("MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE",
-                                "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT", "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
+                                "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT", "PASSWORD_IS_TOO_SIMPEL",
+                                "EMAIL_IS_EMPTY", "FIRSTNAME_IS_EMPTY")));
 
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);

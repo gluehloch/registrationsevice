@@ -1,7 +1,8 @@
 package de.awtools.registration;
 
-import de.awtools.registration.register.RegistrationValidation;
 import org.springframework.http.HttpStatus;
+
+import de.awtools.registration.register.RegistrationValidation;
 
 /**
  * REST Request Validation Exception. Probably a parameter problem and will
