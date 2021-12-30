@@ -12,6 +12,13 @@ public class PasswordEncoderWrapper {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Verschluesselt ein entschluesseltes Passwort. Falls das Passwort bereits verschluesselt ist, wird dieses
+     * zurueck geliefert.
+     *
+     * @param decodedPassword Das entschluesselte (Klartext) Passwort.
+     * @return Das verschluesselte Passwort.
+     */
     public Password encode(Password decodedPassword) {
         if (decodedPassword.isDecoded()) {
             return Password.encoded(passwordEncoder.encode(decodedPassword.get()));

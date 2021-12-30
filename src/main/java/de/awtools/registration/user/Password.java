@@ -12,6 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Describes a password.
+ *
+ * <ul>
+ * <li>encode: etw. verschluesseln</li>
+ * <li>encoded: Adjektiv verschluesselt </li>
+ * <li>decode: etw. entschluesseln</li>
+ * <li>decoded: Adjekktiv entschluesselt</li>
+ * </ul>
+ *
  * 
  * @author winkler
  */
@@ -23,21 +31,24 @@ public class Password {
     @Size(min = 8, max = 60)
     private String value;
 
+    /**
+     * Der Default schlaegt vor, verschluesselte Passwoerter hier abzulegen. Alles andere eroeffnet Sicherheitsluecken.
+     */
     @Transient
-    private final boolean decoded;
+    private final boolean encoded;
 
     public Password() {
-        decoded = true;
+        encoded = true;
     }
     
     public Password(String password) {
         this.value = password;
-        this.decoded = true;
+        this.encoded = true;
     }
 
-    public Password(String password, boolean decoded) {
+    public Password(String password, boolean encoded) {
         this.value = password;
-        this.decoded = decoded;
+        this.encoded = encoded;
     }
     
     public String get() {
@@ -49,8 +60,22 @@ public class Password {
         return this;
     }
 
+    /**
+     * Ist das Passwort verschluesselt?
+     *
+     * @return <code>true</code>, wenn das Passwort verschluesselt ist.
+     */
+    public boolean isEncoded() {
+        return encoded;
+    }
+
+    /**
+     * Ist das Passwort entschluesselt?
+     *
+     * @return <code>true</code>, wenn das Passwort entschluesselt vorliegt.
+     */
     public boolean isDecoded() {
-        return decoded;
+        return !encoded;
     }
 
     @Override
@@ -71,15 +96,31 @@ public class Password {
     }
 
     public static boolean isEqual(Password p1, Password p2) {
-        return p1.equals(p2);
-    }
-    
-    public static Password encoded(String password) {
-        return new Password(password, false);
+        if (p1.isEncoded() && p2.isEncoded()) {
+            return p1.equals(p2);
+        } else {
+            return false;
+        }
     }
 
-    public static Password decoded(String password) {
+    /**
+     * Erstellt ein Password.
+     *
+     * @param password Das Passwort. Dieses ist bereits ge-hasht!
+     * @return Ein Password.
+     */
+    public static Password encoded(String password) {
         return new Password(password, true);
+    }
+
+    /**
+     * Erstellt ein Password.
+     *
+     * @param password Das Passwort. Dieses ist NICHT ge-hasht oder NICHT verschluesselt.
+     * @return Das Password.
+     */
+    public static Password decoded(String password) {
+        return new Password(password, false);
     }
 
 }
