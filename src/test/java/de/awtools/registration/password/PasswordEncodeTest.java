@@ -2,6 +2,8 @@ package de.awtools.registration.password;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,22 +19,28 @@ import de.awtools.registration.user.Password;
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
 @ComponentScan("de.awtools.registration")
 @WebAppConfiguration
-public class PasswordEncodertTest {
+public class PasswordEncodeTest {
 
     @Autowired
     private PasswordEncoderWrapper passwordEncoderWrapper;
-    
+
+    @DisplayName("Encode a password")
+    @Tag("password")
     @Test
     void passwordEncoder() {
+        Password password = Password.decoded("password");
+        assertThat(password.isDecoded()).isTrue();
+        assertThat(password.isEncoded()).isFalse();
+
         assertThat(passwordEncoderWrapper).isNotNull();
-        Password encodedPassword = passwordEncoderWrapper.encode(Password.decoded("password"));
-        assertThat(encodedPassword).isNotEqualTo("password");
+        Password encodedPassword = passwordEncoderWrapper.encode(password);
+        assertThat(encodedPassword.isEncoded()).isTrue();
+        assertThat(encodedPassword.isDecoded()).isFalse();
+        assertThat(encodedPassword).isNotEqualTo(password);
         
         System.out.printf("Encoded password: %s", encodedPassword);
         System.out.println();
         System.out.printf("Encoder class: %s", passwordEncoderWrapper.unwrap().getClass());
-
-
     }
     
 }
