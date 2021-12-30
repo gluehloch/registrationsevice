@@ -83,7 +83,7 @@ class AuthenticationControllerTest {
         userAccount.setName("name");
         userAccount.setNickname("nickname");
         userAccount.setEmail(Email.of("mail@mail.de"));
-        userAccount.setPassword(passwordEncoderWrapper.encode(Password.of("password")));
+        userAccount.setPassword(passwordEncoderWrapper.encode(Password.decoded("password")));
         userAccount.setLocked(false);
         userAccount.setEnabled(true);
         userAccount.setCreated(LocalDateTime.now());

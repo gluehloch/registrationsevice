@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -22,11 +23,21 @@ public class Password {
     @Size(min = 8, max = 60)
     private String value;
 
+    @Transient
+    private final boolean decoded;
+
     public Password() {
+        decoded = true;
     }
     
     public Password(String password) {
         this.value = password;
+        this.decoded = true;
+    }
+
+    public Password(String password, boolean decoded) {
+        this.value = password;
+        this.decoded = decoded;
     }
     
     public String get() {
@@ -36,6 +47,10 @@ public class Password {
     public Password set(String password) {
         this.value = password;
         return this;
+    }
+
+    public boolean isDecoded() {
+        return decoded;
     }
 
     @Override
@@ -59,8 +74,12 @@ public class Password {
         return p1.equals(p2);
     }
     
-    public static Password of(String password) {
-        return new Password(password);
+    public static Password encoded(String password) {
+        return new Password(password, false);
     }
-    
+
+    public static Password decoded(String password) {
+        return new Password(password, true);
+    }
+
 }

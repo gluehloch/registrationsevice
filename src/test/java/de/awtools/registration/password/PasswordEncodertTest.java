@@ -25,7 +25,7 @@ public class PasswordEncodertTest {
     @Test
     void passwordEncoder() {
         assertThat(passwordEncoderWrapper).isNotNull();
-        Password encodedPassword = passwordEncoderWrapper.encode(Password.of("password"));
+        Password encodedPassword = passwordEncoderWrapper.encode(Password.decoded("password"));
         assertThat(encodedPassword).isNotEqualTo("password");
         
         System.out.printf("Encoded password: %s", encodedPassword);

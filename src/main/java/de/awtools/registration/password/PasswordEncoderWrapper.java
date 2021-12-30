@@ -13,10 +13,22 @@ public class PasswordEncoderWrapper {
     private PasswordEncoder passwordEncoder;
 
     public Password encode(Password decodedPassword) {
-        return Password.of(passwordEncoder.encode(decodedPassword.get()));
+        if (decodedPassword.isDecoded()) {
+            return Password.encoded(passwordEncoder.encode(decodedPassword.get()));
+        } else {
+            return decodedPassword;
+        }
     }
 
     public boolean validate(Password decodedPassword, Password encodedPassword) {
+        if (!decodedPassword.isDecoded()) {
+            return false;
+        }
+
+        if (encodedPassword.isDecoded()) {
+            return false;
+        }
+
         return passwordEncoder.matches(decodedPassword.get(), encodedPassword.get());
     }
 

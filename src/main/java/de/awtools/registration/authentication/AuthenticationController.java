@@ -38,7 +38,7 @@ public class AuthenticationController {
     @CrossOrigin
     @PostMapping(path = "/login", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Token> login(@ApiParam(name = "nickname", type = "String", required = true) @RequestParam String nickname, @RequestParam String password) {
-        Optional<Token> loginToken = authenticationService.login(nickname, Password.of(password));
+        Optional<Token> loginToken = authenticationService.login(nickname, Password.decoded(password));
         
         // res.addHeader(HEADER_STRING, TOKEN_PREFIX + token.getContent());
 
