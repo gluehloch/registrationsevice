@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.password.PasswordEncoderWrapper;
 import de.awtools.registration.user.Email;
 import de.awtools.registration.user.Password;
 import de.awtools.registration.user.UserAccountEntity;
@@ -42,6 +43,9 @@ class AuthenticationControllerTest {
 
     @Autowired
     private UserAccountRepository userAccountRepository;
+
+    @Autowired
+    private PasswordEncoderWrapper passwordEncoderWrapper;
 
     @BeforeEach
     void setup() {
@@ -79,7 +83,7 @@ class AuthenticationControllerTest {
         userAccount.setName("name");
         userAccount.setNickname("nickname");
         userAccount.setEmail(Email.of("mail@mail.de"));
-        userAccount.setPassword(Password.of("password"));
+        userAccount.setPassword(passwordEncoderWrapper.encode(Password.of("password")));
         userAccount.setLocked(false);
         userAccount.setEnabled(true);
         userAccount.setCreated(LocalDateTime.now());

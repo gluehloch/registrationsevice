@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import de.awtools.registration.password.PasswordEncoderWrapper;
 import de.awtools.registration.time.TimeService;
 import de.awtools.registration.user.Password;
 import de.awtools.registration.user.PrivilegeEntity;
@@ -46,21 +47,23 @@ public class AuthenticationService implements UserDetailsService {
 	private final UserAccountRepository userAccountRepository;
 	private final PrivilegeRepository privilegeRepository;
 	private final TimeService timeService;
+	private final PasswordEncoderWrapper passwordEncoderWrapper;
 
 	@Autowired
 	public AuthenticationService(AuthenticationRepository authenticationRepository,
 			UserAccountRepository userAccountRepository, PrivilegeRepository privilegeRepository,
-			TimeService timeService) {
+			TimeService timeService, PasswordEncoderWrapper passwordEncoderWrapper) {
 
 		this.authenticationRepository = authenticationRepository;
 		this.userAccountRepository = userAccountRepository;
 		this.privilegeRepository = privilegeRepository;
 		this.timeService = timeService;
+		this.passwordEncoderWrapper = passwordEncoderWrapper;
 	}
 
-	public Optional<Token> login(String nickname, Password password) {
+	public Optional<Token> login(String nickname, Password decodedPassword) {
 		Optional<UserAccountEntity> user = userAccountRepository.findByNickname(nickname)
-		        .filter(p -> Password.isEqual(p.getPassword(), password));
+		        .filter(p -> passwordEncoderWrapper.validate(decodedPassword, p.getPassword()));
 
 		return user.map(UserAccountEntity::getNickname).map(this::token);
 

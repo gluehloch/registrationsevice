@@ -41,17 +41,19 @@ public class AuthenticationController {
         Optional<Token> loginToken = authenticationService.login(nickname, Password.of(password));
         
         // res.addHeader(HEADER_STRING, TOKEN_PREFIX + token.getContent());
-        
+
+        // .header(HEADER_STRING, TOKEN_PREFIX + token)
+
         return loginToken.map(ResponseEntity::ok).orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
     }
 
     /**
      * Start the authentication/login process.
      */
-    @ApiOperation(value = "login", nickname = "login", response = RegistrationValidationJson.class, notes = "Authentication refresh.")
+    @ApiOperation(value = "refresh", response = RegistrationValidationJson.class, notes = "Authentication refresh.")
     @CrossOrigin
-    @PostMapping(path = "/login", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
-    public ResponseEntity<Token> refresh(@ApiParam(name = "nickname", type = "String", required = true) @RequestHeader(HEADER_STRING) String token, @RequestParam String nickname, @RequestParam String password) {
+    @PostMapping(path = "/refresh", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
+    public ResponseEntity<Token> refresh(@RequestHeader(HEADER_STRING) String token) {
         return null; // Create a refresh token
     }    
     

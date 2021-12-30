@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
+import de.awtools.registration.user.Password;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
@@ -24,10 +25,10 @@ public class PasswordEncodertTest {
     @Test
     void passwordEncoder() {
         assertThat(passwordEncoderWrapper).isNotNull();
-        String encode = passwordEncoderWrapper.encode("password");
-        assertThat(encode).isNotEqualTo("password");
+        Password encodedPassword = passwordEncoderWrapper.encode(Password.of("password"));
+        assertThat(encodedPassword).isNotEqualTo("password");
         
-        System.out.printf("Encoded password: %s", encode);
+        System.out.printf("Encoded password: %s", encodedPassword);
         System.out.println();
         System.out.printf("Encoder class: %s", passwordEncoderWrapper.unwrap().getClass());
 

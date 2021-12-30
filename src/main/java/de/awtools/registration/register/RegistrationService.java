@@ -138,7 +138,7 @@ public class RegistrationService {
             registration.setNickname(nickname);
             registration.setFirstname(firstname);
             registration.setName(name);
-            registration.setPassword(new Password(passwordEncoder.encode(password)));
+            registration.setPassword(passwordEncoder.encode(Password.of(password)));
             registration.setEmail(Email.of(email));
             registration.setCreated(now);
             UUID token = UUID.randomUUID();
