@@ -40,7 +40,7 @@ public class MailConfiguration {
         properties.put("mail.smtp.starttls.enable", mailSmtpStarttlsEnable);
         properties.put("mail.smtp.host", mailSmtpHost);
         properties.put("mail.smtp.port", mailSmtpPort);
-        properties.put("mail.smtp.ssl.trust", mailSmtpSslTrust); 
+        properties.put("mail.smtp.ssl.trust", mailSmtpSslTrust);
         return properties;
     }
 
