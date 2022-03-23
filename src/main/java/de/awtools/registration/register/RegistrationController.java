@@ -43,9 +43,8 @@ public class RegistrationController {
     /**
      * Here starts the registration process.
      *
-     * @param registration
-     *            The registration data.
-     * @return A copy of the registration data.
+     * @param  registration The registration data.
+     * @return              A copy of the registration data.
      */
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
@@ -66,12 +65,10 @@ public class RegistrationController {
     }
 
     /**
-     * Validates the registration data. Should be called before
-     * <code>/register</code>.
+     * Validates the registration data. Should be called before <code>/register</code>.
      *
-     * @param registration
-     *            The registration data
-     * @return A copy of the registration data.
+     * @param  registration The registration data
+     * @return              A copy of the registration data.
      */
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
     @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid application name") })
@@ -91,9 +88,8 @@ public class RegistrationController {
     /**
      * The user confirmed his account.
      *
-     * @param token
-     *            The unique token of a new user.
-     * @return ...
+     * @param  token The unique token of a new user.
+     * @return       ...
      */
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
@@ -111,8 +107,7 @@ public class RegistrationController {
      * <li>The application is unknown.</li>
      * </ul>
      * 
-     * @param rv
-     *            The validation result.
+     * @param rv The validation result.
      */
     private void toResponseStatusException(RegistrationValidation rv) {
         // Http Status Code 400: Bad request
