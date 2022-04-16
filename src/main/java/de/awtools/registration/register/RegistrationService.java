@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import de.awtools.registration.RequestValidationException;
 import de.awtools.registration.Token;
 import de.awtools.registration.password.PasswordEncoderWrapper;
-import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import de.awtools.registration.time.TimeService;
 import de.awtools.registration.user.ApplicationEntity;
 import de.awtools.registration.user.ApplicationRepository;
@@ -72,63 +71,63 @@ public class RegistrationService {
      *             Request validation exception
      */
     @Transactional
-    public RegistrationValidation registerNewAccount(String nickname,
-            String email, String password, String name, String firstname,
-            String applicationName, boolean acceptMail, boolean acceptCookie,
-            String supplement)
+    public DefaultRegistrationValidation registerNewAccount(String nickname,
+                                                            String email, String password, String name, String firstname,
+                                                            String applicationName, boolean acceptMail, boolean acceptCookie,
+                                                            String supplement)
             throws RequestValidationException {
 
-        RegistrationValidation registrationValidation = new RegistrationValidation(nickname, applicationName);
+        DefaultRegistrationValidation registrationValidation = new DefaultRegistrationValidation(nickname, applicationName);
 
         if (!acceptCookie) {
-            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_COOKIE);
+            registrationValidation.addValidationCode(Validation.ValidationCode.MISSING_ACCEPT_COOKIE);
         }
 
         if (!acceptMail) {
-            registrationValidation.addValidationCode(ValidationCode.MISSING_ACCEPT_EMAIL);
+            registrationValidation.addValidationCode(Validation.ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
         if (StringUtils.isBlank(password) || password.length() < 5) {
-            registrationValidation.addValidationCode(ValidationCode.PASSWORD_TOO_SHORT);
+            registrationValidation.addValidationCode(Validation.ValidationCode.PASSWORD_TOO_SHORT);
         }
         
         if (StringUtils.isBlank(nickname)) {
-            registrationValidation.addValidationCode(ValidationCode.NICKNAME_IS_EMPTY);
+            registrationValidation.addValidationCode(Validation.ValidationCode.NICKNAME_IS_EMPTY);
         }
         
         if (StringUtils.isBlank(firstname)) {
-            registrationValidation.addValidationCode(ValidationCode.FIRSTNAME_IS_EMPTY);
+            registrationValidation.addValidationCode(Validation.ValidationCode.FIRSTNAME_IS_EMPTY);
         }
 
         if (StringUtils.equalsAnyIgnoreCase(nickname, password)) {
-            registrationValidation.addValidationCode(ValidationCode.PASSWORD_IS_TOO_SIMPEL);
+            registrationValidation.addValidationCode(Validation.ValidationCode.PASSWORD_IS_TOO_SIMPEL);
         }
 
         if (StringUtils.isBlank(email)) {
-            registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_EMPTY);
+            registrationValidation.addValidationCode(Validation.ValidationCode.EMAIL_IS_EMPTY);
         } else {
             if (!EmailValidator.getInstance().isValid(email)) {
-                registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_NOT_VALID);
+                registrationValidation.addValidationCode(Validation.ValidationCode.EMAIL_IS_NOT_VALID);
             }
             
             if (registrationRepository.findByEmail(Email.of(email)).isPresent()) {
-                registrationValidation.addValidationCode(ValidationCode.EMAIL_IS_RESERVED);
+                registrationValidation.addValidationCode(Validation.ValidationCode.EMAIL_IS_RESERVED);
             }     
         }
         
         Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
         if (application.isEmpty()) {
-            registrationValidation.addValidationCode(ValidationCode.UNKNOWN_APPLICATION);
+            registrationValidation.addValidationCode(Validation.ValidationCode.UNKNOWN_APPLICATION);
         }
 
         Optional<UserAccountEntity> userAccountCheck = userAccountRepository.findByNickname(nickname);
         if (userAccountCheck.isPresent()) {
-            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
+            registrationValidation.addValidationCode(Validation.ValidationCode.KNOWN_NICKNAME);
         }
 
         Optional<RegistrationEntity> registrationCheck = registrationRepository.findByNickname(nickname);
         if (registrationCheck.isPresent()) {
-            registrationValidation.addValidationCode(ValidationCode.KNOWN_NICKNAME);
+            registrationValidation.addValidationCode(Validation.ValidationCode.KNOWN_NICKNAME);
         }
 
         if (registrationValidation.ok()) {
@@ -151,17 +150,17 @@ public class RegistrationService {
 
             registrationRepository.save(registration);
 
-            registrationValidation.addValidationCode(ValidationCode.OK);
+            registrationValidation.addValidationCode(Validation.ValidationCode.OK);
         }
 
         return registrationValidation;
     }
 
     @Transactional
-    public RegistrationValidation restartAccount(String nickname,
-            String email, String password, String name, String firstname,
-            String application, boolean acceptMail, boolean acceptCookie,
-            String supplement)
+    public DefaultRegistrationValidation restartAccount(String nickname,
+                                                        String email, String password, String name, String firstname,
+                                                        String application, boolean acceptMail, boolean acceptCookie,
+                                                        String supplement)
             throws RequestValidationException {
 
         registrationRepository.deleteByEmail(Email.of(email));
@@ -170,12 +169,12 @@ public class RegistrationService {
     }
 
     @Transactional
-    public RegistrationValidation confirmAccount(Token token)
+    public DefaultRegistrationValidation confirmAccount(Token token)
             throws RequestValidationException {
 
         Optional<RegistrationEntity> optionalRegistration = registrationRepository.findByToken(token);
         if (optionalRegistration.isEmpty()) {
-            return new RegistrationValidation(null, null, ValidationCode.UNKNOWN_TOKEN);
+            return new DefaultRegistrationValidation(null, null, Validation.ValidationCode.UNKNOWN_TOKEN);
         }
 
         RegistrationEntity registration = optionalRegistration.get();
@@ -192,29 +191,29 @@ public class RegistrationService {
 
         userAccountRepository.save(newUserAccount);
 
-        return new RegistrationValidation(registration.getNickname(),
+        return new DefaultRegistrationValidation(registration.getNickname(),
                 registration.getApplication(),
-                ValidationCode.OK);
+                Validation.ValidationCode.OK);
     }
 
     @Transactional
-    public RegistrationValidation validate(String nickname, String email,
-            String applicationName) throws RequestValidationException {
+    public DefaultRegistrationValidation validate(String nickname, String email,
+                                                  String applicationName) throws RequestValidationException {
 
         validateApplication(nickname, applicationName);
 
         Optional<RegistrationEntity> registrationDefined = registrationRepository.findByNickname(nickname);
         if (registrationDefined.isPresent()) {
-            return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_NICKNAME);
+            return new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.KNOWN_NICKNAME);
         }
 
         registrationDefined = registrationRepository.findByEmail(Email.of(email));
         if (registrationDefined.isPresent()) {
-            return new RegistrationValidation(nickname, applicationName, ValidationCode.KNOWN_MAIL_ADDRESS);
+            return new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.KNOWN_MAIL_ADDRESS);
         }
 
-        return new RegistrationValidation(nickname, applicationName,
-                ValidationCode.OK);
+        return new DefaultRegistrationValidation(nickname, applicationName,
+                Validation.ValidationCode.OK);
     }
 
     private ApplicationEntity validateApplication(String nickname,
@@ -223,7 +222,7 @@ public class RegistrationService {
 
         ApplicationEntity application = applicationRepository.findByName(applicationName)
                 .orElseThrow(() -> new RequestValidationException(
-                        new RegistrationValidation(nickname, applicationName, ValidationCode.UNKNOWN_APPLICATION)));
+                        new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.UNKNOWN_APPLICATION)));
 
         return application;
     }

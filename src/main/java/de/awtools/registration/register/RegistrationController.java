@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.Token;
-import de.awtools.registration.register.RegistrationValidation.ValidationCode;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -50,7 +47,7 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(@Valid @RequestBody RegistrationJson registration) {
-        RegistrationValidation validation = registrationService
+        DefaultRegistrationValidation validation = registrationService
                 .registerNewAccount(registration.getNickname(),
                         registration.getEmail(),
                         registration.getPassword(),
@@ -75,12 +72,12 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/validate", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> validate(@RequestBody RegistrationJson registration) {
-        RegistrationValidation validation = registrationService.validate(
+        DefaultRegistrationValidation validation = registrationService.validate(
                 registration.getNickname(),
                 registration.getEmail(),
                 registration.getApplicationName());
 
-        toResponseStatusException(validation);
+        // toResponseStatusException(validation);
 
         return ResponseEntity.ok(RegistrationValidationJson.of(validation));
     }
@@ -94,31 +91,16 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
     public ResponseEntity<RegistrationValidationJson> confirm(@PathVariable String token) {
-        RegistrationValidation validation = registrationService.confirmAccount(new Token(token));
+        DefaultRegistrationValidation validation = registrationService.confirmAccount(new Token(token));
 
-        toResponseStatusException(validation);
-
-        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
+        return ValidationResultMapper.<ResponseEntity<RegistrationValidationJson>>of(validation)
+                        .ifValid(_v -> ResponseEntity.ok(RegistrationValidationJson.of(_v)))
+                        .orElse(_v -> ResponseEntity.badRequest().build());
     }
 
-    /**
-     * Throws an exception:
-     * <ul>
-     * <li>The application is unknown.</li>
-     * </ul>
-     * 
-     * @param rv The validation result.
-     */
-    private void toResponseStatusException(RegistrationValidation rv) {
-        // Http Status Code 400: Bad request
-        // Set<ValidationCode> httpStatus400 =
-        // Set.of(ValidationCode.UNKNOWN_APPLICATION);
-
-        if (rv.getValidationCodes().contains(ValidationCode.UNKNOWN_APPLICATION)) {
-            LOG.error("Find an unknown application.");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Invalid application parameter.");
-        }
+    private void registrationFailed(Validation validation) {
+        LOG.info("Registration failed: {}", validation);
+        ResponseEntity.badRequest();
     }
 
 }

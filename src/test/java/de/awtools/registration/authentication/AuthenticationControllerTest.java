@@ -60,7 +60,7 @@ class AuthenticationControllerTest {
     @DisplayName("login failed, nickname is unknown")
     @Test
     void loginFailedUnknownUser() throws Exception {
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/authentication/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("nickname", "myNickname")
                         .param("password", "myPassword"))
@@ -89,7 +89,7 @@ class AuthenticationControllerTest {
         userAccount.setCreated(LocalDateTime.now());
         userAccountRepository.save(userAccount);
 
-        mockMvc.perform(post("/auth/login")
+        mockMvc.perform(post("/authentication/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("nickname", "nickname")
                         .param("password", "password"))

@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/authentication")
 public class AuthenticationController {
 
     public static final String TOKEN_PREFIX = "Bearer ";

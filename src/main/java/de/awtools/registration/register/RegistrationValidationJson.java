@@ -8,16 +8,18 @@ public class RegistrationValidationJson {
 
     private final String nickname;
     private final String applicationName;
-    private final Set<RegistrationValidation.ValidationCode> validationCodes = new HashSet<>();
+    private final Set<DefaultRegistrationValidation.ValidationCode> validationCodes = new HashSet<>();
 
-    public static RegistrationValidationJson of(RegistrationValidation rv) {
-        return new RegistrationValidationJson(rv.getNickname(),
-                rv.getApplicationName(), rv.getValidationCodes());
+    public static RegistrationValidationJson of(final Validation rv) {
+        return new RegistrationValidationJson(
+                rv.getNickname(),
+                rv.getApplicationName(),
+                rv.getValidationCodes());
     }
 
-    private RegistrationValidationJson(String nickname,
-            String applicationName,
-            Set<RegistrationValidation.ValidationCode> validationCodes) {
+    private RegistrationValidationJson(final String nickname,
+            final String applicationName,
+            final Set<DefaultRegistrationValidation.ValidationCode> validationCodes) {
 
         this.nickname = nickname;
         this.applicationName = applicationName;
@@ -32,7 +34,7 @@ public class RegistrationValidationJson {
         return applicationName;
     }
 
-    public Set<RegistrationValidation.ValidationCode> getValidationCodes() {
+    public Set<DefaultRegistrationValidation.ValidationCode> getValidationCodes() {
         return Collections.unmodifiableSet(validationCodes);
     }
 
