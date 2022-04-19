@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import javax.transaction.Transactional;
 
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -71,7 +72,7 @@ class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestJson))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(8)))
                 .andExpect(jsonPath("validationCodes.*", Matchers.containsInAnyOrder("UNKNOWN_APPLICATION",
                         "MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE", "NICKNAME_IS_EMPTY", "PASSWORD_TOO_SHORT",
@@ -99,7 +100,7 @@ class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toString(registration)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("validationCodes.*", Matchers.hasSize(7)))
                 .andExpect(jsonPath("validationCodes.*",
                         Matchers.containsInAnyOrder("MISSING_ACCEPT_EMAIL", "MISSING_ACCEPT_COOKIE",
@@ -126,6 +127,54 @@ class RegistrationControllerTest {
                 .orElseThrow(() -> new IllegalArgumentException());
         assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
+    }
+
+    @Tag("registration")
+    @Tag("controller")
+    @DisplayName("accept and confirm registration")
+    @Test
+    @Transactional
+    @Ignore
+    void registerAndConfirm() throws Exception {
+        setupDatabase();
+        RegistrationJson registration = new RegistrationJson();
+        registration.setApplicationName("application");
+
+        registration.setAcceptCookie(true);
+        registration.setAcceptMail(true);
+        registration.setNickname("Frosch");
+        registration.setFirstname("Andre");
+        registration.setName("Winkler");
+        registration.setPassword("secret-password");
+        registration.setEmail("test@test.de");
+
+        mockMvc.perform(post("/registration/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toString(registration)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
+                .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
+
+        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
+                .orElseThrow(() -> new IllegalArgumentException());
+        assertThat(registrationEntity.getToken()).isNotNull();
+        assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
+        assertThat(registrationEntity.getApplication()).isEqualTo("application");
+
+        mockMvc.perform(post("/registration/confirm/" + registrationEntity.getToken().get())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
+                .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
+
+        RegistrationEntity registration2 = registrationRepository.findByNickname("Frosch")
+                .orElseThrow(() -> new IllegalArgumentException());
+        assertThat(registration2.isConfirmed()).isTrue();
+        assertThat(registration2.getToken()).isNotNull();
+        assertThat(registration2.getNickname()).isEqualTo("Frosch");
+        assertThat(registration2.getApplication()).isEqualTo("application");
     }
 
     /**
@@ -157,7 +206,7 @@ class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toString(registration)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("EMAIL_IS_NOT_VALID")));
     }
@@ -191,7 +240,7 @@ class RegistrationControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toString(registration)))
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("PASSWORD_IS_TOO_SIMPEL")));
     }

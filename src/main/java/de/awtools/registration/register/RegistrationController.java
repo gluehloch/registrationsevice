@@ -58,7 +58,7 @@ public class RegistrationController {
                         registration.isAcceptCookie(),
                         registration.getSupplement());
 
-        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
+        return toResponse(validation);
     }
 
     /**
@@ -77,12 +77,11 @@ public class RegistrationController {
                 registration.getEmail(),
                 registration.getApplicationName());
 
-        // toResponseStatusException(validation);
-
-        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
+        return toResponse(validation);
     }
 
     /**
+     *
      * The user confirmed his account.
      *
      * @param  token The unique token of a new user.
@@ -93,14 +92,22 @@ public class RegistrationController {
     public ResponseEntity<RegistrationValidationJson> confirm(@PathVariable String token) {
         DefaultRegistrationValidation validation = registrationService.confirmAccount(new Token(token));
 
-        return ValidationResultMapper.<ResponseEntity<RegistrationValidationJson>>of(validation)
-                        .ifValid(_v -> ResponseEntity.ok(RegistrationValidationJson.of(_v)))
-                        .orElse(_v -> ResponseEntity.badRequest().build());
+        return toResponse(validation);
     }
 
-    private void registrationFailed(Validation validation) {
+    private ResponseEntity<RegistrationValidationJson> toResponse(Validation validation) {
+        return ValidationResultMapper.<ResponseEntity<RegistrationValidationJson>>of(validation)
+                .ifValid(RegistrationController::registrationIsValid)
+                .orElse(RegistrationController::registrationFailed);
+    }
+
+    private static ResponseEntity<RegistrationValidationJson> registrationIsValid(Validation validation) {
+        return ResponseEntity.ok(RegistrationValidationJson.of(validation));
+    }
+
+    private static ResponseEntity<RegistrationValidationJson> registrationFailed(Validation validation) {
         LOG.info("Registration failed: {}", validation);
-        ResponseEntity.badRequest();
+        return ResponseEntity.badRequest().body(RegistrationValidationJson.of(validation));
     }
 
 }

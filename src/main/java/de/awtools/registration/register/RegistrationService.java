@@ -216,9 +216,7 @@ public class RegistrationService {
                 Validation.ValidationCode.OK);
     }
 
-    private ApplicationEntity validateApplication(String nickname,
-            String applicationName)
-            throws RequestValidationException {
+    private ApplicationEntity validateApplication(String nickname, String applicationName) throws RequestValidationException {
 
         ApplicationEntity application = applicationRepository.findByName(applicationName)
                 .orElseThrow(() -> new RequestValidationException(
