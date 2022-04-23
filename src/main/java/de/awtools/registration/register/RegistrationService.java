@@ -72,8 +72,13 @@ public class RegistrationService {
      */
     @Transactional
     public DefaultRegistrationValidation registerNewAccount(String nickname,
-                                                            String email, String password, String name, String firstname,
-                                                            String applicationName, boolean acceptMail, boolean acceptCookie,
+                                                            String email,
+                                                            String password,
+                                                            String name,
+                                                            String firstname,
+                                                            String applicationName,
+                                                            boolean acceptMail,
+                                                            boolean acceptCookie,
                                                             String supplement)
             throws RequestValidationException {
 
@@ -131,29 +136,42 @@ public class RegistrationService {
         }
 
         if (registrationValidation.ok()) {
-            LocalDateTime now = timeService.now();
-
-            RegistrationEntity registration = new RegistrationEntity();
-            registration.setNickname(nickname);
-            registration.setFirstname(firstname);
-            registration.setName(name);
-            registration.setPassword(passwordEncoder.encode(Password.decoded(password)));
-            registration.setEmail(Email.of(email));
-            registration.setCreated(now);
-            UUID token = UUID.randomUUID();
-            registration.setToken(new Token(token.toString()));
-            registration.setApplication(applicationName);
-            registration.setConfirmed(false);
-            registration.setAcceptCookie(acceptCookie);
-            registration.setAcceptMail(acceptMail);
-            registration.setSupplement(supplement);
-
+            RegistrationEntity registration = createRegistration(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
             registrationRepository.save(registration);
 
             registrationValidation.addValidationCode(Validation.ValidationCode.OK);
         }
 
         return registrationValidation;
+    }
+
+    private RegistrationEntity createRegistration(String nickname,
+                                                  String email,
+                                                  String password,
+                                                  String name,
+                                                  String firstname,
+                                                  String applicationName,
+                                                  boolean acceptMail,
+                                                  boolean acceptCookie,
+                                                  String supplement) {
+        LocalDateTime now = timeService.now();
+
+        RegistrationEntity registration = new RegistrationEntity();
+        registration.setNickname(nickname);
+        registration.setFirstname(firstname);
+        registration.setName(name);
+        registration.setPassword(passwordEncoder.encode(Password.decoded(password)));
+        registration.setEmail(Email.of(email));
+        registration.setCreated(now);
+        UUID token = UUID.randomUUID();
+        registration.setToken(new Token(token.toString()));
+        registration.setApplication(applicationName);
+        registration.setConfirmed(false);
+        registration.setAcceptCookie(acceptCookie);
+        registration.setAcceptMail(acceptMail);
+        registration.setSupplement(supplement);
+
+        return registration;
     }
 
     @Transactional
@@ -223,6 +241,67 @@ public class RegistrationService {
                         new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.UNKNOWN_APPLICATION)));
 
         return application;
+    }
+
+    /**
+     * Starts the registration process.
+     *
+     * @param nickname
+     *            nickname
+     * @param email
+     *            the email address
+     * @param password
+     *            password
+     * @param name
+     *            real name
+     * @param firstname
+     *            real firstname
+     * @param applicationName
+     *            the application name to register for
+     * @param acceptMail
+     *            user accepts mails
+     * @param acceptCookie
+     *            user accepts cookies
+     * @param supplement
+     *            untyped supplement data
+     * @return RegistrationValidation
+     * @throws RequestValidationException
+     *             Request validation exception
+     */
+    @Transactional
+    public DefaultRegistrationValidation createAccount(String nickname,
+                                                       String email,
+                                                       String password,
+                                                       String name,
+                                                       String firstname,
+                                                       String applicationName,
+                                                       boolean acceptMail,
+                                                       boolean acceptCookie,
+                                                       String supplement) {
+        DefaultRegistrationValidation registrationValidation = registerNewAccount(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
+        if (registrationValidation.isNotOk()) {
+            return registrationValidation;
+        }
+
+        RegistrationEntity registration = createRegistration(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
+        registrationRepository.save(registration);
+
+        registrationValidation.addValidationCode(Validation.ValidationCode.OK);
+
+        registration.setConfirmed(true);
+
+        ApplicationEntity application = validateApplication(
+                registration.getNickname(),
+                registration.getApplication());
+
+        UserAccountEntity newUserAccount = new UserAccountEntity(timeService.now(), registration);
+        application.addUser(newUserAccount);
+
+        userAccountRepository.save(newUserAccount);
+
+        return new DefaultRegistrationValidation(registration.getNickname(),
+                registration.getApplication(),
+                Validation.ValidationCode.OK);
     }
 
 }

@@ -49,7 +49,7 @@ class AuthenticationControllerTest {
 
     @BeforeEach
     void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(new AuthenticationController(authenticationService))
                 .build();

@@ -68,7 +68,7 @@ public class RegistrationController {
      * @return              A copy of the registration data.
      */
     @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
-    @ApiResponses(value = { @ApiResponse(code = 400, message = "Invalid application name") })
+    @ApiResponses(value = { @ApiResponse(code = 400, message = "Validation failed. Bad request.") })
     @CrossOrigin
     @PostMapping(path = "/validate", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> validate(@RequestBody RegistrationJson registration) {
@@ -87,10 +87,36 @@ public class RegistrationController {
      * @param  token The unique token of a new user.
      * @return       ...
      */
+    @ApiOperation(value = "confirm", nickname = "confirm", response = RegistrationValidationJson.class, notes = "confirm account")
+    @ApiResponses(value = { @ApiResponse(code = 400, message = "Registration not confirmed. Bad request.") })
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
     public ResponseEntity<RegistrationValidationJson> confirm(@PathVariable String token) {
         DefaultRegistrationValidation validation = registrationService.confirmAccount(new Token(token));
+
+        return toResponse(validation);
+    }
+
+    /**
+     * Create user account.
+     *
+     * @param  registration The registration data.
+     * @return              A copy of the registration data.
+     */
+    @ApiOperation(value = "create", nickname = "create", response = RegistrationValidationJson.class, notes = "Starts the registration process")
+    @CrossOrigin
+    @PostMapping(path = "/create", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
+    public ResponseEntity<RegistrationValidationJson> create(@Valid @RequestBody RegistrationJson registration) {
+        DefaultRegistrationValidation validation = registrationService
+                .createAccount(registration.getNickname(),
+                        registration.getEmail(),
+                        registration.getPassword(),
+                        registration.getName(),
+                        registration.getFirstname(),
+                        registration.getApplicationName(),
+                        registration.isAcceptMail(),
+                        registration.isAcceptCookie(),
+                        registration.getSupplement());
 
         return toResponse(validation);
     }
