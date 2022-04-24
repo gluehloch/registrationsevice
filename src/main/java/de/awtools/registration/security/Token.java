@@ -20,4 +20,8 @@ public class Token {
         return String.format("Token=[content='%s']", content);
     }
 
+    public static Token of(String token) {
+        return new Token(token);
+    }
+
 }

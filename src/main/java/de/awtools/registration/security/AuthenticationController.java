@@ -61,9 +61,9 @@ public class AuthenticationController {
     @ApiOperation(value = "logout", nickname = "logout", response = RegistrationValidationJson.class, notes = "Authentication logout.")
     @CrossOrigin
     @PostMapping(path = "/logout", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
-    public void logout(@RequestBody LogoutJson logoutJson) {
-        // TODO Token token = new Token( logoutJson.getToken());
-        authenticationService.logout(null);
+    public ResponseEntity<Void> logout(@RequestHeader(HEADER_STRING) String token) {
+        authenticationService.logout(Token.of(token));
+        return ResponseEntity.ok().build();
     }
 
 }
