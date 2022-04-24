@@ -55,7 +55,7 @@ public class AuthenticationController {
     @CrossOrigin
     @PostMapping(path = "/refresh", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Token> refresh(@RequestHeader(HEADER_STRING) String token) {
-        return throw new NotYetImplementedException(); // TODO Create a refresh token
+        throw new NotYetImplementedException(); // TODO Create a refresh token
     }    
     
     @ApiOperation(value = "logout", nickname = "logout", response = RegistrationValidationJson.class, notes = "Authentication logout.")
