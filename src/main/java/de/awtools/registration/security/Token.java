@@ -1,4 +1,4 @@
-package de.awtools.registration.authentication;
+package de.awtools.registration.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package de.awtools.registration.authentication;
+package de.awtools.registration.security;
 
 import de.awtools.registration.HttpConst;
 import org.springframework.web.bind.annotation.GetMapping;

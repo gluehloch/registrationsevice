@@ -81,7 +81,6 @@ public class RegistrationController {
     }
 
     /**
-     *
      * The user confirmed his account.
      *
      * @param  token The unique token of a new user.

@@ -1,4 +1,4 @@
-package de.awtools.registration.authentication;
+package de.awtools.registration.security;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

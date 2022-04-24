@@ -1,7 +1,8 @@
-package de.awtools.registration.authentication;
+package de.awtools.registration.security;
 
 import java.util.Optional;
 
+import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,7 +55,7 @@ public class AuthenticationController {
     @CrossOrigin
     @PostMapping(path = "/refresh", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Token> refresh(@RequestHeader(HEADER_STRING) String token) {
-        return null; // Create a refresh token
+        return throw new NotYetImplementedException(); // TODO Create a refresh token
     }    
     
     @ApiOperation(value = "logout", nickname = "logout", response = RegistrationValidationJson.class, notes = "Authentication logout.")

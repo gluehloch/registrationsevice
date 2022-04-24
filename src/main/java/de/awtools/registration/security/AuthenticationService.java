@@ -1,4 +1,4 @@
-package de.awtools.registration.authentication;
+package de.awtools.registration.security;
 
 import java.security.KeyPair;
 import java.time.LocalDateTime;

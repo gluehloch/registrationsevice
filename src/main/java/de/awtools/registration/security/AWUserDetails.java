@@ -1,4 +1,4 @@
-package de.awtools.registration.authentication;
+package de.awtools.registration.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
