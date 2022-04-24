@@ -99,6 +99,8 @@ public class RegistrationController {
     /**
      * Create user account.
      *
+     * TODO Absichern!
+     *
      * @param  registration The registration data.
      * @return              A copy of the registration data.
      */

@@ -1,6 +1,7 @@
 package de.awtools.registration.register;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -19,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -38,6 +40,8 @@ import de.awtools.registration.user.ApplicationRepository;
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
 @ComponentScan("de.awtools.registration")
 @WebAppConfiguration
+@Transactional
+@Rollback
 class RegistrationControllerTest {
 
     private MockMvc mockMvc;
@@ -90,7 +94,6 @@ class RegistrationControllerTest {
     @Tag("controller")
     @DisplayName("accept a valid registration")
     @Test
-    @Transactional
     void validRegistration() throws Exception {
         setupDatabase();
         RegistrationJson registration = new RegistrationJson();
@@ -133,8 +136,6 @@ class RegistrationControllerTest {
     @Tag("controller")
     @DisplayName("accept and confirm registration")
     @Test
-    @Transactional
-    @Ignore
     void registerAndConfirm() throws Exception {
         setupDatabase();
         RegistrationJson registration = new RegistrationJson();
@@ -157,7 +158,7 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
         RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElse(fail("Expected a registration with nickname 'Frosch'"));
         assertThat(registrationEntity.getToken()).isNotNull();
         assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
@@ -170,7 +171,7 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
         RegistrationEntity registration2 = registrationRepository.findByNickname("Frosch")
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(fail("Expected a user with nickname 'Frosch'"));
         assertThat(registration2.isConfirmed()).isTrue();
         assertThat(registration2.getToken()).isNotNull();
         assertThat(registration2.getNickname()).isEqualTo("Frosch");
@@ -188,7 +189,6 @@ class RegistrationControllerTest {
     @Tag("controller")
     @DisplayName("deny an invalid registration")
     @Test
-    @Transactional
     void invalidEmailRegistration() throws Exception {
         setupDatabase();
         RegistrationJson registration = new RegistrationJson();
@@ -222,7 +222,6 @@ class RegistrationControllerTest {
     @Tag("controller")
     @DisplayName("deny an invalid password")
     @Test
-    @Transactional
     void invalidPasswordRegistration() throws Exception {
         setupDatabase();
         RegistrationJson registration = new RegistrationJson();
@@ -241,6 +240,32 @@ class RegistrationControllerTest {
                         .content(toString(registration)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
+                .andExpect(jsonPath("validationCodes", Matchers.contains("PASSWORD_IS_TOO_SIMPEL")));
+    }
+
+    @Tag("registration")
+    @Tag("controller")
+    @DisplayName("direct creation of a user account")
+    @Test
+    void createRegistration() throws Exception {
+        setupDatabase();
+        RegistrationJson registration = new RegistrationJson();
+        registration.setApplicationName("application");
+
+        registration.setAcceptCookie(true);
+        registration.setAcceptMail(true);
+        registration.setNickname("Frosch");
+        registration.setFirstname("Andre");
+        registration.setName("Winkler");
+        registration.setPassword("xFroscHx");
+        registration.setEmail("test@test.de");
+
+        mockMvc.perform(post("/registration/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toString(registration)))
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("PASSWORD_IS_TOO_SIMPEL")));
     }
