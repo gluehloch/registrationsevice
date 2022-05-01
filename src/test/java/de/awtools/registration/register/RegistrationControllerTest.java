@@ -127,7 +127,7 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
         
         RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElse(fail("Expected a registration for user with nickname 'Frosch'."));
         assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
     }
@@ -157,8 +157,7 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
-        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
-                .orElse(fail("Expected a registration with nickname 'Frosch'"));
+        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch").orElseThrow();
         assertThat(registrationEntity.getToken()).isNotNull();
         assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
@@ -170,8 +169,7 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
-        RegistrationEntity registrationEntity2 = registrationRepository.findByNickname("Frosch")
-                .orElse(fail("Expected a user with nickname 'Frosch'"));
+        RegistrationEntity registrationEntity2 = registrationRepository.findByNickname("Frosch").orElseThrow();
         assertThat(registrationEntity2.isConfirmed()).isTrue();
         assertThat(registrationEntity2.getToken()).isNotNull();
         assertThat(registrationEntity2.getNickname()).isEqualTo("Frosch");
