@@ -72,13 +72,8 @@ public class RegistrationService {
      */
     @Transactional
     public DefaultRegistrationValidation registerNewAccount(String nickname,
-                                                            String email,
-                                                            String password,
-                                                            String name,
-                                                            String firstname,
-                                                            String applicationName,
-                                                            boolean acceptMail,
-                                                            boolean acceptCookie,
+                                                            String email, String password, String name, String firstname,
+                                                            String applicationName, boolean acceptMail, boolean acceptCookie,
                                                             String supplement)
             throws RequestValidationException {
 
@@ -146,13 +141,8 @@ public class RegistrationService {
     }
 
     private RegistrationEntity createRegistration(String nickname,
-                                                  String email,
-                                                  String password,
-                                                  String name,
-                                                  String firstname,
-                                                  String applicationName,
-                                                  boolean acceptMail,
-                                                  boolean acceptCookie,
+                                                  String email, String password, String name, String firstname,
+                                                  String applicationName, boolean acceptMail, boolean acceptCookie,
                                                   String supplement) {
         LocalDateTime now = timeService.now();
 
@@ -270,13 +260,8 @@ public class RegistrationService {
      */
     @Transactional
     public DefaultRegistrationValidation createAccount(String nickname,
-                                                       String email,
-                                                       String password,
-                                                       String name,
-                                                       String firstname,
-                                                       String applicationName,
-                                                       boolean acceptMail,
-                                                       boolean acceptCookie,
+                                                       String email, String password, String name, String firstname,
+                                                       String applicationName, boolean acceptMail, boolean acceptCookie,
                                                        String supplement) {
         final DefaultRegistrationValidation registrationValidation = registerNewAccount(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
         if (registrationValidation.isNotOk()) {
