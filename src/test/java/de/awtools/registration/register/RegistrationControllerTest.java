@@ -126,8 +126,7 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
         
-        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch")
-                .orElse(fail("Expected a registration for user with nickname 'Frosch'."));
+        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch").orElseThrow();
         assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
     }
