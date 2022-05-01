@@ -170,12 +170,12 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
-        RegistrationEntity registration2 = registrationRepository.findByNickname("Frosch")
-                .orElseThrow(fail("Expected a user with nickname 'Frosch'"));
-        assertThat(registration2.isConfirmed()).isTrue();
-        assertThat(registration2.getToken()).isNotNull();
-        assertThat(registration2.getNickname()).isEqualTo("Frosch");
-        assertThat(registration2.getApplication()).isEqualTo("application");
+        RegistrationEntity registrationEntity2 = registrationRepository.findByNickname("Frosch")
+                .orElse(fail("Expected a user with nickname 'Frosch'"));
+        assertThat(registrationEntity2.isConfirmed()).isTrue();
+        assertThat(registrationEntity2.getToken()).isNotNull();
+        assertThat(registrationEntity2.getNickname()).isEqualTo("Frosch");
+        assertThat(registrationEntity2.getApplication()).isEqualTo("application");
     }
 
     /**
@@ -246,7 +246,7 @@ class RegistrationControllerTest {
 
     @Tag("registration")
     @Tag("controller")
-    @DisplayName("direct creation of a user account")
+    @DisplayName("direct creation of a new user account")
     @Test
     void createRegistration() throws Exception {
         setupDatabase();
@@ -267,7 +267,7 @@ class RegistrationControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
-                .andExpect(jsonPath("validationCodes", Matchers.contains("PASSWORD_IS_TOO_SIMPEL")));
+                .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
     }
 
     private String toString(RegistrationJson registration) throws JsonProcessingException {

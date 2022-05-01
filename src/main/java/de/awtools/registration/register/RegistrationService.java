@@ -283,25 +283,21 @@ public class RegistrationService {
             return registrationValidation;
         }
 
-        RegistrationEntity registration = createRegistration(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
-        registrationRepository.save(registration);
+        Optional<UserAccountEntity> userAccount = registrationRepository.findByNickname(nickname)
+                .map(RegistrationService::confirmAccount)
+                .map(registration -> new UserAccountEntity(timeService.now(), registration));
 
-        registrationValidation.addValidationCode(Validation.ValidationCode.OK);
+        Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
 
+        application.get().addUser(userAccount.get());
+        userAccountRepository.save(userAccount.get());
+
+        return new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.OK);
+    }
+
+    private static RegistrationEntity confirmAccount(RegistrationEntity registration) {
         registration.setConfirmed(true);
-
-        ApplicationEntity application = validateApplication(
-                registration.getNickname(),
-                registration.getApplication());
-
-        UserAccountEntity newUserAccount = new UserAccountEntity(timeService.now(), registration);
-        application.addUser(newUserAccount);
-
-        userAccountRepository.save(newUserAccount);
-
-        return new DefaultRegistrationValidation(registration.getNickname(),
-                registration.getApplication(),
-                Validation.ValidationCode.OK);
+        return registration;
     }
 
 }
