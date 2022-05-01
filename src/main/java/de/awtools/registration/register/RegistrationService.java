@@ -278,26 +278,35 @@ public class RegistrationService {
                                                        boolean acceptMail,
                                                        boolean acceptCookie,
                                                        String supplement) {
-        DefaultRegistrationValidation registrationValidation = registerNewAccount(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
+        final DefaultRegistrationValidation registrationValidation = registerNewAccount(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
         if (registrationValidation.isNotOk()) {
             return registrationValidation;
         }
 
-        Optional<UserAccountEntity> userAccount = registrationRepository.findByNickname(nickname)
-                .map(RegistrationService::confirmAccount)
-                .map(registration -> new UserAccountEntity(timeService.now(), registration));
+        final UserAccountEntity userAccount = registrationRepository.findByNickname(nickname)
+                .map(this::confirmAccount)
+                .map(this::createUserAccountEntity)
+                .orElseThrow();
 
-        Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
-
-        application.get().addUser(userAccount.get());
-        userAccountRepository.save(userAccount.get());
+        applicationRepository.findByName(applicationName)
+                .map(app -> this.addUserAccountToApplication(app, userAccount));
 
         return new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.OK);
     }
 
-    private static RegistrationEntity confirmAccount(RegistrationEntity registration) {
+    private RegistrationEntity confirmAccount(RegistrationEntity registration) {
         registration.setConfirmed(true);
         return registration;
+    }
+
+    private UserAccountEntity createUserAccountEntity(RegistrationEntity registration) {
+        return new UserAccountEntity(timeService.now(), registration);
+    }
+
+    private UserAccountEntity addUserAccountToApplication(ApplicationEntity application, UserAccountEntity userAccount) {
+        application.addUser(userAccount);
+        userAccountRepository.save(userAccount);
+        return userAccount;
     }
 
 }
