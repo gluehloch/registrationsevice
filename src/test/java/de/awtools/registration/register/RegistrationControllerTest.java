@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.hamcrest.Matchers;
@@ -35,6 +37,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import de.awtools.registration.config.PersistenceJPAConfig;
 import de.awtools.registration.user.ApplicationEntity;
 import de.awtools.registration.user.ApplicationRepository;
+import de.awtools.registration.user.UserAccountRepository;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
@@ -44,6 +47,7 @@ import de.awtools.registration.user.ApplicationRepository;
 @Rollback
 class RegistrationControllerTest {
 
+    private static final String FROSCH = "Frosch";
     private MockMvc mockMvc;
 
     @Autowired
@@ -54,6 +58,9 @@ class RegistrationControllerTest {
 
     @Autowired
     private ApplicationRepository applicationRepository;
+
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     @BeforeEach
     void setup() {
@@ -112,7 +119,7 @@ class RegistrationControllerTest {
 
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);
-        registration.setNickname("Frosch");
+        registration.setNickname(FROSCH);
         registration.setFirstname("Andre");
         registration.setName("Winkler");
         registration.setPassword("secret-password");
@@ -126,8 +133,8 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
         
-        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch").orElseThrow();
-        assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
+        RegistrationEntity registrationEntity = registrationRepository.findByNickname(FROSCH).orElseThrow();
+        assertThat(registrationEntity.getNickname()).isEqualTo(FROSCH);
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
     }
 
@@ -142,7 +149,7 @@ class RegistrationControllerTest {
 
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);
-        registration.setNickname("Frosch");
+        registration.setNickname(FROSCH);
         registration.setFirstname("Andre");
         registration.setName("Winkler");
         registration.setPassword("secret-password");
@@ -156,9 +163,9 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
-        RegistrationEntity registrationEntity = registrationRepository.findByNickname("Frosch").orElseThrow();
+        RegistrationEntity registrationEntity = registrationRepository.findByNickname(FROSCH).orElseThrow();
         assertThat(registrationEntity.getToken()).isNotNull();
-        assertThat(registrationEntity.getNickname()).isEqualTo("Frosch");
+        assertThat(registrationEntity.getNickname()).isEqualTo(FROSCH);
         assertThat(registrationEntity.getApplication()).isEqualTo("application");
 
         mockMvc.perform(post("/registration/confirm/" + registrationEntity.getToken().get())
@@ -168,10 +175,10 @@ class RegistrationControllerTest {
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
 
-        RegistrationEntity registrationEntity2 = registrationRepository.findByNickname("Frosch").orElseThrow();
+        RegistrationEntity registrationEntity2 = registrationRepository.findByNickname(FROSCH).orElseThrow();
         assertThat(registrationEntity2.isConfirmed()).isTrue();
         assertThat(registrationEntity2.getToken()).isNotNull();
-        assertThat(registrationEntity2.getNickname()).isEqualTo("Frosch");
+        assertThat(registrationEntity2.getNickname()).isEqualTo(FROSCH);
         assertThat(registrationEntity2.getApplication()).isEqualTo("application");
     }
 
@@ -193,7 +200,7 @@ class RegistrationControllerTest {
 
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);
-        registration.setNickname("Frosch");
+        registration.setNickname(FROSCH);
         registration.setFirstname("Andre");
         registration.setName("Winkler");
         registration.setPassword("secret-password");
@@ -226,10 +233,10 @@ class RegistrationControllerTest {
 
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);
-        registration.setNickname("Frosch");
+        registration.setNickname(FROSCH);
         registration.setFirstname("Andre");
         registration.setName("Winkler");
-        registration.setPassword("frosch");
+        registration.setPassword(FROSCH);
         registration.setEmail("test@test.de");
 
         mockMvc.perform(post("/registration/register")
@@ -252,7 +259,7 @@ class RegistrationControllerTest {
 
         registration.setAcceptCookie(true);
         registration.setAcceptMail(true);
-        registration.setNickname("Frosch");
+        registration.setNickname(FROSCH);
         registration.setFirstname("Andre");
         registration.setName("Winkler");
         registration.setPassword("xFroscHx");
@@ -265,6 +272,9 @@ class RegistrationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
                 .andExpect(jsonPath("validationCodes", Matchers.contains("OK")));
+
+        assertThat(registrationRepository.findByNickname(FROSCH)).isPresent();
+        assertThat(userAccountRepository.findByNickname(FROSCH)).isPresent();
     }
 
     private String toString(RegistrationJson registration) throws JsonProcessingException {
