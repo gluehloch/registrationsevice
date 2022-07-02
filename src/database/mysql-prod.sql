@@ -4,7 +4,7 @@ REVOKE ALL PRIVILEGES ON * . * FROM 'register'@'localhost';
 REVOKE ALL PRIVILEGES ON * . * FROM 'register'@'%';
 
 REVOKE ALL PRIVILEGES ON * . * FROM 'registersu'@'localhost';
-REVOKE ALL PRIVILEGES ON * . * FROM 'registersu'@'%';
+REVOKE ALL PRIVILEGES ON * . * FROM 'registersu'@'%';  
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON register.* TO 'register'@'localhost'
   WITH GRANT OPTION
