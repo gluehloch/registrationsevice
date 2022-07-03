@@ -1,4 +1,4 @@
-# docker build -t register:0.2.0 .
+# docker build -t register:0.3.0-SNAP .
 # Namensvorschlaege: register
 #                    
 # docker run --network betoffice --expose 8080 -p 9090:8080 --name register-0.2.0 -d register:0.2.0
@@ -6,7 +6,7 @@
 #                             \- Port im Host
 #
 # Im laufenden Betrieb ein WAR installieren:
-# docker cp registrationservice-0.0.1-SNAPSHOT.war registerservice:/usr/local/tomcat/webapps/registrationservice2.war
+# docker cp registrationservice-0.3.0-SNAPSHOT.war registerservice:/usr/local/tomcat/webapps/registrationservice.war
 #
 
 #
@@ -23,7 +23,7 @@ FROM tomcat:9.0.46-jdk16-openjdk-buster
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
 
-COPY registrationservice-0.2.0.war /usr/local/tomcat/webapps/registrationservice.war
+COPY registrationservice-0.3.0-SNAPSHOT.war /usr/local/tomcat/webapps/registrationservice.war
 COPY .register.properties /root/.register.properties
 # COPY mariadb-java-client-2.2.6.jar /usr/local/tomcat/lib
 
