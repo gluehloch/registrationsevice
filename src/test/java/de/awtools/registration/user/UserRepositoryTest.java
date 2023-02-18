@@ -53,7 +53,7 @@ class UserRepositoryTest {
         assertThat(user.getId()).isNotNull();
 
         UserAccountEntity persistedUser = userAccountRepository.findByNickname("Frosch").orElseThrow();
-        assertThat(persistedUser).isNotNull();
+        assertThat(persistedUser).isNotNull().isInstanceOf(UserAccountEntity.class);
         assertThat(persistedUser.getFirstname()).isEqualTo("Andre");
         assertThat(persistedUser.getName()).isEqualTo("Winkler");
         assertThat(persistedUser.getNickname()).isEqualTo("Frosch");
