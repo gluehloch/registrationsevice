@@ -37,10 +37,23 @@ public class PasswordEncodeTest {
         assertThat(encodedPassword.isEncoded()).isTrue();
         assertThat(encodedPassword.isDecoded()).isFalse();
         assertThat(encodedPassword).isNotEqualTo(password);
-        
+
         System.out.printf("Encoded password: %s", encodedPassword);
         System.out.println();
         System.out.printf("Encoder class: %s", passwordEncoderWrapper.unwrap().getClass());
+    }
+
+    @DisplayName("Validate a password")
+    @Tag("password")
+    @Test
+    void passwordValidation() {
+        Password password = Password.encoded("password");
+        Password passwordToValidate = Password.decoded("password");
+
+        assertThat(password.isEncoded()).isTrue();
+        assertThat(passwordToValidate.isDecoded()).isTrue();
+        assertThat(passwordToValidate).isEqualTo(password);
+        assertThat(passwordEncoderWrapper.validate(password, passwordToValidate)).isTrue();
     }
     
 }

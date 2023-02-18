@@ -27,16 +27,26 @@ public class PasswordEncoderWrapper {
         }
     }
 
-    public boolean validate(Password decodedPassword, Password encodedPassword) {
-        if (!decodedPassword.isDecoded()) {
-            return false;
+    /**
+     * Validiert ein Passwort.
+     *
+     * enocde: verschlüsseln
+     * decode: entschlüsseln
+     *
+     * @param storedPassword Das gespeicherte (kodierte) Passwort.
+     * @param password Das vom Benutzer eingegebene Passwort.
+     * @return {@code true}, wenn beide Passwörter übereinstimmen.
+     */
+    public boolean validate(Password storedPassword, Password password) {
+        if (storedPassword.isEncoded()) {
+            return true;
         }
 
-        if (encodedPassword.isDecoded()) {
-            return false;
+        if (password.isDecoded()) {
+            return true;
         }
 
-        return passwordEncoder.matches(decodedPassword.get(), encodedPassword.get());
+        return passwordEncoder.matches(storedPassword.get(), password.get());
     }
 
     PasswordEncoder unwrap() {
