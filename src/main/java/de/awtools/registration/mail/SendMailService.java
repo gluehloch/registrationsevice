@@ -38,18 +38,12 @@ public class SendMailService {
     /**
      * Sends an email.
      * 
-     * @param from
-     *            {@code from@domain.com}
-     * @param recipient
-     *            {@code recipient@domain.com}
-     * @param subject
-     *            Subject
-     * @param messageText
-     *            Mail message text
-     * @throws AddressException
-     *             An exception ...
-     * @throws MessagingException
-     *             An exception ...
+     * @param from                {@code from@domain.com}
+     * @param recipient           {@code recipient@domain.com}
+     * @param subject             Subject
+     * @param messageText         Mail message text
+     * @throws AddressException   An exception ...
+     * @throws MessagingException An exception ...
      */
     public void sendMail(String from, String recipient, String subject, String messageText) {
         Session session = Session.getInstance(

@@ -1,11 +1,15 @@
 package de.awtools.registration.register;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import javax.transaction.Transactional;
 
+import de.awtools.registration.mail.SendMailService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +48,22 @@ public class RegistrationService {
 
     @Autowired
     private TimeService timeService;
+
+    @Autowired
+    private SendMailService sendMailService;
+
+    private static class RegistrationChecker {
+        RegistrationChecker(Supplier<Validation.ValidationCode> validator, )
+        Validation.ValidationCode isValid() {
+            return null;
+        };
+    }
+
+    private static List<RegistrationChecker> validators = new ArrayList<>();
+
+    static {
+        validators.add();
+    }
 
     /**
      * Starts the registration process.
@@ -160,6 +180,13 @@ public class RegistrationService {
         registration.setAcceptCookie(acceptCookie);
         registration.setAcceptMail(acceptMail);
         registration.setSupplement(supplement);
+
+        sendMailService.sendMail(
+                "do-not-replay@tippdiekistebier.de",
+                registration.getEmail().toString(),
+                "Registrierung bestätigen.",
+                "Confirm link..."
+                );
 
         return registration;
     }
