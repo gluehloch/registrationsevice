@@ -18,4 +18,9 @@ source mysql.sql
 exit;
 ```
 
+```
+mysql -u registersu --password=register -D registertest -h 127.0.0.1
+source mysql.sql
+exit;
+```
 
