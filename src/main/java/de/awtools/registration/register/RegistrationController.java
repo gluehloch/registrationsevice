@@ -47,16 +47,7 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(@Valid @RequestBody RegistrationJson registration) {
-        DefaultRegistrationValidation validation = registrationService
-                .registerNewAccount(registration.getNickname(),
-                        registration.getEmail(),
-                        registration.getPassword(),
-                        registration.getName(),
-                        registration.getFirstname(),
-                        registration.getApplicationName(),
-                        registration.isAcceptMail(),
-                        registration.isAcceptCookie(),
-                        registration.getSupplement());
+        DefaultRegistrationValidation validation = registrationService.registerNewAccount(registration);
 
         return toResponse(validation);
     }
@@ -108,16 +99,7 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/create", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> create(@Valid @RequestBody RegistrationJson registration) {
-        DefaultRegistrationValidation validation = registrationService
-                .createAccount(registration.getNickname(),
-                        registration.getEmail(),
-                        registration.getPassword(),
-                        registration.getName(),
-                        registration.getFirstname(),
-                        registration.getApplicationName(),
-                        registration.isAcceptMail(),
-                        registration.isAcceptCookie(),
-                        registration.getSupplement());
+        DefaultRegistrationValidation validation = registrationService.createAccount(registration);
 
         return toResponse(validation);
     }

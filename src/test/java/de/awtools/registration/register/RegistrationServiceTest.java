@@ -47,15 +47,23 @@ public class RegistrationServiceTest {
     public void registerNewAccount() throws Exception {
         LOG.info("Start of the test...");
 
+        RegistrationJson registrationJson = new RegistrationJson();
+        registrationJson.setNickname("Frosch");
+        registrationJson.setEmail("frosch@web.de");
+        registrationJson.setPassword("FroschPassword");
+        registrationJson.setName("Winkler");
+        registrationJson.setFirstname("Andre");
+        registrationJson.setAcceptCookie(true);
+        registrationJson.setAcceptMail(true);
+        registrationJson.setSupplement("Supplement data");
+        registrationJson.setApplicationName("applicationName");
+
         ApplicationEntity application = new ApplicationEntity();
         application.setName("applicationName");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
 
-        DefaultRegistrationValidation validation = registrationService
-                .registerNewAccount("Frosch", "frosch@web.de", "FroschPassword",
-                        "Winkler", "Andre", "applicationName", true, true,
-                        "Supplement data");
+        DefaultRegistrationValidation validation = registrationService.registerNewAccount(registrationJson);
 
         RegistrationEntity registration = registrationRepository.findByNickname("Frosch").orElseThrow();
         RegistrationEntity registration2 = registrationRepository.findByToken(registration.getToken()).orElseThrow();
@@ -66,10 +74,7 @@ public class RegistrationServiceTest {
         assertThat(registration.isAcceptingCookie()).isTrue();
         assertThat(registration.isAcceptingMail()).isTrue();
 
-        DefaultRegistrationValidation restartUserAccount = registrationService
-                .restartAccount("Frosch", "frosch@web.de", "FroschPassword",
-                        "Winkler", "Andre", "applicationName", true, true,
-                        "Supplement data");
+        DefaultRegistrationValidation restartUserAccount = registrationService.restartAccount(registrationJson);
 
         assertThat(restartUserAccount).isNotNull();
         assertThat(restartUserAccount.getNickname()).isEqualTo("Frosch");

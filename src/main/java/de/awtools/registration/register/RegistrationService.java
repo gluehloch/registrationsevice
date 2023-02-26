@@ -52,107 +52,75 @@ public class RegistrationService {
     @Autowired
     private SendMailService sendMailService;
 
-    private static class RegistrationChecker {
-        RegistrationChecker(Supplier<Validation.ValidationCode> validator, )
-        Validation.ValidationCode isValid() {
-            return null;
-        };
-    }
-
-    private static List<RegistrationChecker> validators = new ArrayList<>();
-
-    static {
-        validators.add();
-    }
-
     /**
      * Starts the registration process.
      * 
-     * @param nickname
-     *            nickname
-     * @param email
-     *            the email address
-     * @param password
-     *            password
-     * @param name
-     *            real name
-     * @param firstname
-     *            real firstname
-     * @param applicationName
-     *            the application name to register for
-     * @param acceptMail
-     *            user accepts mails
-     * @param acceptCookie
-     *            user accepts cookies
-     * @param supplement
-     *            untyped supplement data
+     * @param registration RegistrationJson
+
      * @return RegistrationValidation
-     * @throws RequestValidationException
-     *             Request validation exception
+     * @throws RequestValidationException Request validation exception
      */
     @Transactional
-    public DefaultRegistrationValidation registerNewAccount(String nickname,
-                                                            String email, String password, String name, String firstname,
-                                                            String applicationName, boolean acceptMail, boolean acceptCookie,
-                                                            String supplement)
+    public DefaultRegistrationValidation registerNewAccount(RegistrationJson registration)
             throws RequestValidationException {
 
-        DefaultRegistrationValidation registrationValidation = new DefaultRegistrationValidation(nickname, applicationName);
+        DefaultRegistrationValidation registrationValidation = new DefaultRegistrationValidation(
+                registration.getNickname(), registration.getApplicationName());
 
-        if (!acceptCookie) {
+        if (!registration.isAcceptCookie()) {
             registrationValidation.addValidationCode(Validation.ValidationCode.MISSING_ACCEPT_COOKIE);
         }
 
-        if (!acceptMail) {
+        if (!registration.isAcceptMail()) {
             registrationValidation.addValidationCode(Validation.ValidationCode.MISSING_ACCEPT_EMAIL);
         }
 
-        if (StringUtils.isBlank(password) || password.length() < 5) {
+        if (StringUtils.isBlank(registration.getPassword()) || registration.getPassword().length() < 5) {
             registrationValidation.addValidationCode(Validation.ValidationCode.PASSWORD_TOO_SHORT);
         }
         
-        if (StringUtils.isBlank(nickname)) {
+        if (StringUtils.isBlank(registration.getNickname())) {
             registrationValidation.addValidationCode(Validation.ValidationCode.NICKNAME_IS_EMPTY);
         }
         
-        if (StringUtils.isBlank(firstname)) {
+        if (StringUtils.isBlank(registration.getFirstname())) {
             registrationValidation.addValidationCode(Validation.ValidationCode.FIRSTNAME_IS_EMPTY);
         }
 
-        if (StringUtils.equalsAnyIgnoreCase(nickname, password)) {
+        if (StringUtils.equalsAnyIgnoreCase(registration.getNickname(), registration.getPassword())) {
             registrationValidation.addValidationCode(Validation.ValidationCode.PASSWORD_IS_TOO_SIMPEL);
         }
 
-        if (StringUtils.isBlank(email)) {
+        if (StringUtils.isBlank(registration.getEmail())) {
             registrationValidation.addValidationCode(Validation.ValidationCode.EMAIL_IS_EMPTY);
         } else {
-            if (!EmailValidator.getInstance().isValid(email)) {
+            if (!EmailValidator.getInstance().isValid(registration.getEmail())) {
                 registrationValidation.addValidationCode(Validation.ValidationCode.EMAIL_IS_NOT_VALID);
             }
             
-            if (registrationRepository.findByEmail(Email.of(email)).isPresent()) {
+            if (registrationRepository.findByEmail(Email.of(registration.getEmail())).isPresent()) {
                 registrationValidation.addValidationCode(Validation.ValidationCode.EMAIL_IS_RESERVED);
             }     
         }
         
-        Optional<ApplicationEntity> application = applicationRepository.findByName(applicationName);
+        Optional<ApplicationEntity> application = applicationRepository.findByName(registration.getApplicationName());
         if (application.isEmpty()) {
             registrationValidation.addValidationCode(Validation.ValidationCode.UNKNOWN_APPLICATION);
         }
 
-        Optional<UserAccountEntity> userAccountCheck = userAccountRepository.findByNickname(nickname);
+        Optional<UserAccountEntity> userAccountCheck = userAccountRepository.findByNickname(registration.getNickname());
         if (userAccountCheck.isPresent()) {
             registrationValidation.addValidationCode(Validation.ValidationCode.KNOWN_NICKNAME);
         }
 
-        Optional<RegistrationEntity> registrationCheck = registrationRepository.findByNickname(nickname);
+        Optional<RegistrationEntity> registrationCheck = registrationRepository.findByNickname(registration.getNickname());
         if (registrationCheck.isPresent()) {
             registrationValidation.addValidationCode(Validation.ValidationCode.KNOWN_NICKNAME);
         }
 
         if (registrationValidation.ok()) {
-            RegistrationEntity registration = createRegistration(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
-            registrationRepository.save(registration);
+            RegistrationEntity registrationEntity = createRegistration(registration);
+            registrationRepository.save(registrationEntity);
 
             registrationValidation.addValidationCode(Validation.ValidationCode.OK);
         }
@@ -160,47 +128,42 @@ public class RegistrationService {
         return registrationValidation;
     }
 
-    private RegistrationEntity createRegistration(String nickname,
-                                                  String email, String password, String name, String firstname,
-                                                  String applicationName, boolean acceptMail, boolean acceptCookie,
-                                                  String supplement) {
+    private RegistrationEntity createRegistration(RegistrationJson registration) {
         LocalDateTime now = timeService.now();
 
-        RegistrationEntity registration = new RegistrationEntity();
-        registration.setNickname(nickname);
-        registration.setFirstname(firstname);
-        registration.setName(name);
-        registration.setPassword(passwordEncoder.encode(Password.decoded(password)));
-        registration.setEmail(Email.of(email));
-        registration.setCreated(now);
+        RegistrationEntity registrationEntity = new RegistrationEntity();
+        registrationEntity.setNickname(registration.getNickname());
+        registrationEntity.setFirstname(registration.getFirstname());
+        registrationEntity.setName(registration.getName());
+        registrationEntity.setPassword(passwordEncoder.encode(Password.decoded(registration.getPassword())));
+        registrationEntity.setEmail(Email.of(registration.getEmail()));
+        registrationEntity.setCreated(now);
         UUID token = UUID.randomUUID();
-        registration.setToken(new Token(token.toString()));
-        registration.setApplication(applicationName);
-        registration.setConfirmed(false);
-        registration.setAcceptCookie(acceptCookie);
-        registration.setAcceptMail(acceptMail);
-        registration.setSupplement(supplement);
+        registrationEntity.setToken(new Token(token.toString()));
+        registrationEntity.setApplication(registration.getApplicationName());
+        registrationEntity.setConfirmed(false);
+        registrationEntity.setAcceptCookie(registration.isAcceptCookie());
+        registrationEntity.setAcceptMail(registration.isAcceptMail());
+        registrationEntity.setSupplement(registration.getSupplement());
 
+        /* TODO
         sendMailService.sendMail(
                 "do-not-replay@tippdiekistebier.de",
                 registration.getEmail().toString(),
                 "Registrierung bestätigen.",
                 "Confirm link..."
                 );
+         */
 
-        return registration;
+        return registrationEntity;
     }
 
     @Transactional
-    public DefaultRegistrationValidation restartAccount(String nickname,
-                                                        String email, String password, String name, String firstname,
-                                                        String application, boolean acceptMail, boolean acceptCookie,
-                                                        String supplement)
+    public DefaultRegistrationValidation restartAccount(RegistrationJson registration)
             throws RequestValidationException {
 
-        registrationRepository.deleteByEmail(Email.of(email));
-        return registerNewAccount(nickname, email, password, name,
-                firstname, application, acceptMail, acceptCookie, supplement);
+        registrationRepository.deleteByEmail(Email.of(registration.getEmail()));
+        return registerNewAccount(registration);
     }
 
     @Transactional
@@ -263,47 +226,29 @@ public class RegistrationService {
     /**
      * Starts the registration process.
      *
-     * @param nickname
-     *            nickname
-     * @param email
-     *            the email address
-     * @param password
-     *            password
-     * @param name
-     *            real name
-     * @param firstname
-     *            real firstname
-     * @param applicationName
-     *            the application name to register for
-     * @param acceptMail
-     *            user accepts mails
-     * @param acceptCookie
-     *            user accepts cookies
-     * @param supplement
-     *            untyped supplement data
+     * @param registration Registration
+     *
      * @return RegistrationValidation
      * @throws RequestValidationException
      *             Request validation exception
      */
     @Transactional
-    public DefaultRegistrationValidation createAccount(String nickname,
-                                                       String email, String password, String name, String firstname,
-                                                       String applicationName, boolean acceptMail, boolean acceptCookie,
-                                                       String supplement) {
-        final DefaultRegistrationValidation registrationValidation = registerNewAccount(nickname, email, password, name, firstname, applicationName, acceptMail, acceptCookie, supplement);
+    public DefaultRegistrationValidation createAccount(RegistrationJson registration) {
+        final DefaultRegistrationValidation registrationValidation = registerNewAccount(registration);
         if (registrationValidation.isNotOk()) {
             return registrationValidation;
         }
 
-        final UserAccountEntity userAccount = registrationRepository.findByNickname(nickname)
+        final UserAccountEntity userAccount = registrationRepository.findByNickname(registration.getNickname())
                 .map(this::confirmAccount)
                 .map(this::createUserAccountEntity)
                 .orElseThrow();
 
-        applicationRepository.findByName(applicationName)
+        applicationRepository.findByName(registration.getApplicationName())
                 .map(app -> this.addUserAccountToApplication(app, userAccount));
 
-        return new DefaultRegistrationValidation(nickname, applicationName, Validation.ValidationCode.OK);
+        return new DefaultRegistrationValidation(
+                registration.getNickname(), registration.getApplicationName(), Validation.ValidationCode.OK);
     }
 
     private RegistrationEntity confirmAccount(RegistrationEntity registration) {
