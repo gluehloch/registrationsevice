@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +43,13 @@ public class AssetsController {
 	*/
 
     @CrossOrigin
-	@GetMapping(name = "/x/{resource}", produces = HttpConst.JSON_UTF_8)
+	@GetMapping(name = "/xxx", produces = HttpConst.JSON_UTF_8)
+	public String resourcex(@PathVariable String resource) throws IOException {
+    	return "xxx";
+    }
+
+    @CrossOrigin
+	@GetMapping(name = "/zzz/{resource}", produces = HttpConst.JSON_UTF_8)
 	public String resource(@PathVariable String resource) throws IOException {
 		InputStream resourceAsStream = AssetsController.class.getResourceAsStream(resource);
 		return new String(resourceAsStream.readAllBytes(), StandardCharsets.UTF_8);
