@@ -21,37 +21,21 @@ import io.swagger.annotations.ApiOperation;
 public class AssetsController {
 
     /**
-     * Ping the cookie service.
+     * Ping the asset service.
      *
      * @return Web-Service reachable?
      */
     @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
-    @CrossOrigin
     @GetMapping(path = "/ping", produces = HttpConst.JSON_UTF_8)
     public DateTimeJson ping() {
         DateTimeJson dateTimeJson = new DateTimeJson();
         return dateTimeJson.setDateTime(LocalDateTime.now());
     }
 
-    /*
-    @CrossOrigin
-	@GetMapping(name = "/x/{resource}", produces = HttpConst.JSON_UTF_8)
-	public HttpEntity<String> resource(@PathVariable String resource) throws IOException {
-		InputStream resourceAsStream = AssetsController.class.getResourceAsStream(resource);
-		return new HttpEntity<String>(new String(resourceAsStream.readAllBytes(), StandardCharsets.UTF_8));
-	}
-	*/
-
-    @CrossOrigin
-	@GetMapping(name = "/xxx", produces = HttpConst.JSON_UTF_8)
-	public String resourcex(@PathVariable String resource) throws IOException {
-    	return "xxx";
-    }
-
-    @CrossOrigin
-	@GetMapping(name = "/zzz/{resource}", produces = HttpConst.JSON_UTF_8)
+    @ApiOperation(value = "assets", nickname = "assets", response = String.class, notes = "Get some static assets.")
+	@GetMapping(path = "/{resource}", produces = HttpConst.JSON_UTF_8)
 	public String resource(@PathVariable String resource) throws IOException {
-		InputStream resourceAsStream = AssetsController.class.getResourceAsStream(resource);
+		InputStream resourceAsStream = AssetsController.class.getResourceAsStream("/assets/" + resource);
 		return new String(resourceAsStream.readAllBytes(), StandardCharsets.UTF_8);
 	}
 
