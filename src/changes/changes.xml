@@ -25,6 +25,9 @@
             <action dev="andrewinkler" type="remove" date="2021-12-29">
                 Removed log4j.
             </action>
+            <action dev="andrewinkler" type="add" date="2023-04-16">
+                AssetController to control CrossOrigin with annotations.
+            </action>
         </release>
 
 		<!-- RELEASED -->
