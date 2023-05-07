@@ -1,5 +1,7 @@
 package de.awtools.registration.assets;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -35,8 +37,9 @@ public class AssetsController {
     @ApiOperation(value = "assets", nickname = "assets", response = String.class, notes = "Get some static assets.")
 	@GetMapping(path = "/{resource}", produces = HttpConst.JSON_UTF_8)
 	public String resource(@PathVariable String resource) throws IOException {
-		InputStream resourceAsStream = AssetsController.class.getResourceAsStream("/assets/" + resource);
-		return new String(resourceAsStream.readAllBytes(), StandardCharsets.UTF_8);
-	}
+        try (InputStream resourceAsStream = AssetsController.class.getResourceAsStream("/assets/" + resource)) {
+            return new String(requireNonNull(resourceAsStream).readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
 
 }
