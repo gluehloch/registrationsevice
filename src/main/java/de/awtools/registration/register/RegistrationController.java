@@ -5,9 +5,14 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.Token;
@@ -42,7 +47,10 @@ public class RegistrationController {
     @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
-    public ResponseEntity<RegistrationValidationJson> register(@RequestHeader("api-key") String apiKey,  @Valid @RequestBody RegistrationJson registration) {
+    public ResponseEntity<RegistrationValidationJson> register(
+    		@RequestHeader("api-key") String apiKey, 
+    		@Valid @RequestBody RegistrationJson registration) {
+
         validateApiKey(apiKey);
         DefaultRegistrationValidation validation = registrationService.registerNewAccount(registration);
 
@@ -50,6 +58,7 @@ public class RegistrationController {
     }
 
     private boolean validateApiKey(String apiKey) {
+    	// jwt token / validierung gegen den KeyStore
         return false;
     }
 

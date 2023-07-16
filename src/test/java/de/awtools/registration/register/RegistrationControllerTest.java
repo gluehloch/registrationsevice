@@ -27,6 +27,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -205,14 +206,18 @@ class RegistrationControllerTest {
         registration.setName("Winkler");
         registration.setPassword("secret-password");
         registration.setEmail("test(at)test.de");
-
-        mockMvc.perform(post("/registration/register")
+      
+        MvcResult result = mockMvc.perform(post("/registration/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toString(registration)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("validationCodes", Matchers.hasSize(1)))
-                .andExpect(jsonPath("validationCodes", Matchers.contains("EMAIL_IS_NOT_VALID")));
+                .andExpect(jsonPath("validationCodes", Matchers.contains("EMAIL_IS_NOT_VALID")))
+                .andReturn();
+        
+        String content = result.getResponse().getContentAsString();
+        System.out.println(content);
     }
 
     /**
