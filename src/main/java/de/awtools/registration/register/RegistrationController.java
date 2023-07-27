@@ -1,5 +1,6 @@
 package de.awtools.registration.register;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -48,8 +49,8 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(
-    		@RequestHeader("api-key") String apiKey, 
-    		@Valid @RequestBody RegistrationJson registration) {
+            @RequestHeader("api-key") String apiKey,
+            @Valid @RequestBody RegistrationJson registration) {
 
         validateApiKey(apiKey);
         DefaultRegistrationValidation validation = registrationService.registerNewAccount(registration);
@@ -59,6 +60,8 @@ public class RegistrationController {
 
     private boolean validateApiKey(String apiKey) {
     	// jwt token / validierung gegen den KeyStore
+        // api-key in der Liste der aktzeptierten Keys?
+        // Falls ja return true, falls nein return false!
         return false;
     }
 
