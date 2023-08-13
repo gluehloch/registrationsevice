@@ -49,10 +49,10 @@ public class RegistrationController {
     @CrossOrigin
     @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(
-            @RequestHeader("api-key") String apiKey,
+            /*@RequestHeader("api-key") String apiKey,*/
             @Valid @RequestBody RegistrationJson registration) {
 
-        validateApiKey(apiKey);
+        // validateApiKey(apiKey);
         DefaultRegistrationValidation validation = registrationService.registerNewAccount(registration);
 
         return toResponse(validation);

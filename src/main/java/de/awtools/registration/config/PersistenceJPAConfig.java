@@ -80,6 +80,7 @@ public class PersistenceJPAConfig {
         dataSource.setPassword(persistenceConfiguration.getPassword());
 
         Properties connectionProperties = new Properties();
+        connectionProperties.setProperty("passwordCharacterEncoding", "UTF-8");
         connectionProperties.setProperty("autocommit", "false");
         dataSource.setConnectionProperties(connectionProperties);
         return dataSource;
