@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.VersionJson;
+import de.awtools.registration.config.PersistenceConfiguration;
 import de.awtools.registration.time.DateTimeJson;
 import io.swagger.annotations.ApiOperation;
 
@@ -34,6 +35,12 @@ public class PingController {
         groupId = properties.getProperty("groupId");
 
         VERSION_JSON = VersionJson.of(groupId, artifactId, version);
+    }
+
+    private final PersistenceConfiguration config;
+    
+    public PingController(PersistenceConfiguration config) {
+    	this.config = config;
     }
 
     /**
@@ -63,5 +70,14 @@ public class PingController {
         dateTimeJson.setDateTime(LocalDateTime.now());
         return dateTimeJson;
     }
- 
+
+    @ApiOperation(value = "database", nickname = "database", response = String.class, notes = "The name of the under lying database.")
+    @CrossOrigin
+    @GetMapping(path = "/database", produces = HttpConst.JSON_UTF_8)
+    public String database() {
+    	return config.getUrl();
+    }
+
 }
+
+
