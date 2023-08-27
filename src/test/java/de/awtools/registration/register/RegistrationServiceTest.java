@@ -3,6 +3,7 @@ package de.awtools.registration.register;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -45,8 +46,6 @@ public class RegistrationServiceTest {
 
     @Test
     public void registerNewAccount() throws Exception {
-        LOG.info("Start of the test...");
-
         RegistrationJson registrationJson = new RegistrationJson();
         registrationJson.setNickname("Frosch");
         registrationJson.setEmail("frosch@web.de");
@@ -62,6 +61,10 @@ public class RegistrationServiceTest {
         application.setName("applicationName");
         application.setDescription("Test Application for some JUnit tests.");
         applicationRepository.save(application);
+        
+        //registrationRepository.deleteAll();
+        Optional<RegistrationEntity> validateRegistration = registrationRepository.findByNickname("Frosch");
+        validateRegistration.ifPresent(RegistrationServiceTest::throwException);
 
         DefaultRegistrationValidation validation = registrationService.registerNewAccount(registrationJson);
 
@@ -80,6 +83,10 @@ public class RegistrationServiceTest {
         assertThat(restartUserAccount.getNickname()).isEqualTo("Frosch");
         assertThat(restartUserAccount.getValidationCodes()).hasSize(1);
         assertThat(restartUserAccount.getValidationCodes()).contains(Validation.ValidationCode.OK);
+    }
+    
+    public static void throwException(RegistrationEntity registrationEntity) {
+    	throw new IllegalStateException(String.format("User registration of user with nickname '%s' shoud not be there.", registrationEntity.getNickname()));
     }
 
     @Test

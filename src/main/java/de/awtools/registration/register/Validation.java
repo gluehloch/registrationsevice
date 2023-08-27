@@ -12,7 +12,7 @@ public interface Validation {
 
     Set<DefaultRegistrationValidation.ValidationCode>  getValidationCodes();
 
-    default boolean isNotOk() {
+    default boolean isBad() {
         return !ok();
     }
 
