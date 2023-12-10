@@ -1,6 +1,6 @@
 package de.awtools.registration.register;
 
-import javax.servlet.http.HttpServletRequest;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -59,6 +59,8 @@ public class RegistrationController {
     }
 
     private boolean validateApiKey(String apiKey) {
+        // Wie sieht denn so ein Token aus, bzw was kommt da rein? Name der Anwendung? Ist die hier hinterlegt?
+        
     	// jwt token / validierung gegen den KeyStore
         // api-key in der Liste der aktzeptierten Keys?
         // Falls ja return true, falls nein return false!
