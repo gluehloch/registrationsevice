@@ -4,9 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,9 +48,9 @@ public class CookieControllerTest {
     private static class MyExceptionResolver implements HandlerExceptionResolver {
 
         @Override
-        public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
-                Exception ex) {
-
+        public ModelAndView resolveException(jakarta.servlet.http.HttpServletRequest request,
+                jakarta.servlet.http.HttpServletResponse response, Object handler, Exception ex) {
+            // TODO Auto-generated method stub
             return null;
         }
 
