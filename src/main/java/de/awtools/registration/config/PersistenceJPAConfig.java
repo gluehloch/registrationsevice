@@ -2,7 +2,6 @@ package de.awtools.registration.config;
 
 import java.util.Properties;
 
-import jakarta.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import jakarta.persistence.EntityManagerFactory;
 
 /**
  * Registration Service Configuration Factory.
@@ -74,8 +75,7 @@ public class PersistenceJPAConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(
-                persistenceConfiguration.getDriverClassName());
+        dataSource.setDriverClassName(persistenceConfiguration.getDriverClassName());
         dataSource.setUrl(persistenceConfiguration.getUrl());
         dataSource.setUsername(persistenceConfiguration.getUsername());
         dataSource.setPassword(persistenceConfiguration.getPassword());
@@ -88,12 +88,9 @@ public class PersistenceJPAConfig {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(
-            EntityManagerFactory emf) {
-
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
-
         return transactionManager;
     }
 
@@ -104,8 +101,7 @@ public class PersistenceJPAConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect",
-                "org.hibernate.dialect.MariaDB102Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
         return properties;
     }
 

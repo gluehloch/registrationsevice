@@ -146,6 +146,11 @@
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
 
         <!-- Jackson Java to JSON coder/encoder -->
         <dependency>
@@ -222,6 +227,14 @@
             <version>${org.hibernate.version}</version>
             <scope>compile</scope>
         </dependency>
+        <!--
+        https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.6.15.Final</version>
+        </dependency>
+
         <!--
         <dependency>
             <groupId>org.hibernate</groupId>
