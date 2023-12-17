@@ -1,16 +1,14 @@
 package de.awtools.registration.config;
 
-import jakarta.servlet.ServletContext;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.google.common.base.Predicate;
-
+import jakarta.servlet.ServletContext;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -38,6 +36,7 @@ public class SwaggerConfig {
         // .host("http://localhost:8080").pathMapping("/registrationservice/api");
     }
 
+    /*
     private Predicate<String> postPaths() {
         return PathSelectors.regex("/api/registration/ping");
         // return Predicates.or(
@@ -46,13 +45,14 @@ public class SwaggerConfig {
         // PathSelectors.regex("/api/registration/validate"),
         // PathSelectors.regex("/api/registration/confirm"));
     }
+    */
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Registration API")
                 .description("Registration API reference for developers")
                 //.termsOfServiceUrl("http")
-                .contact("Andre Winkler")
+                .contact(new Contact("Andre Winkler", "andre-winkler.de", "andre.winkler@web.de"))
                 .license("Apache License Version 2.0")
                 .licenseUrl(
                         "https://github.com/springfox/springfox/blob/master/LICENSE")

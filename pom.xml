@@ -17,6 +17,7 @@
     <properties>
         <slf4j.version>2.0.9</slf4j.version>
         <org.springframework.version>6.0.12</org.springframework.version>
+        <org.springframework.spring-data-jpa.version>3.2.1</org.springframework.spring-data-jpa.version>
         <org.hibernate.version>6.3.1.Final</org.hibernate.version>
         <com.fasterxml.jackson.core.jackson-annotations.version>2.15.2</com.fasterxml.jackson.core.jackson-annotations.version>
         <com.fasterxml.jackson.core.jackson-core.version>2.15.2</com.fasterxml.jackson.core.jackson-core.version>
@@ -27,7 +28,7 @@
         <betoffice.jweb-misc.version>1.3.1</betoffice.jweb-misc.version>
         <betoffice.jweb.version>1.3.1</betoffice.jweb.version>
         -->
-        <springfox.version>2.9.2</springfox.version>
+        <springfox.version>3.0.0</springfox.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
@@ -234,42 +235,11 @@
             <artifactId>hibernate-entitymanager</artifactId>
             <version>6.0.0.Alpha7</version>
         </dependency>
-        <!--
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>5.6.15.Final</version>
-        </dependency>
-        -->
-
-        <!--
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${org.hibernate.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        -->
-        <!--
-        https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
-        <!--
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-validator</artifactId>
-		    <version>7.0.5.Final</version>
-		</dependency>
-		-->
-        <!--
-        https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.4.3.Final</version>
+            <version>8.0.1.Final</version>
         </dependency>
-
-        <!-- <dependency> <groupId>mysql</groupId>
-        <artifactId>mysql-connector-java</artifactId> 
-			<version>6.0.6</version> </dependency> -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
@@ -309,8 +279,9 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>2.4.3</version>
+            <version>${org.springframework.spring-data-jpa.version}</version>
         </dependency>
+
 
         <!-- Spring Security -->
         <dependency>
@@ -400,12 +371,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>

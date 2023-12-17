@@ -14,7 +14,6 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,7 +39,7 @@ import jakarta.persistence.EntityManagerFactory;
         "classpath:/register.properties"
 })
 @EnableTransactionManagement
-@ComponentScan("de.awtools.registration")
+//@ComponentScan("de.awtools.registration")
 @EnableJpaRepositories(basePackages = { "de.awtools.registration" })
 public class PersistenceJPAConfig {
 
@@ -59,6 +58,22 @@ public class PersistenceJPAConfig {
         return p;
     }
 
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
+      HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+
+      LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+      factory.setJpaVendorAdapter(vendorAdapter);
+      factory.setPackagesToScan("de.awtools.registration");
+      factory.setDataSource(dataSource);
+      factory.setJpaProperties(additionalProperties());
+      factory.afterPropertiesSet();
+
+      return factory.getObject();
+    }
+
+    /*
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -71,6 +86,7 @@ public class PersistenceJPAConfig {
 
         return em;
     }
+    */
 
     @Bean
     public DataSource dataSource() {
@@ -80,7 +96,7 @@ public class PersistenceJPAConfig {
         dataSource.setUsername(persistenceConfiguration.getUsername());
         dataSource.setPassword(persistenceConfiguration.getPassword());
 
-        Properties connectionProperties = new Properties();
+        Properties connectionProperties = new java.util.Properties();
         connectionProperties.setProperty("passwordCharacterEncoding", "UTF-8");
         connectionProperties.setProperty("autocommit", "false");
         dataSource.setConnectionProperties(connectionProperties);
