@@ -39,7 +39,7 @@ import jakarta.persistence.EntityManagerFactory;
         "classpath:/register.properties"
 })
 @EnableTransactionManagement
-//@ComponentScan("de.awtools.registration")
+@ComponentScan("de.awtools.registration")
 @EnableJpaRepositories(basePackages = { "de.awtools.registration" })
 public class PersistenceJPAConfig {
 
