@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.register.RegistrationValidationJson;
 import de.awtools.registration.user.Password;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/authentication")
@@ -38,11 +36,11 @@ public class AuthenticationController {
      * @param  password password
      * @return Authentication token or JWT
      */
-    @ApiOperation(value = "login", nickname = "login", response = RegistrationValidationJson.class, notes = "Authentication login.")
+    // @ApiOperation(value = "login", nickname = "login", response = RegistrationValidationJson.class, notes = "Authentication login.")
     @CrossOrigin
     @PostMapping(path = "/login", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Token> login(
-            @ApiParam(name = "nickname", type = "String", required = true) @RequestParam String nickname,
+            /*@ApiParam(name = "nickname", type = "String", required = true)*/ @RequestParam String nickname,
             @RequestParam String password) {
         Optional<Token> loginToken = authenticationService.login(nickname, Password.decoded(password));
 
@@ -56,14 +54,14 @@ public class AuthenticationController {
     /**
      * Start the authentication/login process.
      */
-    @ApiOperation(value = "refresh", response = RegistrationValidationJson.class, notes = "Authentication refresh.")
+    // @ApiOperation(value = "refresh", response = RegistrationValidationJson.class, notes = "Authentication refresh.")
     @CrossOrigin
     @PostMapping(path = "/refresh", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Token> refresh(@RequestHeader(HEADER_STRING) String token) {
         throw new NotImplementedException(); // TODO Create a refresh token
     }
 
-    @ApiOperation(value = "logout", nickname = "logout", response = RegistrationValidationJson.class, notes = "Authentication logout.")
+    // @ApiOperation(value = "logout", nickname = "logout", response = RegistrationValidationJson.class, notes = "Authentication logout.")
     @CrossOrigin
     @PostMapping(path = "/logout", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Void> logout(@RequestHeader(HEADER_STRING) String token) {
