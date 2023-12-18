@@ -1,6 +1,7 @@
 package de.awtools.registration.mail;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,9 +25,12 @@ import com.icegreen.greenmail.spring.GreenMailBean;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
+import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
 
 import de.awtools.registration.config.PersistenceJPAConfig;
 
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { PersistenceJPAConfig.class })
 @ComponentScan({ "de.awtools.registration" })
@@ -43,16 +48,18 @@ public class MailControllerTest {
     private MailController mailController;
 
     private GreenMail greenMail;
+    private ServerSetup serverSetup;
 
     @BeforeEach
     void setup() {
-        greenMailBean.setHostname("localhost");
+        greenMail = new GreenMail(ServerSetupTest.SMTP.dynamicPort());
+        // greenMailBean.setHostname("localhost");
         // greenMailBean.setPortOffset(10000);
-        greenMailBean.setSmtpProtocol(true);
-        greenMailBean.setImapProtocol(true);
-
-        greenMail = greenMailBean.getGreenMail();
+        // greenMailBean.setSmtpProtocol(true);
+        // greenMailBean.setImapProtocol(true);
+        // greenMail = greenMailBean.getGreenMail();
         greenMail.start();
+        serverSetup = greenMail.getSmtp().getServerSetup();
     }
 
     @AfterEach
@@ -63,8 +70,13 @@ public class MailControllerTest {
     @Test
     @DisplayName("Send an email with GreenMail test.")
     void sendEmailWithGreenMail() {
-        GreenMailUtil.sendTextEmailTest("to@localhost", "from@localhost", "some subject", "some body");
+        GreenMailUtil.sendTextEmail("to@localhost", "from@localhost", "some subject", "some body", serverSetup/* greenMail.getSmtp().getServerSetup() */);
+
+        // assertTrue(greenMail.waitForIncomingEmail(5000, 1));
+
         final MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+        assertThat(receivedMessages).isNotNull().hasSize(1);
+
         final MimeMessage receivedMessage = receivedMessages[0];
         assertThat(GreenMailUtil.getBody(receivedMessage)).isEqualTo("some body");
     }
@@ -72,7 +84,7 @@ public class MailControllerTest {
     @Test
     @DisplayName("Send an email with GreenMail test.")
     void sendPingEmail() throws MessagingException, IOException {
-        assertThat(greenMail.getSmtp().getPort()).isEqualTo(3025);
+        assertThat(greenMail.getSmtp().getPort()).isEqualTo(greenMail.getSmtp().getServerSetup().getPort());
 
         GreenMailUser user1 = greenMail.setUser("test@localhost", "test");
 
