@@ -4,11 +4,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import jakarta.json.Json;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonBuilderFactory;
-import jakarta.json.JsonObjectBuilder;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,14 +15,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import de.awtools.registration.RequestValidationException;
 import de.awtools.registration.register.DefaultRegistrationValidation;
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObjectBuilder;
 
 @ControllerAdvice
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { RequestValidationException.class })
     protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
-
-        // JsonBuilderFactory factory = Json.createBuilderFactory(null);
         JsonObjectBuilder json = Json.createObjectBuilder();
 
         if (ex instanceof RequestValidationException) {
