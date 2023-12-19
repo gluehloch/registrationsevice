@@ -56,8 +56,7 @@ public class ValidationTest {
     public void ping() throws Exception {
         ServletContext context = webAppContext.getServletContext();
 
-        assertThat(context).isNotNull();
-        assertThat(context).isInstanceOf(MockServletContext.class);
+        assertThat(context).isNotNull().isInstanceOf(MockServletContext.class);
         assertThat(context.getServletContextName())
                 .isEqualTo("MockServletContext");
         assertThat(webAppContext.getBean(RegistrationController.class))
