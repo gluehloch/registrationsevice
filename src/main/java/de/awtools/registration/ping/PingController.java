@@ -11,7 +11,6 @@ import de.awtools.registration.HttpConst;
 import de.awtools.registration.VersionJson;
 import de.awtools.registration.config.PersistenceConfiguration;
 import de.awtools.registration.time.DateTimeJson;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class PingController {
@@ -48,7 +47,7 @@ public class PingController {
      *
      * @return A version String.
      */
-    @ApiOperation(value = "version", nickname = "version", response = String.class)
+    // @ApiOperation(value = "version", nickname = "version", response = String.class)
     @CrossOrigin
     @GetMapping(path = "/version", produces = HttpConst.JSON_UTF_8)
     public VersionJson versionInfo() {
@@ -61,7 +60,7 @@ public class PingController {
      *
      * @return Web-Service reachable?
      */
-    @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
+    // @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
     @CrossOrigin
     @GetMapping(path = "/ping", produces = HttpConst.JSON_UTF_8)
     public DateTimeJson ping() {
@@ -71,7 +70,7 @@ public class PingController {
         return dateTimeJson;
     }
 
-    @ApiOperation(value = "database", nickname = "database", response = String.class, notes = "The name of the under lying database.")
+    // @ApiOperation(value = "database", nickname = "database", response = String.class, notes = "The name of the under lying database.")
     @CrossOrigin
     @GetMapping(path = "/database", produces = HttpConst.JSON_UTF_8)
     public String database() {

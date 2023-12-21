@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.awtools.registration.HttpConst;
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/mail")
@@ -19,7 +18,7 @@ public class MailController {
         this.sendMailService = sendMailService;
     }
 
-    @ApiOperation(value = "submit", notes = "Starts the registration process")
+    // @ApiOperation(value = "submit", notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/submit", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<Boolean> register() {

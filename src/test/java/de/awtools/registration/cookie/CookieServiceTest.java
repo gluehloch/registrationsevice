@@ -2,7 +2,7 @@ package de.awtools.registration.cookie;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

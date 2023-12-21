@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.time.DateTimeJson;
-import io.swagger.annotations.ApiOperation;
 
 @CrossOrigin
 @RestController
@@ -27,14 +26,14 @@ public class AssetsController {
      *
      * @return Web-Service reachable?
      */
-    @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
+    // @ApiOperation(value = "ping", nickname = "ping", response = DateTimeJson.class, notes = "Ping this service. Is it reachable?")
     @GetMapping(path = "/ping", produces = HttpConst.JSON_UTF_8)
     public DateTimeJson ping() {
         DateTimeJson dateTimeJson = new DateTimeJson();
         return dateTimeJson.setDateTime(LocalDateTime.now());
     }
 
-    @ApiOperation(value = "assets", nickname = "assets", response = String.class, notes = "Get some static assets.")
+    // @ApiOperation(value = "assets", nickname = "assets", response = String.class, notes = "Get some static assets.")
 	@GetMapping(path = "/{resource}", produces = HttpConst.JSON_UTF_8)
 	public String resource(@PathVariable String resource) throws IOException {
         try (InputStream resourceAsStream = AssetsController.class.getResourceAsStream("/assets/" + resource)) {

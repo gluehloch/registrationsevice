@@ -1,7 +1,6 @@
 package de.awtools.registration.register;
 
-
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +10,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.awtools.registration.HttpConst;
 import de.awtools.registration.Token;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 
 /**
  * The registration controller.
@@ -45,7 +40,7 @@ public class RegistrationController {
      * @param  registration The registration data.
      * @return              A copy of the registration data.
      */
-    @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
+    // @ApiOperation(value = "register", nickname = "register", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/register", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> register(
@@ -73,8 +68,8 @@ public class RegistrationController {
      * @param  registration The registration data
      * @return              A copy of the registration data.
      */
-    @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
-    @ApiResponses(value = { @ApiResponse(code = 400, message = "Validation failed. Bad request.") })
+    // @ApiOperation(value = "validate", nickname = "validate", response = RegistrationValidationJson.class, notes = "Validates possible new account infos")
+    // @ApiResponses(value = { @ApiResponse(code = 400, message = "Validation failed. Bad request.") })
     @CrossOrigin
     @PostMapping(path = "/validate", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> validate(@RequestBody RegistrationJson registration) {
@@ -92,8 +87,8 @@ public class RegistrationController {
      * @param  token The unique token of a new user.
      * @return       ...
      */
-    @ApiOperation(value = "confirm", nickname = "confirm", response = RegistrationValidationJson.class, notes = "confirm account")
-    @ApiResponses(value = { @ApiResponse(code = 400, message = "Registration not confirmed. Bad request.") })
+    // @ApiOperation(value = "confirm", nickname = "confirm", response = RegistrationValidationJson.class, notes = "confirm account")
+    // @ApiResponses(value = { @ApiResponse(code = 400, message = "Registration not confirmed. Bad request.") })
     @CrossOrigin
     @PostMapping(value = "/confirm/{token}")
     public ResponseEntity<RegistrationValidationJson> confirm(@PathVariable String token) {
@@ -110,7 +105,7 @@ public class RegistrationController {
      * @param  registration The registration data.
      * @return              A copy of the registration data.
      */
-    @ApiOperation(value = "create", nickname = "create", response = RegistrationValidationJson.class, notes = "Starts the registration process")
+    // @ApiOperation(value = "create", nickname = "create", response = RegistrationValidationJson.class, notes = "Starts the registration process")
     @CrossOrigin
     @PostMapping(path = "/create", headers = { HttpConst.CONTENT_TYPE }, produces = HttpConst.JSON_UTF_8)
     public ResponseEntity<RegistrationValidationJson> create(@Valid @RequestBody RegistrationJson registration) {

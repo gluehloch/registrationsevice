@@ -2,7 +2,6 @@ package de.awtools.registration.config;
 
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +14,14 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import jakarta.persistence.EntityManagerFactory;
 
 /**
  * Registration Service Configuration Factory.
@@ -58,6 +58,22 @@ public class PersistenceJPAConfig {
         return p;
     }
 
+
+    @Bean
+    public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
+      HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+
+      LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+      factory.setJpaVendorAdapter(vendorAdapter);
+      factory.setPackagesToScan("de.awtools.registration");
+      factory.setDataSource(dataSource);
+      factory.setJpaProperties(additionalProperties());
+      factory.afterPropertiesSet();
+
+      return factory.getObject();
+    }
+
+    /*
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -70,17 +86,17 @@ public class PersistenceJPAConfig {
 
         return em;
     }
+    */
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(
-                persistenceConfiguration.getDriverClassName());
+        dataSource.setDriverClassName(persistenceConfiguration.getDriverClassName());
         dataSource.setUrl(persistenceConfiguration.getUrl());
         dataSource.setUsername(persistenceConfiguration.getUsername());
         dataSource.setPassword(persistenceConfiguration.getPassword());
 
-        Properties connectionProperties = new Properties();
+        Properties connectionProperties = new java.util.Properties();
         connectionProperties.setProperty("passwordCharacterEncoding", "UTF-8");
         connectionProperties.setProperty("autocommit", "false");
         dataSource.setConnectionProperties(connectionProperties);
@@ -88,12 +104,9 @@ public class PersistenceJPAConfig {
     }
 
     @Bean
-    public PlatformTransactionManager transactionManager(
-            EntityManagerFactory emf) {
-
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(emf);
-
         return transactionManager;
     }
 
@@ -104,8 +117,7 @@ public class PersistenceJPAConfig {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect",
-                "org.hibernate.dialect.MariaDB102Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MariaDBDialect");
         return properties;
     }
 
