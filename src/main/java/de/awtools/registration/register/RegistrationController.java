@@ -1,6 +1,5 @@
 package de.awtools.registration.register;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,6 +54,8 @@ public class RegistrationController {
     }
 
     private boolean validateApiKey(String apiKey) {
+        // Wie sieht denn so ein Token aus, bzw was kommt da rein? Name der Anwendung? Ist die hier hinterlegt?
+        
     	// jwt token / validierung gegen den KeyStore
         // api-key in der Liste der aktzeptierten Keys?
         // Falls ja return true, falls nein return false!

@@ -17,7 +17,16 @@
 
 		<!-- *** STILL UNDER DEVELOPMENT x.x.x (SNAPSHOT) *** -->
 
-		<!-- UNDER DEVELOPMENT -->
+
+        <!-- RELEASED -->
+        <release version="registrationservice-0.4.0" date="2023-12-21" description="JDK 21, Spring 6, Hibernate 6, Jakarta">
+            <action dev="andrewinkler" type="update" date="2023-12-21">
+                Updated to JDK 21, Spring 6, Hibernate 6 and from javax to Jakarta. Ready for Deployment
+                on Tomcat 10.
+            </action>
+        </release>
+
+		<!-- Not Released -->
         <release version="registrationservice-0.3.0" date="2021-xx-xx" description="Refresh Token">
             <action dev="andrewinkler" type="add" date="2021-11-20">
                 Request to get a refresh token.
