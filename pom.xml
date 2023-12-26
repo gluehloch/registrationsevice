@@ -254,6 +254,10 @@
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>3.0.6</version>
+            <!-- TODO Validate the new JDBC driver
+            <version>3.3.2</version>
+            2023-12-16: Had some problems in production with this driver.
+            -->
         </dependency>
 
         <dependency>
