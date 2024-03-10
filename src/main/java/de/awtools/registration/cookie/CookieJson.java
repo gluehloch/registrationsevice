@@ -1,5 +1,6 @@
 package de.awtools.registration.cookie;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -9,6 +10,7 @@ import java.io.Serializable;
  */
 public class CookieJson implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 6847203448959868549L;
 
     private boolean acceptCookies;
