@@ -90,7 +90,8 @@ public class PersistenceJPAConfig {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(persistenceConfiguration.getDriverClassName());
+        String driverClassName = persistenceConfiguration.getDriverClassName();
+        dataSource.setDriverClassName(driverClassName);
         dataSource.setUrl(persistenceConfiguration.getUrl());
         dataSource.setUsername(persistenceConfiguration.getUsername());
         dataSource.setPassword(persistenceConfiguration.getPassword());
