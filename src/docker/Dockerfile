@@ -18,13 +18,12 @@
 #
 
 # FROM tomcat:9.0.35-jdk14-openjdk-oracle
-FROM tomcat:9.0.46-jdk16-openjdk-buster
+FROM tomcat:10.1.18-jdk21
 
 LABEL maintainer="Andre Winkler"
 LABEL mail="andre.winkler@web.de"
 
-COPY registrationservice-0.3.0-SNAPSHOT.war /usr/local/tomcat/webapps/registrationservice.war
+COPY registrationservice-0.4.0.war /usr/local/tomcat/webapps/registrationservice.war
 COPY .register.properties /root/.register.properties
-# COPY mariadb-java-client-2.2.6.jar /usr/local/tomcat/lib
 
 EXPOSE 8080

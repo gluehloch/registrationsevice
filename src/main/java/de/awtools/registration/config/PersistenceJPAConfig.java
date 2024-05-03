@@ -58,7 +58,6 @@ public class PersistenceJPAConfig {
         return p;
     }
 
-
     @Bean
     public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
       HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
