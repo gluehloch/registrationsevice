@@ -4,9 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>de.awtools</groupId>
-        <artifactId>master-pom</artifactId>
-        <version>14-java21</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.3</version>
     </parent>
 
     <artifactId>registrationservice-boot</artifactId>
@@ -44,23 +44,6 @@
     </scm>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>3.3.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-        </plugins>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -111,17 +94,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>5.5.2</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-bom</artifactId>
-                <version>6.1.5</version>
-                <!--  {spring-security-version} -->
+                <groupId>de.awtools</groupId>
+                <artifactId>registrationservice-parent</artifactId>
+                <version>0.4.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
