@@ -9,7 +9,7 @@
         <version>14-java21</version>
     </parent>
 
-    <artifactId>registrationservice</artifactId>
+    <artifactId>registrationservice-parent</artifactId>
     <version>0.4.0</version>
     <name>Registration REST API project</name>
     <packaging>pom</packaging>
@@ -40,9 +40,7 @@
     <modules>
         <module>register</module>
         <module>register-war</module>
-        <!--
         <module>register-boot</module>
-        -->
     </modules>
 
     <build>
@@ -306,17 +304,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
 
         <!-- TEST section -->

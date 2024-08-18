@@ -11,7 +11,7 @@
 
     <artifactId>registrationservice</artifactId>
     <version>0.4.0</version>
-    <name>Registration REST API project</name>
+    <name>Registration REST API project (Core Implementation)</name>
     <packaging>jar</packaging>
 
     <properties>
@@ -279,17 +279,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
         </dependency>
 
         <!-- TEST section -->
