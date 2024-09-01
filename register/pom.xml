@@ -9,10 +9,10 @@
         <version>14-java21</version>
     </parent>
 
-    <artifactId>registrationservice-parent</artifactId>
+    <artifactId>registrationservice</artifactId>
     <version>0.4.0</version>
-    <name>Registration REST API project</name>
-    <packaging>pom</packaging>
+    <name>Registration REST API project (Core Implementation)</name>
+    <packaging>jar</packaging>
 
     <properties>
         <slf4j.version>2.0.9</slf4j.version>
@@ -22,7 +22,6 @@
         <com.fasterxml.jackson.core.jackson-annotations.version>2.15.2</com.fasterxml.jackson.core.jackson-annotations.version>
         <com.fasterxml.jackson.core.jackson-core.version>2.15.2</com.fasterxml.jackson.core.jackson-core.version>
         <com.fasterxml.jackson.core.jackson-databind.version>2.15.2</com.fasterxml.jackson.core.jackson-databind.version>
-        <springfox.version>3.0.0</springfox.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
@@ -37,30 +36,7 @@
         <tag>v0.4.0</tag>
     </scm>
 
-    <modules>
-        <module>register</module>
-        <module>register-war</module>
-        <module>register-boot</module>
-    </modules>
-
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>3.3.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-            </plugin>
-        </plugins>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -121,7 +97,6 @@
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-bom</artifactId>
                 <version>6.1.5</version>
-                <!--  {spring-security-version} -->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
