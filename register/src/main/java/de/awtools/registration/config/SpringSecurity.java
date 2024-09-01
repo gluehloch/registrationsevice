@@ -90,7 +90,7 @@ public class SpringSecurity {
             .csrf(AbstractHttpConfigurer::disable);
 
         http.authorizeHttpRequests(authz -> authz /*.anyRequest().permitAll()*/
-                .requestMatchers(antMatcher(HttpMethod.GET, "register/**")).permitAll());
+                .requestMatchers(antMatcher(HttpMethod.GET, "/**")).permitAll());
             // Authentication
             /*
             .requestMatchers(antMatcher(HttpMethod.GET,    BetofficeUrlPath.URL_AUTHENTICATION + BetofficeUrlPath.URL_AUTHENTICATION_PING)).permitAll()
