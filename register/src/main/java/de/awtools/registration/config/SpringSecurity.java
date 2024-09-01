@@ -22,10 +22,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import de.awtools.registration.user.UserAccountRepository;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SpringSecurity {
+
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     @Autowired
     private UserAccountDetailsService userDetailsService;
@@ -74,12 +79,15 @@ public class SpringSecurity {
 
     @Bean
     public UserDetailsService userDetailsService() {
+        return new UserAccountDetailsService(userAccountRepository);
+        /* 
         UserDetails user = User.withDefaultPasswordEncoder()
             .username("user")
             .password("password")
             .roles("USER")
             .build();
          return new InMemoryUserDetailsManager(user);
+         */
      }
 
      @Bean
