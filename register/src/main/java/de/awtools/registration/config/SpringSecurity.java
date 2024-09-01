@@ -32,19 +32,12 @@ public class SpringSecurity {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    @Autowired
-    private UserAccountDetailsService userDetailsService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationProvider authenticationProvider;
-
+    /*
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+     */
 
     /**
      * Funktioniert dieses Konstrukt aus @Bean und @Autowired?
@@ -61,7 +54,7 @@ public class SpringSecurity {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
+    public AuthenticationManager authenticationManager(@Autowired HttpSecurity httpSecurity, @Autowired AuthenticationProvider authenticationProvider) throws Exception {
         AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.authenticationProvider(authenticationProvider);
         return authenticationManagerBuilder.build();
@@ -77,18 +70,18 @@ public class SpringSecurity {
     }
     */
 
+    /*
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserAccountDetailsService(userAccountRepository);
-        /* 
         UserDetails user = User.withDefaultPasswordEncoder()
             .username("user")
             .password("password")
             .roles("USER")
             .build();
          return new InMemoryUserDetailsManager(user);
-         */
      }
+     */
 
      @Bean
     public SecurityFilterChain configure(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {

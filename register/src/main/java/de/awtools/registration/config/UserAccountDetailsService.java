@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 import de.awtools.registration.user.UserAccountEntity;
 import de.awtools.registration.user.UserAccountRepository;
 
-@Service
+// @Service
+/** TODO: Doppelt hinterlegt @see AuthenticationService ??? */
 public class UserAccountDetailsService implements UserDetailsService {
 
     private final UserAccountRepository userRepository;
